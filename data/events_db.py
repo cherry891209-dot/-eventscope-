@@ -126,6 +126,17 @@ HISTORICAL_EVENTS = [
         "primary_shock": "OIL",
         "magnitude": 3.0,
     },
+    {
+        "id": "taiwan_strait_tension_2022",
+        "name_zh": "台海軍事緊張升溫",
+        "name_en": "Taiwan Strait Tensions",
+        "category": "地緣政治",
+        "date": "2022-08-03",
+        "description_zh": "台海局勢升溫引發半導體供應鏈與亞洲股市波動，市場重新評估地緣風險溢價。",
+        "description_en": "Escalating tensions in the Taiwan Strait rattled Asian equities and semiconductor supply chain sentiment.",
+        "primary_shock": "TW_EQUITY",
+        "magnitude": 3.5,
+    },
 
     # ── 金融危機 ──────────────────────────────────────────────
     {
@@ -259,6 +270,17 @@ HISTORICAL_EVENTS = [
         "description_en": "Credit Suisse collapsed into a forced takeover by UBS, rocking European bank equities and AT1 bond markets.",
         "primary_shock": "US_BANK",
         "magnitude": 3.5,
+    },
+    {
+        "id": "mexico_tequila_1994",
+        "name_zh": "墨西哥披索危機",
+        "name_en": "Mexican Peso Crisis",
+        "category": "金融危機",
+        "date": "1994-12-20",
+        "description_zh": "墨西哥披索危機引發拉美與新興市場資金撤離，外匯與主權風險定價快速惡化。",
+        "description_en": "The Mexican peso crisis triggered capital flight across Latin America and broader emerging markets.",
+        "primary_shock": "CN_EQUITY",
+        "magnitude": 4.0,
     },
 
     # ── 貨幣政策 ──────────────────────────────────────────────
@@ -394,6 +416,17 @@ HISTORICAL_EVENTS = [
         "primary_shock": "CN_EQUITY",
         "magnitude": 2.5,
     },
+    {
+        "id": "ecb_qe_2015",
+        "name_zh": "歐洲央行全面QE啟動",
+        "name_en": "ECB QE Launch",
+        "category": "貨幣政策",
+        "date": "2015-01-22",
+        "description_zh": "歐洲央行啟動量化寬鬆，歐元走弱、歐債殖利率下滑，歐洲股市與風險資產受到提振。",
+        "description_en": "The ECB launched full-scale QE, weakening the euro and lifting European equities while bond yields fell.",
+        "primary_shock": "EUR",
+        "magnitude": 3.5,
+    },
 
     # ── 商品衝擊 ──────────────────────────────────────────────
     {
@@ -505,6 +538,17 @@ HISTORICAL_EVENTS = [
         "description_en": "India's rice export restrictions pushed up global food prices and heightened inflation risks in import-dependent nations.",
         "primary_shock": "WHEAT",
         "magnitude": 3.0,
+    },
+    {
+        "id": "copper_rally_2021",
+        "name_zh": "銅價衝上十年新高",
+        "name_en": "Copper Price Rally",
+        "category": "商品衝擊",
+        "date": "2021-05-10",
+        "description_zh": "全球復甦與綠能投資預期推升銅價創十年新高，工業金屬與景氣循環標的同步受惠。",
+        "description_en": "Recovery optimism and green investment expectations sent copper to a decade high, lifting cyclicals and metals.",
+        "primary_shock": "OIL",
+        "magnitude": 2.5,
     },
 
     # ── 科技產業 ──────────────────────────────────────────────
@@ -618,6 +662,17 @@ HISTORICAL_EVENTS = [
         "primary_shock": "TECH_EQUITY",
         "magnitude": 2.5,
     },
+    {
+        "id": "crowdstrike_outage_2024",
+        "name_zh": "CrowdStrike全球系統中斷",
+        "name_en": "CrowdStrike Global Outage",
+        "category": "科技產業",
+        "date": "2024-07-19",
+        "description_zh": "資安更新錯誤引發全球系統大規模當機，航空、金融與企業 IT 韌性風險被市場重新定價。",
+        "description_en": "A faulty cybersecurity update caused a global outage, refocusing markets on enterprise IT resilience and platform risk.",
+        "primary_shock": "TECH_EQUITY",
+        "magnitude": 3.0,
+    },
 
     # ── 自然災害 ──────────────────────────────────────────────
     {
@@ -719,6 +774,17 @@ HISTORICAL_EVENTS = [
         "primary_shock": "OIL",
         "magnitude": 2.5,
     },
+    {
+        "id": "australia_bushfires_2020",
+        "name_zh": "澳洲野火危機",
+        "name_en": "Australia Bushfires",
+        "category": "自然災害",
+        "date": "2020-01-06",
+        "description_zh": "澳洲大規模野火衝擊農產、觀光與保險產業，南半球供應鏈與商品價格受到擾動。",
+        "description_en": "Massive Australian bushfires disrupted agriculture, tourism, insurance, and regional commodity supply chains.",
+        "primary_shock": "CN_EQUITY",
+        "magnitude": 3.0,
+    },
 ]
 
 EVENT_REGION_MAP = {
@@ -733,6 +799,7 @@ EVENT_REGION_MAP = {
     "crimea_2014": "歐洲",
     "suez_blockage_2021": "中東",
     "red_sea_shipping_2024": "中東",
+    "taiwan_strait_tension_2022": "亞洲",
     "dotcom_crash_2000": "北美",
     "lehman_2008": "北美",
     "eurozone_crisis_2010": "歐洲",
@@ -745,6 +812,7 @@ EVENT_REGION_MAP = {
     "turkey_lira_2018": "歐洲",
     "uk_gilt_crisis_2022": "歐洲",
     "credit_suisse_2023": "歐洲",
+    "mexico_tequila_1994": "拉丁美洲",
     "fed_qe1_2008": "北美",
     "taper_tantrum_2013": "北美",
     "fed_hike_cycle_2022": "北美",
@@ -757,6 +825,7 @@ EVENT_REGION_MAP = {
     "rbi_covid_cuts_2020": "亞洲",
     "boj_negative_rates_2016": "亞洲",
     "boc_property_support_2023": "亞洲",
+    "ecb_qe_2015": "歐洲",
     "oil_crisis_2008": "全球",
     "oil_negative_2020": "全球",
     "opec_cut_2022": "中東",
@@ -767,6 +836,7 @@ EVENT_REGION_MAP = {
     "cocoa_record_2024": "非洲",
     "uranium_rally_2023": "全球",
     "india_rice_ban_2023": "亞洲",
+    "copper_rally_2021": "全球",
     "bitcoin_crash_2018": "全球",
     "ftx_collapse_2022": "全球",
     "chatgpt_launch_2022": "北美",
@@ -777,6 +847,7 @@ EVENT_REGION_MAP = {
     "tsmc_capex_boom_2021": "亞洲",
     "meta_crash_2022": "北美",
     "eu_ai_act_2024": "歐洲",
+    "crowdstrike_outage_2024": "全球",
     "japan_earthquake_2011": "亞洲",
     "hurricane_katrina_2005": "北美",
     "covid_who_pandemic_2020": "全球",
@@ -786,6 +857,7 @@ EVENT_REGION_MAP = {
     "thailand_floods_2011": "亞洲",
     "turkey_syria_quake_2023": "中東",
     "panama_drought_2023": "拉丁美洲",
+    "australia_bushfires_2020": "亞洲",
 }
 
 EVENT_REGIONS = ["全球", "北美", "拉丁美洲", "歐洲", "中東", "亞洲", "非洲", "跨區域"]
@@ -804,6 +876,12 @@ ASSET_UNIVERSE = {
         "category": "美國股市",
         "color": "#aec7e8",
     },
+    "^DJI": {
+        "name_zh": "道瓊工業指數",
+        "name_en": "Dow Jones Industrial Average",
+        "category": "美國股市",
+        "color": "#7f98a0",
+    },
     "^TWII": {
         "name_zh": "台灣加權指數",
         "name_en": "Taiwan TAIEX",
@@ -815,6 +893,48 @@ ASSET_UNIVERSE = {
         "name_en": "TSMC",
         "category": "亞洲股市",
         "color": "#ffbb78",
+    },
+    "^N225": {
+        "name_zh": "日經225指數",
+        "name_en": "Nikkei 225",
+        "category": "亞洲股市",
+        "color": "#d9b59c",
+    },
+    "^HSI": {
+        "name_zh": "恆生指數",
+        "name_en": "Hang Seng Index",
+        "category": "亞洲股市",
+        "color": "#c99f86",
+    },
+    "000001.SS": {
+        "name_zh": "上證綜合指數",
+        "name_en": "Shanghai Composite",
+        "category": "亞洲股市",
+        "color": "#b68772",
+    },
+    "^FTSE": {
+        "name_zh": "英國富時100指數",
+        "name_en": "FTSE 100",
+        "category": "歐洲股市",
+        "color": "#8ba2a5",
+    },
+    "^GDAXI": {
+        "name_zh": "德國DAX指數",
+        "name_en": "DAX",
+        "category": "歐洲股市",
+        "color": "#9ab1b4",
+    },
+    "^FCHI": {
+        "name_zh": "法國CAC 40指數",
+        "name_en": "CAC 40",
+        "category": "歐洲股市",
+        "color": "#b2bec0",
+    },
+    "EWZ": {
+        "name_zh": "巴西ETF",
+        "name_en": "iShares MSCI Brazil ETF",
+        "category": "拉丁美洲",
+        "color": "#b79f88",
     },
     "GLD": {
         "name_zh": "黃金ETF",
@@ -834,17 +954,47 @@ ASSET_UNIVERSE = {
         "category": "商品",
         "color": "#8c564b",
     },
+    "HG=F": {
+        "name_zh": "銅期貨",
+        "name_en": "Copper Futures",
+        "category": "商品",
+        "color": "#b98878",
+    },
     "^TNX": {
         "name_zh": "10年期美債殖利率",
         "name_en": "10Y Treasury Yield",
         "category": "固定收益",
         "color": "#2ca02c",
     },
+    "IEF": {
+        "name_zh": "7-10年期美債ETF",
+        "name_en": "iShares 7-10 Year Treasury ETF",
+        "category": "固定收益",
+        "color": "#9cb49f",
+    },
+    "TLT": {
+        "name_zh": "20年期以上美債ETF",
+        "name_en": "iShares 20+ Year Treasury ETF",
+        "category": "固定收益",
+        "color": "#bcc8b3",
+    },
     "^DXY": {
         "name_zh": "美元指數",
         "name_en": "US Dollar Index",
         "category": "外匯",
         "color": "#98df8a",
+    },
+    "EURUSD=X": {
+        "name_zh": "歐元兌美元",
+        "name_en": "EUR/USD",
+        "category": "外匯",
+        "color": "#b6c1ac",
+    },
+    "JPY=X": {
+        "name_zh": "美元兌日圓",
+        "name_en": "USD/JPY",
+        "category": "外匯",
+        "color": "#c8cfb4",
     },
     "BTC-USD": {
         "name_zh": "比特幣",

@@ -16,8 +16,9 @@ DEFAULT_PORTFOLIO = {
 
 # Known valid tickers (from ASSET_UNIVERSE + common ones)
 VALID_TICKERS = {
-    "^GSPC", "^IXIC", "^TWII", "2330.TW", "GLD", "GC=F",
-    "CL=F", "^TNX", "^DXY", "BTC-USD", "ETH-USD", "EEM",
+    "^GSPC", "^IXIC", "^DJI", "^TWII", "2330.TW", "^N225", "^HSI", "000001.SS",
+    "^FTSE", "^GDAXI", "^FCHI", "EWZ", "GLD", "GC=F", "CL=F", "HG=F",
+    "^TNX", "IEF", "TLT", "^DXY", "EURUSD=X", "JPY=X", "BTC-USD", "ETH-USD", "EEM",
     # Additional common tickers
     "AAPL", "TSLA", "MSFT", "AMZN", "NVDA", "GOOG", "META",
     "SPY", "QQQ", "IEF", "TLT", "USO", "IAU",
