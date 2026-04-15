@@ -97,6 +97,28 @@ http://你的外部 IP:8505
 - 不需要你的電腦一直開著
 - 已經有 `render.yaml`
 
+## 一鍵更新線上版
+
+如果你之後修改完網站，想快速把最新版本推到 GitHub 並讓 Render 自動更新，可以直接使用：
+
+```bash
+./deploy.sh "update website"
+```
+
+你也可以把引號裡的訊息換成你自己的 commit 訊息，例如：
+
+```bash
+./deploy.sh "polish homepage ui"
+```
+
+這個腳本會自動執行：
+
+- `git add .`
+- `git commit -m "..."`
+- `git push`
+
+如果目前沒有任何變更，它會直接提示 `No changes to deploy.`。
+
 ## 上線前一步
 
 你還需要把這個資料夾放到 GitHub。
