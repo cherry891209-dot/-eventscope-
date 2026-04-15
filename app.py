@@ -611,6 +611,42 @@ def build_region_summary() -> list[dict]:
     return sorted(rows, key=lambda x: (-x["count"], -x["avg_magnitude"]))
 
 
+def build_homepage_signal_summary(snapshot_df: pd.DataFrame) -> dict:
+    if snapshot_df.empty:
+        return {
+            "avg_magnitude": 0.0,
+            "cross_region_count": 0,
+            "asset_category_count": len({info["category"] for info in ASSET_UNIVERSE.values()}),
+            "analysis_module_count": 5,
+            "risk_on_count": 0,
+            "risk_off_count": 0,
+            "avg_weekly_move": 0.0,
+            "top_category": "",
+            "recommended_pair": "",
+        }
+
+    cross_region_count = sum(1 for e in HISTORICAL_EVENTS if get_event_region(e) == "跨區域")
+    avg_magnitude = float(np.mean([e["magnitude"] for e in HISTORICAL_EVENTS]))
+    asset_categories = {info["category"] for info in ASSET_UNIVERSE.values()}
+    risk_on_count = int((snapshot_df["momentum"] == "risk-on").sum())
+    risk_off_count = int((snapshot_df["momentum"] == "risk-off").sum())
+    avg_weekly_move = float(snapshot_df["one_week"].abs().mean())
+    top_category = max(EVENT_CATEGORIES, key=lambda cat: sum(1 for e in HISTORICAL_EVENTS if e["category"] == cat))
+    recommended_pair = "金融海嘯 vs COVID 崩盤"
+
+    return {
+        "avg_magnitude": avg_magnitude,
+        "cross_region_count": cross_region_count,
+        "asset_category_count": len(asset_categories),
+        "analysis_module_count": 5,
+        "risk_on_count": risk_on_count,
+        "risk_off_count": risk_off_count,
+        "avg_weekly_move": avg_weekly_move,
+        "top_category": top_category,
+        "recommended_pair": recommended_pair,
+    }
+
+
 def build_executive_summary(event: dict, sim_results: pd.DataFrame, net: dict, port_result: dict) -> dict:
     if sim_results.empty:
         return {
@@ -909,6 +945,74 @@ if page == "🏠 首頁":
 
     st.markdown("<br>", unsafe_allow_html=True)
 
+    snapshot_df = build_market_snapshot()
+    home_signals = build_homepage_signal_summary(snapshot_df)
+    st.markdown('<div class="section-header">🧭 首頁總覽</div>', unsafe_allow_html=True)
+    overview_cols = st.columns(4)
+    overview_items = [
+        ("平均事件強度", f"{home_signals['avg_magnitude']:.1f} / 5", "快速判斷事件庫整體衝擊等級"),
+        ("跨區域事件", f"{home_signals['cross_region_count']} 件", "最適合做全球傳導與供應鏈觀察"),
+        ("資產類別數", f"{home_signals['asset_category_count']} 類", "股市、商品、債券、外匯、加密全都含在內"),
+        ("分析模組數", f"{home_signals['analysis_module_count']} 種", "事件研究、網路、壓測、比較與資料庫探索"),
+    ]
+    for col, (label, value, note) in zip(overview_cols, overview_items):
+        with col:
+            st.markdown(
+                f"""
+                <div class="rich-grid-card fade-up">
+                  <div class="rich-grid-title">{label}</div>
+                  <div class="rich-grid-value">{value}</div>
+                  <div class="rich-grid-meta">{note}</div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+
+    sentiment_cols = st.columns(3)
+    sentiment_items = [
+        ("市場情緒", f"Risk-on {home_signals['risk_on_count']} / Risk-off {home_signals['risk_off_count']}", "從首頁脈動卡先看當前模擬市場偏向避險還是追價。"),
+        ("平均週波動", f"{home_signals['avg_weekly_move']:.2%}", "用來快速判斷首頁市場快照目前的整體擾動程度。"),
+        ("最常見事件類型", home_signals["top_category"], "這是目前資料庫收錄最密集的風險主題。"),
+    ]
+    for col, (label, value, note) in zip(sentiment_cols, sentiment_items):
+        with col:
+            st.markdown(
+                f"""
+                <div class="glass-panel fade-up fade-delay-1">
+                  <div class="mini-section-title">{label}</div>
+                  <div class="summary-tile-value" style="margin-top:0;">{value}</div>
+                  <div class="summary-tile-note">{note}</div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+
+    reco_col1, reco_col2 = st.columns(2)
+    with reco_col1:
+        st.markdown(
+            f"""
+            <div class="event-card">
+              <h4>🧪 推薦比較事件</h4>
+              <p>{home_signals['recommended_pair']}</p>
+              <div style="margin-top:8px; color:var(--text-muted);">適合直接到「⚔️ 事件比較」看系統性風險與尾端損失差異。</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+    with reco_col2:
+        st.markdown(
+            """
+            <div class="event-card">
+              <h4>🗺️ 推薦探索路線</h4>
+              <p>先看世界地圖，再去事件資料庫，最後用事件分析頁搭配投組壓測。</p>
+              <div style="margin-top:8px; color:var(--text-muted);">這條動線最容易把全球覆蓋、事件深度與實際決策場景串起來。</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+    st.markdown("<br>", unsafe_allow_html=True)
+
     st.markdown('<div class="section-header">🌍 全球市場覆蓋</div>', unsafe_allow_html=True)
     region_counts = {}
     for event in HISTORICAL_EVENTS:
@@ -977,7 +1081,6 @@ if page == "🏠 首頁":
     st.markdown("<br>", unsafe_allow_html=True)
 
     st.markdown('<div class="section-header">📡 全球市場脈動</div>', unsafe_allow_html=True)
-    snapshot_df = build_market_snapshot()
     world_event_df = build_world_event_df()
     pulse_col1, pulse_col2 = st.columns([1.1, 1])
     with pulse_col1:
