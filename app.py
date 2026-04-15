@@ -61,6 +61,15 @@ st.markdown(
         font-weight: 600;
         font-size: 1.02rem !important;
     }
+    [data-testid="stSidebar"] .stRadio label {
+        padding: 0.18rem 0.1rem;
+        border-radius: 12px;
+        transition: transform 0.18s ease, background 0.18s ease;
+    }
+    [data-testid="stSidebar"] .stRadio label:hover {
+        transform: translateX(3px);
+        background: rgba(255, 250, 246, 0.5);
+    }
     .sidebar-card {
         background: linear-gradient(180deg, rgba(255, 251, 247, 0.94) 0%, rgba(242, 235, 227, 0.98) 100%);
         border: 1px solid rgba(171, 164, 155, 0.24);
@@ -68,6 +77,17 @@ st.markdown(
         padding: 14px 14px 12px 14px;
         margin: 10px 0 12px 0;
         box-shadow: 0 10px 24px rgba(136, 123, 110, 0.08);
+        position: relative;
+        overflow: hidden;
+    }
+    .sidebar-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(115deg, transparent 0%, rgba(255,255,255,0.28) 48%, transparent 72%);
+        transform: translateX(-135%);
+        animation: sidebarShimmer 7s ease-in-out infinite;
+        pointer-events: none;
     }
     .sidebar-card-title {
         color: var(--accent-strong);
@@ -98,6 +118,89 @@ st.markdown(
         font-size: 0.85rem;
         font-weight: 700;
         color: var(--text-main);
+    }
+    .sidebar-status {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 8px;
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: var(--text-main);
+    }
+    .sidebar-status-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        background: #8fa89d;
+        box-shadow: 0 0 0 0 rgba(143, 168, 157, 0.55);
+        animation: statusPulse 2.1s ease-out infinite;
+        flex: 0 0 auto;
+    }
+    .sidebar-mini-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        margin-top: 10px;
+    }
+    .sidebar-mini-tile {
+        background: rgba(255, 250, 246, 0.76);
+        border: 1px solid rgba(171, 164, 155, 0.18);
+        border-radius: 14px;
+        padding: 10px 11px;
+        transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+    .sidebar-mini-tile:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 18px rgba(136, 123, 110, 0.08);
+    }
+    .sidebar-mini-label {
+        color: var(--text-muted);
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    .sidebar-mini-value {
+        color: var(--accent-strong);
+        font-size: 1.02rem;
+        font-weight: 800;
+        margin-top: 5px;
+    }
+    .sidebar-route {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-top: 10px;
+    }
+    .sidebar-route-step {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 9px 10px;
+        border-radius: 12px;
+        background: rgba(255, 250, 246, 0.78);
+        border: 1px solid rgba(171, 164, 155, 0.18);
+        transition: transform 0.18s ease, background 0.18s ease;
+    }
+    .sidebar-route-step:hover {
+        transform: translateX(3px);
+        background: rgba(255, 250, 246, 0.96);
+    }
+    .sidebar-step-index {
+        width: 24px;
+        height: 24px;
+        border-radius: 999px;
+        background: rgba(143, 168, 157, 0.14);
+        color: var(--accent-strong);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.8rem;
+        font-weight: 800;
+        flex: 0 0 auto;
+    }
+    .orbital-float {
+        animation: orbitalFloat 5.5s ease-in-out infinite;
     }
 
     [data-testid="stMetric"] {
@@ -197,6 +300,7 @@ st.markdown(
         text-align: center;
         margin-bottom: 30px;
         box-shadow: 0 18px 38px rgba(136, 123, 110, 0.12);
+        animation: ambientDrift 13s ease-in-out infinite alternate;
     }
     .hero-title {
         font-size: 2.8rem;
@@ -221,6 +325,7 @@ st.markdown(
         font-size: 0.8rem;
         letter-spacing: 0.08em;
         text-transform: uppercase;
+        animation: softBob 3.8s ease-in-out infinite;
     }
     .pulse-card {
         background: linear-gradient(180deg, rgba(255, 251, 247, 0.98) 0%, rgba(243, 236, 228, 0.98) 100%);
@@ -229,6 +334,11 @@ st.markdown(
         padding: 18px;
         min-height: 132px;
         box-shadow: 0 14px 28px rgba(136, 123, 110, 0.08);
+        transition: transform 0.22s ease, box-shadow 0.22s ease;
+    }
+    .pulse-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 16px 30px rgba(136, 123, 110, 0.1);
     }
     .pulse-label {
         color: var(--text-muted);
@@ -260,6 +370,11 @@ st.markdown(
         font-size: 0.92rem;
         font-weight: 600;
         margin: 4px 8px 0 0;
+        transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+    .market-chip:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 18px rgba(136, 123, 110, 0.08);
     }
     .rich-grid-card {
         background: linear-gradient(180deg, rgba(255, 251, 247, 0.98) 0%, rgba(244, 238, 231, 0.98) 100%);
@@ -337,6 +452,27 @@ st.markdown(
             opacity: 1;
             transform: translateY(0);
         }
+    }
+    @keyframes statusPulse {
+        0% { box-shadow: 0 0 0 0 rgba(143, 168, 157, 0.55); }
+        70% { box-shadow: 0 0 0 10px rgba(143, 168, 157, 0.0); }
+        100% { box-shadow: 0 0 0 0 rgba(143, 168, 157, 0.0); }
+    }
+    @keyframes sidebarShimmer {
+        0%, 100% { transform: translateX(-135%); }
+        50% { transform: translateX(135%); }
+    }
+    @keyframes orbitalFloat {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-5px); }
+    }
+    @keyframes ambientDrift {
+        0% { background-position: 0% 0%, 100% 0%, 50% 0%; }
+        100% { background-position: 2% 2%, 98% 1%, 52% 100%; }
+    }
+    @keyframes softBob {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-3px); }
     }
 
     /* Section headers */
@@ -918,11 +1054,14 @@ def build_custom_scenario(
 # ─── Sidebar Navigation ───────────────────────────────────────────────────────
 
 with st.sidebar:
-    sidebar_top_region = max(build_region_summary(), key=lambda x: x["count"])["region"]
+    sidebar_region_summary = build_region_summary()
+    sidebar_top_region = max(sidebar_region_summary, key=lambda x: x["count"])["region"]
+    sidebar_snapshot = build_market_snapshot()
+    sidebar_signal_summary = build_homepage_signal_summary(sidebar_snapshot)
     st.markdown(
         """
         <div style="text-align:center; padding: 20px 0 10px 0;">
-          <div style="font-size:2.2rem;">📡</div>
+          <div class="orbital-float" style="font-size:2.2rem;">📡</div>
           <div style="font-size:1.5rem; font-weight:800; color:var(--accent-strong);">EventScope</div>
           <div style="font-size:0.78rem; color:var(--text-muted); margin-top:4px;">金融事件模擬平台</div>
         </div>
@@ -943,10 +1082,29 @@ with st.sidebar:
           <div class="sidebar-card-title">Quick Overview</div>
           <div class="sidebar-card-value">{len(HISTORICAL_EVENTS)} 件事件 · {len(ASSET_UNIVERSE)} 種標的</div>
           <div class="sidebar-card-note">目前覆蓋 {len(EVENT_REGIONS)} 個地區維度，事件最密集區域是 {sidebar_top_region}。</div>
+          <div class="sidebar-status"><span class="sidebar-status-dot"></span>System ready for scenario simulation</div>
           <div style="margin-top:6px;">
             <span class="sidebar-chip">事件比較</span>
             <span class="sidebar-chip">投組壓測</span>
             <span class="sidebar-chip">全球地圖</span>
+          </div>
+          <div class="sidebar-mini-grid">
+            <div class="sidebar-mini-tile">
+              <div class="sidebar-mini-label">Risk-On</div>
+              <div class="sidebar-mini-value">{sidebar_signal_summary['risk_on_count']}</div>
+            </div>
+            <div class="sidebar-mini-tile">
+              <div class="sidebar-mini-label">Risk-Off</div>
+              <div class="sidebar-mini-value">{sidebar_signal_summary['risk_off_count']}</div>
+            </div>
+            <div class="sidebar-mini-tile">
+              <div class="sidebar-mini-label">跨區域事件</div>
+              <div class="sidebar-mini-value">{sidebar_signal_summary['cross_region_count']}</div>
+            </div>
+            <div class="sidebar-mini-tile">
+              <div class="sidebar-mini-label">平均強度</div>
+              <div class="sidebar-mini-value">{sidebar_signal_summary['avg_magnitude']:.1f}/5</div>
+            </div>
           </div>
         </div>
         """,
@@ -954,10 +1112,20 @@ with st.sidebar:
     )
 
     st.markdown(
-        """
+        f"""
         <div class="sidebar-card">
           <div class="sidebar-card-title">Recommended Path</div>
           <div class="sidebar-card-note">先看首頁的全球市場脈動，再到事件分析做模擬，最後用事件比較或持倉壓測收斂成結論。</div>
+          <div class="sidebar-route">
+            <div class="sidebar-route-step"><span class="sidebar-step-index">1</span><span>首頁脈動與世界地圖</span></div>
+            <div class="sidebar-route-step"><span class="sidebar-step-index">2</span><span>事件分析與傳導路徑</span></div>
+            <div class="sidebar-route-step"><span class="sidebar-step-index">3</span><span>事件比較與投組壓測</span></div>
+          </div>
+        </div>
+        <div class="sidebar-card">
+          <div class="sidebar-card-title">Live Focus</div>
+          <div class="sidebar-card-value">{sidebar_signal_summary['recommended_pair']}</div>
+          <div class="sidebar-card-note">目前最適合直接拿來展示差異的對照組合，也最能看出平台的比較能力。</div>
         </div>
         """,
         unsafe_allow_html=True,
