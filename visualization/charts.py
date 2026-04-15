@@ -275,7 +275,9 @@ def plot_market_snapshot(snapshot_df: pd.DataFrame) -> go.Figure:
             orientation="h",
             marker_color=colors,
             text=[f"{v:.2f}%" for v in df["one_week"] * 100],
-            textposition="outside",
+            textposition="auto",
+            textfont=dict(size=11, color=TEXT_COLOR),
+            cliponaxis=False,
             customdata=np.column_stack([df["one_day"] * 100, df["ticker"]]),
             hovertemplate=(
                 "<b>%{y}</b><br>"
@@ -292,6 +294,7 @@ def plot_market_snapshot(snapshot_df: pd.DataFrame) -> go.Figure:
         xaxis_title="近一週變化 (%)",
         yaxis_title="",
         height=420,
+        margin=dict(l=70, r=70, t=60, b=45),
     )
     return fig
 
