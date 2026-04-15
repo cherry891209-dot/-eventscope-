@@ -9,6 +9,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
+from urllib.parse import quote
 
 # ─── Page Config (must be first Streamlit call) ──────────────────────────────
 st.set_page_config(
@@ -326,6 +327,46 @@ st.markdown(
         letter-spacing: 0.08em;
         text-transform: uppercase;
         animation: softBob 3.8s ease-in-out infinite;
+    }
+    .visual-card {
+        position: relative;
+        overflow: hidden;
+        border-radius: 22px;
+        border: 1px solid rgba(171, 164, 155, 0.26);
+        min-height: 260px;
+        box-shadow: 0 16px 34px rgba(136, 123, 110, 0.10);
+        background: linear-gradient(180deg, rgba(255,251,247,0.96) 0%, rgba(243,236,228,0.98) 100%);
+    }
+    .visual-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+    .visual-card-overlay {
+        position: absolute;
+        inset: auto 0 0 0;
+        padding: 18px 18px 16px 18px;
+        background: linear-gradient(180deg, rgba(27,34,36,0.02) 0%, rgba(33,41,42,0.70) 55%, rgba(33,41,42,0.88) 100%);
+        color: #f8f4ef;
+    }
+    .visual-card-kicker {
+        font-size: 0.74rem;
+        text-transform: uppercase;
+        letter-spacing: 0.10em;
+        opacity: 0.82;
+    }
+    .visual-card-title {
+        font-size: 1.24rem;
+        font-weight: 800;
+        margin-top: 8px;
+        line-height: 1.3;
+    }
+    .visual-card-note {
+        font-size: 0.9rem;
+        line-height: 1.55;
+        margin-top: 8px;
+        color: rgba(248, 244, 239, 0.86);
     }
     .pulse-card {
         background: linear-gradient(180deg, rgba(255, 251, 247, 0.98) 0%, rgba(243, 236, 228, 0.98) 100%);
@@ -705,6 +746,126 @@ def rows_to_portfolio(rows: list[dict]) -> dict:
 def format_asset_label(ticker: str) -> str:
     info = ASSET_UNIVERSE.get(ticker, {})
     return f"{info.get('name_zh', ticker)} ({ticker})"
+
+
+def svg_to_data_uri(svg: str) -> str:
+    return f"data:image/svg+xml;utf8,{quote(svg)}"
+
+
+def build_scene_image(scene: str, accent: str = "#7f998f", secondary: str = "#c8a092") -> str:
+    if scene == "market":
+        svg = f"""
+        <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 620'>
+          <defs>
+            <linearGradient id='bg' x1='0%' y1='0%' x2='100%' y2='100%'>
+              <stop offset='0%' stop-color='#f7efe6'/>
+              <stop offset='55%' stop-color='#e8ddd2'/>
+              <stop offset='100%' stop-color='#c8d6d1'/>
+            </linearGradient>
+            <linearGradient id='line' x1='0%' y1='0%' x2='100%' y2='0%'>
+              <stop offset='0%' stop-color='{accent}'/>
+              <stop offset='100%' stop-color='{secondary}'/>
+            </linearGradient>
+          </defs>
+          <rect width='900' height='620' fill='url(#bg)'/>
+          <circle cx='145' cy='135' r='110' fill='rgba(255,255,255,0.34)'/>
+          <circle cx='770' cy='108' r='88' fill='rgba(127,153,143,0.20)'/>
+          <g opacity='0.35' stroke='#ffffff'>
+            <path d='M70 145 H840'/><path d='M70 245 H840'/><path d='M70 345 H840'/><path d='M70 445 H840'/>
+            <path d='M120 85 V535'/><path d='M280 85 V535'/><path d='M440 85 V535'/><path d='M600 85 V535'/><path d='M760 85 V535'/>
+          </g>
+          <path d='M80 455 C165 455, 165 388, 230 388 S322 220, 395 220 S505 330, 565 330 S640 165, 715 165 S790 260, 845 115'
+                fill='none' stroke='url(#line)' stroke-width='16' stroke-linecap='round'/>
+          <g fill='{accent}'>
+            <circle cx='230' cy='388' r='12'/><circle cx='395' cy='220' r='12'/><circle cx='565' cy='330' r='12'/><circle cx='845' cy='115' r='12'/>
+          </g>
+          <g fill='rgba(255,255,255,0.74)'>
+            <rect x='95' y='88' width='150' height='72' rx='18'/>
+            <rect x='640' y='418' width='165' height='82' rx='20'/>
+          </g>
+          <text x='118' y='132' font-size='26' font-family='Arial' fill='#5b6d68'>Global Pulse</text>
+          <text x='667' y='460' font-size='22' font-family='Arial' fill='#5b6d68'>Cross-asset</text>
+          <text x='667' y='490' font-size='22' font-family='Arial' fill='#5b6d68'>signal flow</text>
+        </svg>
+        """
+    elif scene == "taiwan":
+        svg = f"""
+        <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 620'>
+          <defs>
+            <linearGradient id='bg' x1='0%' y1='0%' x2='100%' y2='100%'>
+              <stop offset='0%' stop-color='#f8efe7'/>
+              <stop offset='60%' stop-color='#e8d8cc'/>
+              <stop offset='100%' stop-color='#d3cfc3'/>
+            </linearGradient>
+          </defs>
+          <rect width='900' height='620' fill='url(#bg)'/>
+          <ellipse cx='210' cy='170' rx='190' ry='86' fill='rgba(255,255,255,0.38)'/>
+          <ellipse cx='710' cy='130' rx='140' ry='72' fill='rgba(255,255,255,0.30)'/>
+          <path d='M612 78 C545 172, 514 262, 486 392 C472 456, 494 522, 544 552 C599 584, 651 564, 689 511 C728 456, 740 387, 727 307 C716 240, 674 149, 612 78 Z'
+                fill='{accent}' opacity='0.78'/>
+          <path d='M606 110 C558 190, 534 272, 513 374 C502 426, 519 483, 558 512 C602 544, 642 526, 672 480 C706 429, 715 375, 703 313 C693 257, 659 176, 606 110 Z'
+                fill='rgba(255,255,255,0.68)'/>
+          <g fill='{secondary}' opacity='0.88'>
+            <rect x='102' y='370' width='88' height='155' rx='12'/>
+            <rect x='200' y='318' width='108' height='207' rx='14'/>
+            <rect x='322' y='278' width='96' height='247' rx='14'/>
+            <rect x='439' y='214' width='66' height='311' rx='15'/>
+          </g>
+          <g fill='rgba(255,255,255,0.78)'>
+            <circle cx='455' cy='200' r='18'/>
+            <rect x='98' y='116' width='194' height='76' rx='18'/>
+          </g>
+          <text x='123' y='160' font-size='28' font-family='Arial' fill='#5e635e'>Taiwan market</text>
+          <text x='120' y='432' font-size='26' font-family='Arial' fill='#fffaf6'>Semis</text>
+          <text x='223' y='377' font-size='26' font-family='Arial' fill='#fffaf6'>Banks</text>
+          <text x='334' y='336' font-size='26' font-family='Arial' fill='#fffaf6'>Tech</text>
+        </svg>
+        """
+    else:
+        svg = f"""
+        <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 620'>
+          <defs>
+            <linearGradient id='bg' x1='0%' y1='0%' x2='100%' y2='100%'>
+              <stop offset='0%' stop-color='#f7eee6'/>
+              <stop offset='50%' stop-color='#e7dbd0'/>
+              <stop offset='100%' stop-color='#cad7d2'/>
+            </linearGradient>
+          </defs>
+          <rect width='900' height='620' fill='url(#bg)'/>
+          <g stroke='rgba(255,255,255,0.82)' stroke-width='7' fill='none'>
+            <path d='M168 125 L314 210 L250 363 L138 472'/>
+            <path d='M314 210 L485 175 L622 282 L704 177'/>
+            <path d='M250 363 L423 420 L559 371 L622 282'/>
+            <path d='M423 420 L598 503 L748 437'/>
+          </g>
+          <g fill='{accent}'>
+            <circle cx='168' cy='125' r='25'/><circle cx='314' cy='210' r='25'/><circle cx='250' cy='363' r='25'/>
+            <circle cx='138' cy='472' r='25'/><circle cx='485' cy='175' r='25'/><circle cx='622' cy='282' r='25'/>
+            <circle cx='704' cy='177' r='25'/><circle cx='423' cy='420' r='25'/><circle cx='559' cy='371' r='25'/>
+            <circle cx='598' cy='503' r='25'/><circle cx='748' cy='437' r='25'/>
+          </g>
+          <g fill='rgba(255,255,255,0.82)'>
+            <rect x='96' y='90' width='196' height='74' rx='18'/>
+            <rect x='594' y='460' width='180' height='72' rx='18'/>
+          </g>
+          <text x='121' y='133' font-size='28' font-family='Arial' fill='#5b6d68'>Contagion map</text>
+          <text x='620' y='505' font-size='24' font-family='Arial' fill='#5b6d68'>Shock routes</text>
+        </svg>
+        """
+    return svg_to_data_uri(svg)
+
+
+def build_visual_card_html(title: str, note: str, image_uri: str, kicker: str) -> str:
+    return f"""
+    <div class="visual-card fade-up">
+      <img src="{image_uri}" alt="{title}">
+      <div class="visual-card-overlay">
+        <div class="visual-card-kicker">{kicker}</div>
+        <div class="visual-card-title">{title}</div>
+        <div class="visual-card-note">{note}</div>
+      </div>
+    </div>
+    """
 
 
 MARKET_SNAPSHOT_TICKERS = [
@@ -1466,6 +1627,31 @@ if page == "🏠 首頁":
         unsafe_allow_html=True,
     )
 
+    hero_visuals = [
+        (
+            "全球風險脈動",
+            "把跨市場價格變化、風險偏好與事件熱度濃縮成一眼可掃描的視覺入口。",
+            build_scene_image("market", "#7f998f", "#c8a092"),
+            "Market Image",
+        ),
+        (
+            "台灣科技鏈",
+            "現在可以直接把台灣股市、半導體與本地事件拉進同一條分析動線。",
+            build_scene_image("taiwan", "#d9925b", "#8f9f98"),
+            "Taiwan Image",
+        ),
+        (
+            "衝擊傳導網路",
+            "從第一波衝擊源一路看到跨資產的擴散方向，不再只看單一報酬數字。",
+            build_scene_image("network", "#819daf", "#9aa287"),
+            "Network Image",
+        ),
+    ]
+    hv1, hv2, hv3 = st.columns(3)
+    for col, card in zip([hv1, hv2, hv3], hero_visuals):
+        with col:
+            st.markdown(build_visual_card_html(*card), unsafe_allow_html=True)
+
     # Quick stats
     col1, col2, col3, col4 = st.columns(4)
     with col1:
@@ -1927,6 +2113,29 @@ elif page == "🔬 事件分析":
                     """,
                     unsafe_allow_html=True,
                 )
+
+        event_visuals = [
+            (
+                f"{selected_event['name_zh']} 情境圖像",
+                f"用視覺方式快速記住這個事件的核心敘事：{selected_event['description_zh'][:42]}...",
+                build_scene_image(
+                    "taiwan" if get_event_region(selected_event) == "台灣" else "market",
+                    cat_color,
+                    "#c8a092",
+                ),
+                "Event Image",
+            ),
+            (
+                "傳導路徑預覽",
+                "這張圖代表接下來會在分析結果裡看到的跨資產傳導與風險擴散概念。",
+                build_scene_image("network", cat_color, "#8fa89d"),
+                "Pathway Image",
+            ),
+        ]
+        evc1, evc2 = st.columns(2)
+        for col, card in zip([evc1, evc2], event_visuals):
+            with col:
+                st.markdown(build_visual_card_html(*card), unsafe_allow_html=True)
 
     # ── Step 2: Select Assets ─────────────────────────────────────────────
     st.markdown('<div class="section-header">Step 2 · 選擇分析資產</div>', unsafe_allow_html=True)
