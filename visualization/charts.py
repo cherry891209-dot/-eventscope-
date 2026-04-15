@@ -267,6 +267,7 @@ def plot_market_snapshot(snapshot_df: pd.DataFrame) -> go.Figure:
         return go.Figure()
 
     df = snapshot_df.copy().sort_values("one_week")
+    layout = dict(_LAYOUT_BASE, margin=dict(l=70, r=70, t=60, b=45))
     colors = [POSITIVE_COLOR if v >= 0 else NEGATIVE_COLOR for v in df["one_week"]]
     fig = go.Figure(
         go.Bar(
@@ -289,12 +290,11 @@ def plot_market_snapshot(snapshot_df: pd.DataFrame) -> go.Figure:
     )
     fig.add_vline(x=0, line_color=GRID_COLOR, line_width=1)
     fig.update_layout(
-        **_LAYOUT_BASE,
+        **layout,
         title=dict(text="全球市場快照", font=dict(color=ACCENT, size=16)),
         xaxis_title="近一週變化 (%)",
         yaxis_title="",
         height=420,
-        margin=dict(l=70, r=70, t=60, b=45),
     )
     return fig
 
