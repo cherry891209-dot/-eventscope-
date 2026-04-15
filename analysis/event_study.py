@@ -130,12 +130,18 @@ def run_event_study(
     ev_end = min(len(returns_matrix), event_loc + post + 1)
     event_rets = returns_matrix.iloc[ev_start:ev_end]
 
-    market_est = estimation_rets.get(market_ticker, pd.Series(dtype=float))
-    market_ev = event_rets.get(market_ticker, pd.Series(dtype=float))
-
     for ticker in returns_matrix.columns:
         asset_est = estimation_rets.get(ticker, pd.Series(dtype=float))
         asset_ev = event_rets.get(ticker, pd.Series(dtype=float))
+
+        benchmark_ticker = market_ticker
+        if ticker == market_ticker:
+            alt_candidates = [col for col in returns_matrix.columns if col != ticker]
+            if alt_candidates:
+                benchmark_ticker = alt_candidates[0]
+
+        market_est = estimation_rets.get(benchmark_ticker, pd.Series(dtype=float))
+        market_ev = event_rets.get(benchmark_ticker, pd.Series(dtype=float))
 
         model = estimate_market_model(asset_est, market_est)
         alpha, beta = model["alpha"], model["beta"]
