@@ -132,6 +132,7 @@ git push -u origin main
 
 - 安裝：`pip install -r requirements.txt`
 - 啟動：`streamlit run app.py --server.port $PORT --server.address 0.0.0.0`
+- Python：由 `runtime.txt` 固定為 `3.11.11`
 
 ### Streamlit Community Cloud
 
