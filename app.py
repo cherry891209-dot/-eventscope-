@@ -868,6 +868,17 @@ def build_visual_card_html(title: str, note: str, image_uri: str, kicker: str) -
     """
 
 
+def pick_scene_for_event(event: dict) -> tuple[str, str]:
+    region = get_event_region(event)
+    category = event.get("category", "")
+    accent = CAT_COLORS.get(category, "#7f998f")
+    if region == "台灣":
+        return "taiwan", accent
+    if category in {"科技產業", "金融危機", "地緣政治"}:
+        return "network", accent
+    return "market", accent
+
+
 MARKET_SNAPSHOT_TICKERS = [
     "^GSPC", "^IXIC", "^DJI", "^TWII", "2330.TW", "2454.TW", "^N225", "^HSI", "^FTSE", "GLD",
     "CL=F", "^DXY", "BTC-USD", "IEF", "EEM",
@@ -1869,7 +1880,17 @@ if page == "🏠 首頁":
         col = [fc1, fc2, fc3][i % 3]
         cat_color = CAT_COLORS.get(ev["category"], "#888")
         mag_stars = "★" * round(ev["magnitude"]) + "☆" * (5 - round(ev["magnitude"]))
+        scene, scene_color = pick_scene_for_event(ev)
         with col:
+            st.markdown(
+                build_visual_card_html(
+                    ev["name_zh"],
+                    f"{ev['date']} · {get_event_region(ev)} · {ev['category']}",
+                    build_scene_image(scene, scene_color, "#c8a092"),
+                    "Featured Event",
+                ),
+                unsafe_allow_html=True,
+            )
             st.markdown(
                 f"""
                 <div class="event-card">
@@ -3122,6 +3143,31 @@ elif page == "📚 事件資料庫":
 elif page == "📖 方法論說明":
     st.markdown('<div class="hero-title" style="font-size:2rem;">📖 方法論說明</div>', unsafe_allow_html=True)
     st.markdown('<div class="hero-subtitle" style="text-align:left; margin-bottom:20px;">EventScope 核心分析方法的學術基礎與實作說明</div>', unsafe_allow_html=True)
+
+    meth_cards = [
+        (
+            "事件研究視角",
+            "先估計正常報酬，再抽出異常報酬與 CAR，讓事件衝擊有可比較的統計尺度。",
+            build_scene_image("market", "#8fa89d", "#c8a092"),
+            "Method Image",
+        ),
+        (
+            "傳導網路視角",
+            "把 Granger 因果性與轉移熵結合成有向關係圖，描述衝擊擴散路徑。",
+            build_scene_image("network", "#819daf", "#9aa287"),
+            "Network Image",
+        ),
+        (
+            "壓力測試視角",
+            "把單一資產的分佈延伸到整體投組，從平均、尾端到對沖建議一次看清楚。",
+            build_scene_image("taiwan", "#b59b74", "#7f998f"),
+            "Stress Image",
+        ),
+    ]
+    mc1, mc2, mc3 = st.columns(3)
+    for col, card in zip([mc1, mc2, mc3], meth_cards):
+        with col:
+            st.markdown(build_visual_card_html(*card), unsafe_allow_html=True)
 
     # ── 1. Event Study ────────────────────────────────────────────────────
     with st.expander("📊 一、事件研究法（Event Study）", expanded=True):
