@@ -656,6 +656,7 @@ CAT_COLORS = {
 
 PORTFOLIO_PRESETS = {
     "課堂示範": DEFAULT_PORTFOLIO.copy(),
+    "台灣核心": {"0050.TW": 0.25, "2330.TW": 0.25, "2454.TW": 0.15, "2317.TW": 0.10, "2881.TW": 0.10, "GLD": 0.10, "^DXY": 0.05},
     "科技成長": {"^IXIC": 0.30, "2330.TW": 0.20, "BTC-USD": 0.15, "^GSPC": 0.20, "GLD": 0.05, "^TNX": 0.10},
     "防禦避險": {"GLD": 0.30, "^TNX": 0.25, "^DXY": 0.15, "^GSPC": 0.15, "^TWII": 0.10, "BTC-USD": 0.05},
     "通膨交易": {"CL=F": 0.25, "GC=F": 0.20, "GLD": 0.15, "^DXY": 0.10, "EEM": 0.10, "^GSPC": 0.20},
@@ -707,12 +708,13 @@ def format_asset_label(ticker: str) -> str:
 
 
 MARKET_SNAPSHOT_TICKERS = [
-    "^GSPC", "^IXIC", "^DJI", "^N225", "^HSI", "^FTSE", "GLD",
+    "^GSPC", "^IXIC", "^DJI", "^TWII", "2330.TW", "2454.TW", "^N225", "^HSI", "^FTSE", "GLD",
     "CL=F", "^DXY", "BTC-USD", "IEF", "EEM",
 ]
 
 REGION_COORDS = {
     "全球": (10, 15),
+    "台灣": (23.7, 121.0),
     "北美": (42, -98),
     "拉丁美洲": (-16, -60),
     "歐洲": (51, 12),
