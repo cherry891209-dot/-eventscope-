@@ -925,6 +925,25 @@ if "portfolio_editor_rows" not in st.session_state:
     st.session_state["portfolio_editor_rows"] = portfolio_to_rows(DEFAULT_PORTFOLIO)
 if "portfolio_input_mode" not in st.session_state:
     st.session_state["portfolio_input_mode"] = "快速配置器"
+if "nav_page" not in st.session_state:
+    st.session_state["nav_page"] = "🏠 首頁"
+if "global_category_filter" not in st.session_state:
+    st.session_state["global_category_filter"] = "全部"
+if "global_region_filter" not in st.session_state:
+    st.session_state["global_region_filter"] = "全部"
+if "global_min_magnitude" not in st.session_state:
+    st.session_state["global_min_magnitude"] = 1.0
+all_years = sorted(int(e["date"][:4]) for e in HISTORICAL_EVENTS)
+if "global_year_range" not in st.session_state:
+    st.session_state["global_year_range"] = (min(all_years), max(all_years))
+if "quick_event_id" not in st.session_state:
+    st.session_state["quick_event_id"] = None
+if "favorite_event_ids" not in st.session_state:
+    st.session_state["favorite_event_ids"] = []
+if "recent_event_ids" not in st.session_state:
+    st.session_state["recent_event_ids"] = []
+if "selected_tickers" not in st.session_state:
+    st.session_state["selected_tickers"] = list(DEFAULT_PORTFOLIO.keys())
 
 
 # ─── Cached Analysis Functions ───────────────────────────────────────────────
@@ -1058,6 +1077,11 @@ with st.sidebar:
     sidebar_top_region = max(sidebar_region_summary, key=lambda x: x["count"])["region"]
     sidebar_snapshot = build_market_snapshot()
     sidebar_signal_summary = build_homepage_signal_summary(sidebar_snapshot)
+    sidebar_featured_ids = [
+        "covid_crash_2020", "asian_financial_crisis_1997", "russia_ukraine_2022",
+        "uk_gilt_crisis_2022", "deepseek_shock_2025", "japan_earthquake_2011",
+    ]
+    sidebar_featured_events = [get_event_by_id(eid) for eid in sidebar_featured_ids if get_event_by_id(eid)]
     st.markdown(
         """
         <div style="text-align:center; padding: 20px 0 10px 0;">
@@ -1073,6 +1097,7 @@ with st.sidebar:
     page = st.radio(
         "導覽",
         options=["🏠 首頁", "🔬 事件分析", "📚 事件資料庫", "📖 方法論說明"],
+        key="nav_page",
         label_visibility="collapsed",
     )
 
@@ -1111,6 +1136,67 @@ with st.sidebar:
         unsafe_allow_html=True,
     )
 
+    st.markdown('<div class="sidebar-card-title" style="margin-top:6px;">Quick Filters</div>', unsafe_allow_html=True)
+    filter_col1, filter_col2 = st.columns(2)
+    with filter_col1:
+        global_cat = st.selectbox(
+            "類別",
+            ["全部"] + EVENT_CATEGORIES,
+            index=(["全部"] + EVENT_CATEGORIES).index(st.session_state["global_category_filter"]),
+            key="global_category_filter_widget",
+        )
+    with filter_col2:
+        global_region = st.selectbox(
+            "地區",
+            ["全部"] + EVENT_REGIONS,
+            index=(["全部"] + EVENT_REGIONS).index(st.session_state["global_region_filter"]),
+            key="global_region_filter_widget",
+        )
+    global_mag = st.slider(
+        "最低嚴重程度",
+        1.0, 5.0, float(st.session_state["global_min_magnitude"]), 0.5,
+        key="global_min_magnitude_widget",
+    )
+    global_years = st.slider(
+        "年份區間",
+        min(all_years), max(all_years),
+        value=st.session_state["global_year_range"],
+        key="global_year_range_widget",
+    )
+    st.session_state["global_category_filter"] = global_cat
+    st.session_state["global_region_filter"] = global_region
+    st.session_state["global_min_magnitude"] = global_mag
+    st.session_state["global_year_range"] = global_years
+
+    st.markdown('<div class="sidebar-card-title" style="margin-top:18px;">Hot Events</div>', unsafe_allow_html=True)
+    quick_event_options = {
+        f"{e['date']} · {e['name_zh']}": e["id"]
+        for e in sidebar_featured_events
+    }
+    quick_event_label = st.selectbox(
+        "熱門事件捷徑",
+        list(quick_event_options.keys()),
+        key="sidebar_quick_event_label",
+    )
+    quick_event = get_event_by_id(quick_event_options[quick_event_label])
+    quick_btn1, quick_btn2, quick_btn3 = st.columns(3)
+    if quick_btn1.button("載入分析", use_container_width=True):
+        st.session_state["quick_event_id"] = quick_event["id"]
+        st.session_state["global_category_filter"] = quick_event["category"]
+        st.session_state["global_region_filter"] = get_event_region(quick_event)
+        st.session_state["nav_page"] = "🔬 事件分析"
+        st.rerun()
+    if quick_btn2.button("看資料庫", use_container_width=True):
+        st.session_state["quick_event_id"] = quick_event["id"]
+        st.session_state["global_category_filter"] = quick_event["category"]
+        st.session_state["global_region_filter"] = get_event_region(quick_event)
+        st.session_state["nav_page"] = "📚 事件資料庫"
+        st.rerun()
+    if quick_btn3.button("收藏", use_container_width=True):
+        if quick_event["id"] not in st.session_state["favorite_event_ids"]:
+            st.session_state["favorite_event_ids"] = [quick_event["id"]] + st.session_state["favorite_event_ids"]
+        st.rerun()
+
     st.markdown(
         f"""
         <div class="sidebar-card">
@@ -1130,6 +1216,81 @@ with st.sidebar:
         """,
         unsafe_allow_html=True,
     )
+
+    current_selected_event = st.session_state.get("selected_event")
+    current_event_name = current_selected_event["name_zh"] if current_selected_event else "尚未執行分析"
+    workspace_event = get_event_by_id(st.session_state["quick_event_id"]) if st.session_state.get("quick_event_id") else None
+    workspace_event_name = workspace_event["name_zh"] if workspace_event else current_event_name
+    st.markdown(
+        f"""
+        <div class="sidebar-card">
+          <div class="sidebar-card-title">Workspace</div>
+          <div class="sidebar-card-note">目前事件：{workspace_event_name}</div>
+          <div class="sidebar-mini-grid">
+            <div class="sidebar-mini-tile">
+              <div class="sidebar-mini-label">已選標的</div>
+              <div class="sidebar-mini-value">{len(st.session_state.get('selected_tickers', []))}</div>
+            </div>
+            <div class="sidebar-mini-tile">
+              <div class="sidebar-mini-label">投組資產</div>
+              <div class="sidebar-mini-value">{len(st.session_state.get('portfolio_dict', {}))}</div>
+            </div>
+            <div class="sidebar-mini-tile">
+              <div class="sidebar-mini-label">篩選類別</div>
+              <div class="sidebar-mini-value">{st.session_state['global_category_filter']}</div>
+            </div>
+            <div class="sidebar-mini-tile">
+              <div class="sidebar-mini-label">篩選地區</div>
+              <div class="sidebar-mini-value">{st.session_state['global_region_filter']}</div>
+            </div>
+          </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    recent_events = [get_event_by_id(eid) for eid in st.session_state["recent_event_ids"][:4] if get_event_by_id(eid)]
+    favorite_events = [get_event_by_id(eid) for eid in st.session_state["favorite_event_ids"][:4] if get_event_by_id(eid)]
+    favorites_html = "".join(
+        f"<div class='sidebar-route-step'><span class='sidebar-step-index'>★</span><span>{ev['name_zh']}</span></div>"
+        for ev in favorite_events
+    ) or "<div class='sidebar-card-note'>還沒有收藏事件。</div>"
+    recent_html = "".join(
+        f"<div class='sidebar-route-step'><span class='sidebar-step-index'>↺</span><span>{ev['name_zh']}</span></div>"
+        for ev in recent_events
+    ) or "<div class='sidebar-card-note'>還沒有最近瀏覽事件。</div>"
+    st.markdown(
+        f"""
+        <div class="sidebar-card">
+          <div class="sidebar-card-title">Favorites</div>
+          <div class="sidebar-route">{favorites_html}</div>
+        </div>
+        <div class="sidebar-card">
+          <div class="sidebar-card-title">Recent Events</div>
+          <div class="sidebar-route">{recent_html}</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    st.markdown('<div class="sidebar-card-title" style="margin-top:18px;">Quick Actions</div>', unsafe_allow_html=True)
+    action_col1, action_col2 = st.columns(2)
+    if action_col1.button("前往分析", use_container_width=True):
+        st.session_state["nav_page"] = "🔬 事件分析"
+        st.rerun()
+    if action_col2.button("前往資料庫", use_container_width=True):
+        st.session_state["nav_page"] = "📚 事件資料庫"
+        st.rerun()
+    action_col3, action_col4 = st.columns(2)
+    if action_col3.button("重設篩選", use_container_width=True):
+        st.session_state["global_category_filter"] = "全部"
+        st.session_state["global_region_filter"] = "全部"
+        st.session_state["global_min_magnitude"] = 1.0
+        st.session_state["global_year_range"] = (min(all_years), max(all_years))
+        st.rerun()
+    if action_col4.button("清空收藏", use_container_width=True):
+        st.session_state["favorite_event_ids"] = []
+        st.rerun()
 
     st.markdown("<hr style='border-color:var(--border); margin:20px 0 10px 0;'>", unsafe_allow_html=True)
     st.markdown(
@@ -1480,7 +1641,10 @@ elif page == "🔬 事件分析":
     s1_col1, s1_col2 = st.columns([1, 2])
     with s1_col1:
         all_cats = ["全部"] + EVENT_CATEGORIES
-        default_cat = "全部" if scenario_mode == "歷史事件" else "貨幣政策"
+        global_cat_default = st.session_state.get("global_category_filter", "全部")
+        if scenario_mode != "歷史事件" and global_cat_default == "全部":
+            global_cat_default = "貨幣政策"
+        default_cat = global_cat_default if scenario_mode == "歷史事件" else global_cat_default
         selected_cat = st.radio(
             "事件類別篩選",
             all_cats if scenario_mode == "歷史事件" else EVENT_CATEGORIES,
@@ -1488,7 +1652,12 @@ elif page == "🔬 事件分析":
             index=(all_cats.index(default_cat) if scenario_mode == "歷史事件" else 0),
         )
         if scenario_mode == "歷史事件":
-            selected_region = st.selectbox("地區篩選", ["全部"] + EVENT_REGIONS)
+            region_options = ["全部"] + EVENT_REGIONS
+            selected_region = st.selectbox(
+                "地區篩選",
+                region_options,
+                index=region_options.index(st.session_state.get("global_region_filter", "全部")),
+            )
         else:
             selected_region = "全部"
 
@@ -1504,11 +1673,22 @@ elif page == "🔬 事件分析":
 
         if scenario_mode == "歷史事件":
             filtered_events = get_events_by_filters(selected_cat, selected_region)
+            year_start, year_end = st.session_state.get("global_year_range", (min(all_years), max(all_years)))
+            global_mag = st.session_state.get("global_min_magnitude", 1.0)
+            filtered_events = [
+                e for e in filtered_events
+                if year_start <= int(e["date"][:4]) <= year_end and e["magnitude"] >= global_mag
+            ]
             event_options = {f"{e['date']} — {e['name_zh']}": e["id"] for e in filtered_events}
             if not event_options:
                 st.warning("目前這個類別與地區組合沒有事件，請調整篩選條件。")
                 st.stop()
-            selected_label = st.selectbox("選擇事件", list(event_options.keys()))
+            option_labels = list(event_options.keys())
+            default_index = 0
+            quick_event_id = st.session_state.get("quick_event_id")
+            if quick_event_id and quick_event_id in event_options.values():
+                default_index = list(event_options.values()).index(quick_event_id)
+            selected_label = st.selectbox("選擇事件", option_labels, index=default_index)
             selected_event_id = event_options[selected_label]
             selected_event = get_event_by_id(selected_event_id)
         else:
@@ -1573,6 +1753,16 @@ elif page == "🔬 事件分析":
             event_card_html,
             unsafe_allow_html=True,
         )
+        fav_col1, fav_col2 = st.columns([1, 4])
+        if fav_col1.button("收藏這個事件", key=f"favorite_{selected_event['id']}", use_container_width=True):
+            if selected_event["id"] not in st.session_state["favorite_event_ids"]:
+                st.session_state["favorite_event_ids"] = [selected_event["id"]] + st.session_state["favorite_event_ids"]
+                st.rerun()
+        with fav_col2:
+            st.markdown(
+                f"<div style='color:var(--text-muted); font-size:0.92rem; padding-top:8px;'>目前已收藏 {len(st.session_state['favorite_event_ids'])} 個事件，可在左側 Favorites 快速回看。</div>",
+                unsafe_allow_html=True,
+            )
         summary_cols = st.columns(3)
         calibration_value = selected_event.get("reference_event_name", "歷史事件基準")
         calibration_note = (
@@ -1611,9 +1801,10 @@ elif page == "🔬 事件分析":
     selected_tickers = st.multiselect(
         "選擇資產（可多選）",
         options=all_tickers,
-        default=all_tickers,
+        default=st.session_state.get("selected_tickers", all_tickers),
         format_func=lambda t: ticker_display[t],
     )
+    st.session_state["selected_tickers"] = selected_tickers
 
     if not selected_tickers:
         st.warning("請至少選擇一個資產。")
@@ -1665,6 +1856,8 @@ elif page == "🔬 事件分析":
             progress_bar.progress(100, text="分析完成！")
             st.session_state["analysis_done"] = True
             st.session_state["selected_event"] = selected_event
+            recent_ids = [selected_event["id"]] + [eid for eid in st.session_state["recent_event_ids"] if eid != selected_event["id"]]
+            st.session_state["recent_event_ids"] = recent_ids[:8]
             st.success(f"✓ 分析完成 — {selected_event['name_zh']} ({event_date})")
 
         except Exception as e:
@@ -2417,13 +2610,28 @@ elif page == "📚 事件資料庫":
     # Filters
     f1, f2, f3, f4 = st.columns(4)
     with f1:
-        filter_cat = st.selectbox("類別篩選", ["全部"] + EVENT_CATEGORIES)
+        db_cat_options = ["全部"] + EVENT_CATEGORIES
+        filter_cat = st.selectbox(
+            "類別篩選",
+            db_cat_options,
+            index=db_cat_options.index(st.session_state.get("global_category_filter", "全部")),
+        )
     with f2:
-        filter_region = st.selectbox("地區篩選", ["全部"] + EVENT_REGIONS)
+        db_region_options = ["全部"] + EVENT_REGIONS
+        filter_region = st.selectbox(
+            "地區篩選",
+            db_region_options,
+            index=db_region_options.index(st.session_state.get("global_region_filter", "全部")),
+        )
     with f3:
         filter_search = st.text_input("搜尋事件名稱", placeholder="例如：聯準會、比特幣...")
     with f4:
-        filter_mag = st.slider("最低嚴重程度", 1.0, 5.0, 1.0, 0.5)
+        filter_mag = st.slider(
+            "最低嚴重程度",
+            1.0, 5.0,
+            float(st.session_state.get("global_min_magnitude", 1.0)),
+            0.5,
+        )
 
     # Filter events
     display_events = HISTORICAL_EVENTS.copy()
@@ -2438,6 +2646,8 @@ elif page == "📚 事件資料庫":
             if q in e["name_zh"].lower() or q in e["name_en"].lower() or q in e["description_zh"].lower()
         ]
     display_events = [e for e in display_events if e["magnitude"] >= filter_mag]
+    year_start, year_end = st.session_state.get("global_year_range", (min(all_years), max(all_years)))
+    display_events = [e for e in display_events if year_start <= int(e["date"][:4]) <= year_end]
     display_events = sorted(display_events, key=lambda x: x["date"], reverse=True)
 
     st.markdown(f"**找到 {len(display_events)} 個事件**", unsafe_allow_html=True)
@@ -2463,10 +2673,14 @@ elif page == "📚 事件資料庫":
         f'<div class="section-header">事件詳情</div><div style="color:var(--text-muted); margin:-6px 0 14px 0;">目前展開前 {detail_limit} 件事件，方便快速瀏覽全球資料庫。</div>',
         unsafe_allow_html=True,
     )
+    quick_event_id = st.session_state.get("quick_event_id")
+    if quick_event_id:
+        display_events = sorted(display_events, key=lambda e: 0 if e["id"] == quick_event_id else 1)
     for ev in display_events[:detail_limit]:
         cat_color = CAT_COLORS.get(ev["category"], "#888")
         mag_stars = "★" * round(ev["magnitude"]) + "☆" * (5 - round(ev["magnitude"]))
-        with st.expander(f"📌 {ev['date']} — {ev['name_zh']}"):
+        is_quick_target = quick_event_id == ev["id"]
+        with st.expander(f"📌 {ev['date']} — {ev['name_zh']}" + ("（捷徑目標）" if is_quick_target else ""), expanded=is_quick_target):
             dc1, dc2 = st.columns([3, 1])
             with dc1:
                 st.markdown(
@@ -2479,6 +2693,15 @@ elif page == "📚 事件資料庫":
                     """,
                     unsafe_allow_html=True,
                 )
+                action_cols = st.columns(2)
+                if action_cols[0].button("載入到分析頁", key=f"db_to_analysis_{ev['id']}", use_container_width=True):
+                    st.session_state["quick_event_id"] = ev["id"]
+                    st.session_state["nav_page"] = "🔬 事件分析"
+                    st.rerun()
+                if action_cols[1].button("收藏", key=f"db_favorite_{ev['id']}", use_container_width=True):
+                    if ev["id"] not in st.session_state["favorite_event_ids"]:
+                        st.session_state["favorite_event_ids"] = [ev["id"]] + st.session_state["favorite_event_ids"]
+                    st.rerun()
             with dc2:
                 st.markdown(
                     f"""
