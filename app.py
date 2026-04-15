@@ -879,6 +879,44 @@ def pick_scene_for_event(event: dict) -> tuple[str, str]:
     return "market", accent
 
 
+def derive_event_tags(event: dict) -> list[str]:
+    text = f"{event.get('name_zh', '')} {event.get('description_zh', '')} {event.get('primary_shock', '')}".lower()
+    tags = {event.get("category", ""), get_event_region(event), event.get("primary_shock", "")}
+    if "台" in text or get_event_region(event) == "台灣":
+        tags.add("台灣")
+    if any(word in text for word in ["晶片", "半導體", "台積電", "科技", "chip", "semiconductor"]):
+        tags.add("半導體")
+    if any(word in text for word in ["升息", "利率", "央行", "qe", "貨幣"]):
+        tags.add("利率政策")
+    if any(word in text for word in ["戰", "衝突", "軍事", "選舉", "政治"]):
+        tags.add("地緣風險")
+    if any(word in text for word in ["原油", "能源", "電力", "油價", "天然氣"]):
+        tags.add("能源")
+    if any(word in text for word in ["銀行", "信用", "違約", "債務", "房市"]):
+        tags.add("金融壓力")
+    return sorted(tag for tag in tags if tag)
+
+
+def build_taiwan_focus_summary() -> dict:
+    tw_events = [e for e in HISTORICAL_EVENTS if get_event_region(e) == "台灣"]
+    tw_assets = {ticker: info for ticker, info in ASSET_UNIVERSE.items() if info.get("category") == "台灣股市"}
+    latest_event = max(tw_events, key=lambda e: e["date"]) if tw_events else None
+    dominant_category = ""
+    if tw_events:
+        categories = {cat: sum(1 for e in tw_events if e["category"] == cat) for cat in EVENT_CATEGORIES}
+        dominant_category = max(categories, key=categories.get)
+    flagship_assets = list(tw_assets.keys())[:4]
+    avg_mag = float(np.mean([e["magnitude"] for e in tw_events])) if tw_events else 0.0
+    return {
+        "event_count": len(tw_events),
+        "asset_count": len(tw_assets),
+        "avg_magnitude": avg_mag,
+        "latest_event": latest_event,
+        "dominant_category": dominant_category,
+        "flagship_assets": flagship_assets,
+    }
+
+
 MARKET_SNAPSHOT_TICKERS = [
     "^GSPC", "^IXIC", "^DJI", "^TWII", "2330.TW", "2454.TW", "^N225", "^HSI", "^FTSE", "GLD",
     "CL=F", "^DXY", "BTC-USD", "IEF", "EEM",
@@ -1200,6 +1238,8 @@ if "open_compare_tab" not in st.session_state:
     st.session_state["open_compare_tab"] = False
 if "saved_portfolios" not in st.session_state:
     st.session_state["saved_portfolios"] = {}
+if "db_theme_filter" not in st.session_state:
+    st.session_state["db_theme_filter"] = "全部"
 
 
 # ─── Cached Analysis Functions ───────────────────────────────────────────────
@@ -1796,6 +1836,59 @@ if page == "🏠 首頁":
     )
     st.markdown(f"<div style='margin-top:6px; margin-bottom:8px;'>{chips_html}</div>", unsafe_allow_html=True)
 
+    tw_focus = build_taiwan_focus_summary()
+    latest_tw = tw_focus["latest_event"]
+    st.markdown('<div class="section-header">🇹🇼 台灣焦點專區</div>', unsafe_allow_html=True)
+    tw_col1, tw_col2 = st.columns([1.2, 1])
+    with tw_col1:
+        st.markdown(
+            build_visual_card_html(
+                "台灣市場情境總覽",
+                "把台股、半導體、金融與本地重大事件放進同一個分析主線，適合課堂展示與區域市場報告。",
+                build_scene_image("taiwan", "#d9925b", "#8f9f98"),
+                "Taiwan Focus",
+            ),
+            unsafe_allow_html=True,
+        )
+    with tw_col2:
+        st.markdown(
+            f"""
+            <div class="glass-panel">
+              <div class="mini-section-title">台灣資料面板</div>
+              <div class="summary-tile-note" style="margin-top:0;">已經把台灣事件、台股與台灣核心投組整合進首頁與分析流程。</div>
+              <div style="display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:10px; margin-top:12px;">
+                <div class="summary-tile"><div class="summary-tile-label">台灣事件</div><div class="summary-tile-value">{tw_focus['event_count']} 件</div><div class="summary-tile-note">平均強度 {tw_focus['avg_magnitude']:.1f} / 5</div></div>
+                <div class="summary-tile"><div class="summary-tile-label">台灣標的</div><div class="summary-tile-value">{tw_focus['asset_count']} 檔</div><div class="summary-tile-note">台股與 ETF 可直接進投組分析</div></div>
+                <div class="summary-tile"><div class="summary-tile-label">主力主題</div><div class="summary-tile-value">{tw_focus['dominant_category'] or '--'}</div><div class="summary-tile-note">目前最常見的台灣事件型態</div></div>
+                <div class="summary-tile"><div class="summary-tile-label">最新事件</div><div class="summary-tile-value" style="font-size:1.05rem;">{latest_tw['name_zh'] if latest_tw else '--'}</div><div class="summary-tile-note">{latest_tw['date'] if latest_tw else '暫無資料'}</div></div>
+              </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+        tw_action1, tw_action2, tw_action3 = st.columns(3)
+        if tw_action1.button("前往台灣事件", key="home_taiwan_db", use_container_width=True):
+            st.session_state["global_region_filter"] = "台灣"
+            queue_nav("📚 事件資料庫")
+            st.rerun()
+        if tw_action2.button("分析台灣事件", key="home_taiwan_analysis", use_container_width=True):
+            if latest_tw:
+                st.session_state["quick_event_id"] = latest_tw["id"]
+            st.session_state["global_region_filter"] = "台灣"
+            queue_nav("🔬 事件分析")
+            st.rerun()
+        if tw_action3.button("載入台灣核心投組", key="home_taiwan_port", use_container_width=True):
+            st.session_state["portfolio_dict"] = PORTFOLIO_PRESETS["台灣核心"].copy()
+            st.session_state["portfolio_editor_rows"] = portfolio_to_rows(PORTFOLIO_PRESETS["台灣核心"])
+            st.rerun()
+
+    if tw_focus["flagship_assets"]:
+        tw_assets_html = "".join(
+            f"<span class='market-chip'><span class='market-dot' style='background:{ASSET_UNIVERSE[t]['color']};'></span>{ASSET_UNIVERSE[t]['name_zh']}</span>"
+            for t in tw_focus["flagship_assets"]
+        )
+        st.markdown(f"<div style='margin-top:8px; margin-bottom:10px;'>{tw_assets_html}</div>", unsafe_allow_html=True)
+
     richness_cols = st.columns(4)
     for col, item in zip(richness_cols, region_summary[:4]):
         with col:
@@ -1904,6 +1997,18 @@ if page == "🏠 首頁":
                 """,
                 unsafe_allow_html=True,
             )
+            feature_btn1, feature_btn2 = st.columns(2)
+            if feature_btn1.button("直接分析", key=f"featured_go_{ev['id']}", use_container_width=True):
+                st.session_state["quick_event_id"] = ev["id"]
+                st.session_state["global_category_filter"] = ev["category"]
+                st.session_state["global_region_filter"] = get_event_region(ev)
+                queue_nav("🔬 事件分析")
+                st.rerun()
+            if feature_btn2.button("進資料庫", key=f"featured_db_{ev['id']}", use_container_width=True):
+                st.session_state["quick_event_id"] = ev["id"]
+                st.session_state["global_region_filter"] = get_event_region(ev)
+                queue_nav("📚 事件資料庫")
+                st.rerun()
 
     with st.expander("查看更多事件與標的覆蓋", expanded=False):
         exp_col1, exp_col2 = st.columns([1.15, 1])
@@ -3021,8 +3126,15 @@ elif page == "📚 事件資料庫":
 
     st.markdown("<hr>", unsafe_allow_html=True)
 
+    quick_theme_cols = st.columns(5)
+    quick_themes = ["全部", "台灣", "半導體", "利率政策", "地緣風險"]
+    for col, theme in zip(quick_theme_cols, quick_themes):
+        with col:
+            if col.button(theme, key=f"db_theme_{theme}", use_container_width=True):
+                st.session_state["db_theme_filter"] = theme
+
     # Filters
-    f1, f2, f3, f4 = st.columns(4)
+    f1, f2, f3, f4, f5 = st.columns(5)
     with f1:
         db_cat_options = ["全部"] + EVENT_CATEGORIES
         filter_cat = st.selectbox(
@@ -3046,6 +3158,14 @@ elif page == "📚 事件資料庫":
             float(st.session_state.get("global_min_magnitude", 1.0)),
             0.5,
         )
+    with f5:
+        theme_options = ["全部", "台灣", "半導體", "利率政策", "地緣風險", "能源", "金融壓力"]
+        theme_filter = st.selectbox(
+            "主題標籤",
+            theme_options,
+            index=theme_options.index(st.session_state.get("db_theme_filter", "全部")),
+        )
+        st.session_state["db_theme_filter"] = theme_filter
 
     # Filter events
     display_events = HISTORICAL_EVENTS.copy()
@@ -3059,6 +3179,8 @@ elif page == "📚 事件資料庫":
             e for e in display_events
             if q in e["name_zh"].lower() or q in e["name_en"].lower() or q in e["description_zh"].lower()
         ]
+    if theme_filter != "全部":
+        display_events = [e for e in display_events if theme_filter in derive_event_tags(e)]
     display_events = [e for e in display_events if e["magnitude"] >= filter_mag]
     year_start, year_end = st.session_state.get("global_year_range", (min(all_years), max(all_years)))
     display_events = [e for e in display_events if year_start <= int(e["date"][:4]) <= year_end]
@@ -3117,6 +3239,11 @@ elif page == "📚 事件資料庫":
                     """,
                     unsafe_allow_html=True,
                 )
+                tags_html = "".join(
+                    f"<span class='market-chip' style='font-size:0.82rem; padding:6px 10px;'>{tag}</span>"
+                    for tag in derive_event_tags(ev)[:6]
+                )
+                st.markdown(f"<div style='margin:8px 0 10px 0;'>{tags_html}</div>", unsafe_allow_html=True)
                 action_cols = st.columns(2)
                 if action_cols[0].button("載入到分析頁", key=f"db_to_analysis_{ev['id']}", use_container_width=True):
                     st.session_state["quick_event_id"] = ev["id"]
