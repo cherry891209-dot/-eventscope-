@@ -650,6 +650,52 @@ def build_executive_summary(event: dict, sim_results: pd.DataFrame, net: dict, p
         pills.append(f"核心節點: {ASSET_UNIVERSE.get(top_hub, {}).get('name_zh', top_hub)}")
     return {"headline": headline, "bullets": bullets, "pills": pills}
 
+
+def build_event_comparison_summary(
+    base_event: dict,
+    base_results: pd.DataFrame,
+    compare_event: dict,
+    compare_results: pd.DataFrame,
+) -> dict:
+    if base_results.empty or compare_results.empty:
+        return {
+            "headline": "目前沒有足夠資料建立事件比較。",
+            "bullets": [],
+            "top_changes": pd.DataFrame(),
+        }
+
+    merged = base_results[
+        ["ticker", "mean_return", "p5", "prob_negative"]
+    ].merge(
+        compare_results[["ticker", "mean_return", "p5", "prob_negative"]],
+        on="ticker",
+        suffixes=("_base", "_compare"),
+    )
+    merged["mean_gap"] = merged["mean_return_base"] - merged["mean_return_compare"]
+    merged["tail_gap"] = merged["p5_base"] - merged["p5_compare"]
+    merged["risk_gap"] = merged["prob_negative_base"] - merged["prob_negative_compare"]
+    merged["abs_gap"] = merged["mean_gap"].abs()
+
+    biggest_gap = merged.sort_values("abs_gap", ascending=False).iloc[0]
+    base_loss = base_results.sort_values("mean_return").iloc[0]
+    compare_loss = compare_results.sort_values("mean_return").iloc[0]
+    more_severe = base_event["name_zh"] if merged["mean_gap"].mean() < 0 else compare_event["name_zh"]
+
+    headline = (
+        f"{base_event['name_zh']} 與 {compare_event['name_zh']} 相比，"
+        f"整體壓力較大的一側偏向 {more_severe}。"
+    )
+    bullets = [
+        f"{base_event['name_zh']} 最脆弱資產是 {format_asset_label(str(base_loss['ticker']))}，期望報酬 {float(base_loss['mean_return']):.2%}。",
+        f"{compare_event['name_zh']} 最脆弱資產是 {format_asset_label(str(compare_loss['ticker']))}，期望報酬 {float(compare_loss['mean_return']):.2%}。",
+        f"差異最大的資產是 {format_asset_label(str(biggest_gap['ticker']))}，兩事件期望報酬差距 {float(biggest_gap['mean_gap']):+.2%}。",
+    ]
+    return {
+        "headline": headline,
+        "bullets": bullets,
+        "top_changes": merged.sort_values("abs_gap", ascending=False),
+    }
+
 # ─── Session state init ───────────────────────────────────────────────────────
 for key in [
     "analysis_done", "selected_event", "simulation_results",
@@ -1362,8 +1408,8 @@ elif page == "🔬 事件分析":
                     unsafe_allow_html=True,
                 )
 
-        tab1, tab2, tab3, tab4 = st.tabs(
-            ["📊 衝擊預測", "🕸️ 傳導路徑", "📈 歷史比對", "💼 持倉壓力測試"]
+        tab1, tab2, tab3, tab4, tab5 = st.tabs(
+            ["📊 衝擊預測", "🕸️ 傳導路徑", "📈 歷史比對", "💼 持倉壓力測試", "⚔️ 事件比較"]
         )
 
         # ── Tab 1: Impact Forecast ────────────────────────────────────────
@@ -1847,6 +1893,161 @@ elif page == "🔬 事件分析":
                     """,
                     unsafe_allow_html=True,
                 )
+
+        # ── Tab 5: Event Comparison ──────────────────────────────────────
+        with tab5:
+            compare_candidates = [
+                e for e in HISTORICAL_EVENTS
+                if e["id"] != current_event.get("id")
+            ]
+            compare_options = {
+                f"{e['date']} · {e['category']} · {e['name_zh']}": e["id"]
+                for e in sorted(compare_candidates, key=lambda x: x["date"], reverse=True)
+            }
+
+            select_col1, select_col2 = st.columns([2, 1])
+            with select_col1:
+                compare_label = st.selectbox(
+                    "選擇第二個事件做對照",
+                    list(compare_options.keys()),
+                    key="compare_event_select",
+                )
+            with select_col2:
+                compare_intensity = st.slider(
+                    "比較事件強度",
+                    min_value=0.5,
+                    max_value=2.0,
+                    value=1.0,
+                    step=0.1,
+                    key="compare_event_intensity",
+                )
+
+            compare_event = get_event_by_id(compare_options[compare_label])
+            cta_col1, cta_col2, cta_col3 = st.columns([1.2, 1, 1])
+            with cta_col1:
+                run_compare = st.button("生成事件比較", use_container_width=True, key="run_event_compare")
+            with cta_col2:
+                st.metric("主事件", current_event["name_zh"])
+            with cta_col3:
+                st.metric("比較事件", compare_event["name_zh"] if compare_event else "--")
+
+            if run_compare and compare_event:
+                compare_hist = cached_historical_cars(compare_event["id"], tuple(selected_tickers))
+                compare_sim_results = cached_simulate(compare_event["id"], tuple(selected_tickers), compare_intensity)
+                compare_port = portfolio_stress_test(st.session_state["portfolio_dict"], compare_sim_results)
+                compare_summary = build_event_comparison_summary(
+                    current_event,
+                    sim_results,
+                    compare_event,
+                    compare_sim_results,
+                )
+
+                bullets_html = "".join(f"<li>{bullet}</li>" for bullet in compare_summary["bullets"])
+                st.markdown(
+                    f"""
+                    <div class="summary-banner fade-up">
+                      <div class="summary-banner-title">Compare Two Events</div>
+                      <div class="summary-banner-lead">{compare_summary["headline"]}</div>
+                      <ul style="margin:12px 0 4px 18px; line-height:1.75;">{bullets_html}</ul>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+
+                top_changes = compare_summary["top_changes"].copy()
+                if not top_changes.empty:
+                    top_changes = top_changes.reset_index(drop=True)
+                    compare_spot_cols = st.columns(3)
+                    key_rows = [
+                        top_changes.iloc[0],
+                        top_changes.reindex(top_changes["tail_gap"].abs().sort_values(ascending=False).index).iloc[0],
+                        top_changes.reindex(top_changes["risk_gap"].abs().sort_values(ascending=False).index).iloc[0],
+                    ]
+                    key_labels = [
+                        ("期望報酬差異最大", "mean_gap", "兩事件平均衝擊差"),
+                        ("尾端風險差異最大", "tail_gap", "P5 最差情境差"),
+                        ("下跌機率差異最大", "risk_gap", "負報酬機率差"),
+                    ]
+                    for col, row, (label, metric, note) in zip(compare_spot_cols, key_rows, key_labels):
+                        value = float(row[metric])
+                        with col:
+                            st.markdown(
+                                f"""
+                                <div class="spotlight-card">
+                                  <div class="spotlight-label">{label}</div>
+                                  <div class="spotlight-note" style="margin-top:8px;">{format_asset_label(str(row['ticker']))}</div>
+                                  <div class="spotlight-value {'positive' if value >= 0 else 'negative'}">{value:+.2%}</div>
+                                  <div class="spotlight-note">{note}</div>
+                                </div>
+                                """,
+                                unsafe_allow_html=True,
+                            )
+
+                    card_col1, card_col2 = st.columns(2)
+                    with card_col1:
+                        st.markdown(
+                            f"""
+                            <div class="glass-panel">
+                              <div class="mini-section-title">{current_event['name_zh']}</div>
+                              <div class="summary-tile-value" style="margin-top:0;">{port_result['var_95']:.2%}</div>
+                              <div class="summary-tile-note">投組 VaR 95%，期望報酬 {port_result['expected_return']:.2%}</div>
+                            </div>
+                            """,
+                            unsafe_allow_html=True,
+                        )
+                    with card_col2:
+                        st.markdown(
+                            f"""
+                            <div class="glass-panel">
+                              <div class="mini-section-title">{compare_event['name_zh']}</div>
+                              <div class="summary-tile-value" style="margin-top:0;">{compare_port['var_95']:.2%}</div>
+                              <div class="summary-tile-note">投組 VaR 95%，期望報酬 {compare_port['expected_return']:.2%}</div>
+                            </div>
+                            """,
+                            unsafe_allow_html=True,
+                        )
+
+                    compare_table = top_changes[[
+                        "ticker", "mean_return_base", "mean_return_compare",
+                        "mean_gap", "p5_base", "p5_compare", "risk_gap"
+                    ]].copy()
+                    compare_table.insert(1, "名稱", compare_table["ticker"].apply(format_asset_label))
+                    compare_table.columns = [
+                        "資產", "名稱",
+                        f"{current_event['name_zh']} 期望報酬",
+                        f"{compare_event['name_zh']} 期望報酬",
+                        "期望報酬差",
+                        f"{current_event['name_zh']} P5",
+                        f"{compare_event['name_zh']} P5",
+                        "下跌機率差",
+                    ]
+                    for col_name in compare_table.columns[2:]:
+                        compare_table[col_name] = compare_table[col_name].apply(lambda x: f"{float(x):+.2%}")
+
+                    st.markdown('<div class="section-header" style="font-size:1rem;">資產差異排行</div>', unsafe_allow_html=True)
+                    st.dataframe(compare_table, use_container_width=True, hide_index=True)
+
+                    if compare_hist is not None and not compare_hist.empty:
+                        base_scenarios = generate_scenario_comparison(hist_cars) if hist_cars is not None and not hist_cars.empty else {}
+                        compare_scenarios = generate_scenario_comparison(compare_hist)
+                        scen_col1, scen_col2 = st.columns(2)
+                        for col, title, scen_data in [
+                            (scen_col1, current_event["name_zh"], base_scenarios),
+                            (scen_col2, compare_event["name_zh"], compare_scenarios),
+                        ]:
+                            with col:
+                                st.markdown(f'<div class="section-header" style="font-size:1rem;">{title} 情境帶</div>', unsafe_allow_html=True)
+                                for scen_key, scen_label in [("best", "樂觀"), ("base", "基準"), ("worst", "悲觀")]:
+                                    vals = scen_data.get(scen_key, {})
+                                    avg_val = np.mean(list(vals.values())) if vals else 0.0
+                                    val_color = "#8fa8a1" if avg_val >= 0 else "#c48f87"
+                                    st.markdown(
+                                        f"<div style='display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid rgba(171,164,155,0.18);'>"
+                                        f"<span style='color:var(--text-main); font-weight:700;'>{scen_label}</span>"
+                                        f"<span style='color:{val_color}; font-weight:700;'>{avg_val:+.2%}</span>"
+                                        f"</div>",
+                                        unsafe_allow_html=True,
+                                    )
 
     elif not st.session_state.get("analysis_done"):
         st.markdown(
