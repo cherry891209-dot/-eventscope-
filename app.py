@@ -788,6 +788,118 @@ def build_scene_image(scene: str, accent: str = "#7f998f", secondary: str = "#c8
           <text x='667' y='490' font-size='22' font-family='Arial' fill='#5b6d68'>signal flow</text>
         </svg>
         """
+    elif scene == "semiconductor":
+        svg = f"""
+        <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 620'>
+          <defs>
+            <linearGradient id='bg' x1='0%' y1='0%' x2='100%' y2='100%'>
+              <stop offset='0%' stop-color='#eef3f1'/>
+              <stop offset='55%' stop-color='#d8e1de'/>
+              <stop offset='100%' stop-color='#bfcfc9'/>
+            </linearGradient>
+          </defs>
+          <rect width='900' height='620' fill='url(#bg)'/>
+          <rect x='210' y='120' width='480' height='360' rx='34' fill='{accent}' opacity='0.86'/>
+          <rect x='260' y='170' width='380' height='260' rx='22' fill='rgba(255,255,255,0.78)'/>
+          <g stroke='{secondary}' stroke-width='8'>
+            <path d='M290 220 H610'/><path d='M290 280 H610'/><path d='M290 340 H610'/>
+            <path d='M350 190 V410'/><path d='M450 190 V410'/><path d='M550 190 V410'/>
+          </g>
+          <g fill='{accent}'>
+            <rect x='170' y='170' width='30' height='28' rx='6'/><rect x='170' y='235' width='30' height='28' rx='6'/><rect x='170' y='300' width='30' height='28' rx='6'/><rect x='170' y='365' width='30' height='28' rx='6'/>
+            <rect x='700' y='170' width='30' height='28' rx='6'/><rect x='700' y='235' width='30' height='28' rx='6'/><rect x='700' y='300' width='30' height='28' rx='6'/><rect x='700' y='365' width='30' height='28' rx='6'/>
+          </g>
+          <circle cx='665' cy='155' r='70' fill='rgba(255,255,255,0.26)'/>
+          <text x='292' y='253' font-size='34' font-family='Arial' fill='#61736f'>Semiconductor</text>
+          <text x='292' y='300' font-size='34' font-family='Arial' fill='#61736f'>supply network</text>
+        </svg>
+        """
+    elif scene == "rates":
+        svg = f"""
+        <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 620'>
+          <defs>
+            <linearGradient id='bg' x1='0%' y1='0%' x2='100%' y2='100%'>
+              <stop offset='0%' stop-color='#f8efe6'/>
+              <stop offset='60%' stop-color='#eadfd2'/>
+              <stop offset='100%' stop-color='#d7d9d0'/>
+            </linearGradient>
+          </defs>
+          <rect width='900' height='620' fill='url(#bg)'/>
+          <g fill='rgba(255,255,255,0.70)'>
+            <circle cx='180' cy='150' r='110'/><circle cx='730' cy='120' r='84'/>
+          </g>
+          <path d='M120 475 C240 405, 310 365, 395 305 S560 180, 770 135' fill='none' stroke='{accent}' stroke-width='18' stroke-linecap='round'/>
+          <g fill='{secondary}'>
+            <circle cx='238' cy='405' r='15'/><circle cx='395' cy='305' r='15'/><circle cx='548' cy='202' r='15'/><circle cx='770' cy='135' r='15'/>
+          </g>
+          <text x='140' y='160' font-size='76' font-family='Arial' font-weight='700' fill='#65736e'>%</text>
+          <text x='510' y='470' font-size='30' font-family='Arial' fill='#65736e'>Rate cycle repricing</text>
+          <rect x='105' y='420' width='110' height='60' rx='18' fill='rgba(255,255,255,0.74)'/>
+          <text x='132' y='460' font-size='28' font-family='Arial' fill='#65736e'>1.00</text>
+        </svg>
+        """
+    elif scene == "disaster":
+        svg = f"""
+        <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 620'>
+          <defs>
+            <linearGradient id='bg' x1='0%' y1='0%' x2='100%' y2='100%'>
+              <stop offset='0%' stop-color='#ede8e1'/>
+              <stop offset='55%' stop-color='#d9d6cf'/>
+              <stop offset='100%' stop-color='#bfc8c4'/>
+            </linearGradient>
+          </defs>
+          <rect width='900' height='620' fill='url(#bg)'/>
+          <polygon points='70,465 215,270 332,420 438,230 572,430 694,250 835,465' fill='{accent}' opacity='0.72'/>
+          <polyline points='70,435 210,370 315,390 430,285 580,355 700,225 835,265' fill='none' stroke='{secondary}' stroke-width='12' stroke-linecap='round'/>
+          <circle cx='670' cy='150' r='74' fill='rgba(255,255,255,0.35)'/>
+          <path d='M650 100 L615 180 H665 L640 255 L717 155 H665 L690 100 Z' fill='rgba(255,255,255,0.86)'/>
+          <text x='112' y='132' font-size='30' font-family='Arial' fill='#5f6b67'>Disruption shock</text>
+          <text x='112' y='170' font-size='24' font-family='Arial' fill='#7d8783'>supply and infrastructure stress</text>
+        </svg>
+        """
+    elif scene == "election":
+        svg = f"""
+        <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 620'>
+          <defs>
+            <linearGradient id='bg' x1='0%' y1='0%' x2='100%' y2='100%'>
+              <stop offset='0%' stop-color='#f7f0e8'/>
+              <stop offset='58%' stop-color='#e7ddd5'/>
+              <stop offset='100%' stop-color='#d6d9d2'/>
+            </linearGradient>
+          </defs>
+          <rect width='900' height='620' fill='url(#bg)'/>
+          <rect x='180' y='150' width='520' height='320' rx='28' fill='rgba(255,255,255,0.76)' stroke='{accent}' stroke-width='10'/>
+          <rect x='255' y='250' width='180' height='28' rx='12' fill='{secondary}' opacity='0.88'/>
+          <rect x='255' y='314' width='210' height='28' rx='12' fill='{secondary}' opacity='0.56'/>
+          <rect x='255' y='378' width='165' height='28' rx='12' fill='{secondary}' opacity='0.42'/>
+          <rect x='560' y='220' width='92' height='140' rx='18' fill='{accent}' opacity='0.88'/>
+          <path d='M578 287 L605 314 L636 263' fill='none' stroke='white' stroke-width='12' stroke-linecap='round' stroke-linejoin='round'/>
+          <circle cx='165' cy='140' r='78' fill='rgba(255,255,255,0.30)'/>
+          <text x='250' y='210' font-size='30' font-family='Arial' fill='#61716d'>Policy and election</text>
+          <text x='250' y='244' font-size='30' font-family='Arial' fill='#61716d'>risk repricing</text>
+        </svg>
+        """
+    elif scene == "banking":
+        svg = f"""
+        <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 620'>
+          <defs>
+            <linearGradient id='bg' x1='0%' y1='0%' x2='100%' y2='100%'>
+              <stop offset='0%' stop-color='#f4ede6'/>
+              <stop offset='60%' stop-color='#e4d9cd'/>
+              <stop offset='100%' stop-color='#ccd6d3'/>
+            </linearGradient>
+          </defs>
+          <rect width='900' height='620' fill='url(#bg)'/>
+          <polygon points='450,120 660,210 240,210' fill='{accent}' opacity='0.84'/>
+          <rect x='270' y='220' width='360' height='40' rx='12' fill='{accent}' opacity='0.64'/>
+          <rect x='300' y='250' width='52' height='180' rx='16' fill='rgba(255,255,255,0.82)'/>
+          <rect x='424' y='250' width='52' height='180' rx='16' fill='rgba(255,255,255,0.82)'/>
+          <rect x='548' y='250' width='52' height='180' rx='16' fill='rgba(255,255,255,0.82)'/>
+          <rect x='255' y='430' width='390' height='42' rx='14' fill='{secondary}' opacity='0.88'/>
+          <path d='M170 470 C265 405, 350 370, 440 322 S620 250, 735 170' fill='none' stroke='{secondary}' stroke-width='16' stroke-linecap='round'/>
+          <text x='298' y='535' font-size='30' font-family='Arial' fill='#5d6e69'>Credit and liquidity stress</text>
+        </svg>
+        """
     elif scene == "taiwan":
         svg = f"""
         <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 620'>
@@ -872,9 +984,25 @@ def pick_scene_for_event(event: dict) -> tuple[str, str]:
     region = get_event_region(event)
     category = event.get("category", "")
     accent = CAT_COLORS.get(category, "#7f998f")
+    tags = set(derive_event_tags(event))
+    text = f"{event.get('name_zh', '')} {event.get('description_zh', '')}".lower()
+    if region == "台灣" and "地緣風險" in tags:
+        return "election", accent
+    if category == "自然災害" or any(word in text for word in ["地震", "颶風", "乾旱", "野火", "停電", "quake", "earthquake"]):
+        return "disaster", accent
+    if region == "台灣" and "半導體" in tags:
+        return "semiconductor", accent
     if region == "台灣":
         return "taiwan", accent
-    if category in {"科技產業", "金融危機", "地緣政治"}:
+    if "半導體" in tags:
+        return "semiconductor", accent
+    if "利率政策" in tags or category == "貨幣政策":
+        return "rates", accent
+    if "金融壓力" in tags or category == "金融危機":
+        return "banking", accent
+    if "地緣風險" in tags:
+        return "election", accent
+    if category in {"科技產業", "地緣政治"}:
         return "network", accent
     return "market", accent
 
@@ -888,7 +1016,7 @@ def derive_event_tags(event: dict) -> list[str]:
         tags.add("半導體")
     if any(word in text for word in ["升息", "利率", "央行", "qe", "貨幣"]):
         tags.add("利率政策")
-    if any(word in text for word in ["戰", "衝突", "軍事", "選舉", "政治"]):
+    if any(word in text for word in ["戰", "衝突", "軍事", "選舉", "大選", "政治", "兩岸"]):
         tags.add("地緣風險")
     if any(word in text for word in ["原油", "能源", "電力", "油價", "天然氣"]):
         tags.add("能源")
