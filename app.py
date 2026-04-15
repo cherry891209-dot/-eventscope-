@@ -26,9 +26,13 @@ st.markdown(
         --bg-main: #f5f1eb;
         --panel: rgba(255, 251, 247, 0.88);
         --border: rgba(171, 164, 155, 0.34);
-        --text-main: #4f5a59;
-        --text-muted: #8e9894;
-        --accent: #8fa8a1;
+        --text-main: #3f4b4a;
+        --text-muted: #697572;
+        --accent: #7f998f;
+        --accent-strong: #677f78;
+        --paper-strong: #f1e7dd;
+        --paper-soft: #fffaf6;
+        --warm-accent: #c8a092;
     }
     html, body, [data-testid="stApp"] {
         background:
@@ -37,6 +41,7 @@ st.markdown(
             linear-gradient(180deg, #f7f3ee 0%, #f3eee7 44%, #efe7df 100%);
         color: var(--text-main);
         font-family: 'Avenir Next', 'SF Pro Display', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+        font-size: 17px;
     }
     [data-testid="stAppViewContainer"] {
         background: transparent;
@@ -47,6 +52,10 @@ st.markdown(
         backdrop-filter: blur(10px);
     }
     [data-testid="stSidebar"] * { color: var(--text-main); }
+    [data-testid="stSidebar"] .stRadio label p {
+        color: var(--text-main) !important;
+        font-weight: 600;
+    }
 
     [data-testid="stMetric"] {
         background: linear-gradient(180deg, rgba(255, 252, 248, 0.96) 0%, rgba(247, 241, 234, 0.96) 100%);
@@ -55,8 +64,8 @@ st.markdown(
         padding: 12px 18px;
         box-shadow: 0 14px 34px rgba(136, 123, 110, 0.10);
     }
-    [data-testid="stMetricValue"] { color: var(--accent); font-size: 1.6rem; font-weight: 700; }
-    [data-testid="stMetricLabel"] { color: var(--text-muted); font-size: 0.85rem; }
+    [data-testid="stMetricValue"] { color: var(--accent); font-size: 1.85rem; font-weight: 800; }
+    [data-testid="stMetricLabel"] { color: var(--text-muted); font-size: 0.96rem; }
 
     /* Buttons */
     .stButton > button {
@@ -112,22 +121,23 @@ st.markdown(
         background: linear-gradient(180deg, rgba(255, 251, 247, 0.96) 0%, rgba(246, 240, 233, 0.98) 100%);
         border: 1px solid var(--border);
         border-left: 4px solid var(--accent);
-        border-radius: 16px;
-        padding: 14px 18px;
-        margin-bottom: 10px;
+        border-radius: 18px;
+        padding: 18px 22px;
+        margin-bottom: 14px;
         transition: all 0.2s;
         box-shadow: 0 14px 30px rgba(136, 123, 110, 0.09);
     }
     .event-card:hover { border-left-color: #a7bbb5; box-shadow: 0 18px 34px rgba(143, 168, 161, 0.12); transform: translateY(-1px); }
-    .event-card h4 { color: var(--accent); margin: 0 0 6px 0; font-size: 1rem; }
-    .event-card p { color: #73807d; margin: 0; font-size: 0.85rem; line-height: 1.5; }
+    .event-card h4 { color: var(--accent-strong); margin: 10px 0 8px 0; font-size: 1.35rem; line-height: 1.45; }
+    .event-card p { color: #677372; margin: 0; font-size: 1.02rem; line-height: 1.75; }
     .badge {
         display: inline-block;
-        padding: 4px 10px;
+        padding: 6px 12px;
         border-radius: 20px;
-        font-size: 0.75rem;
-        font-weight: 600;
+        font-size: 0.88rem;
+        font-weight: 700;
         margin-right: 6px;
+        margin-bottom: 8px;
     }
 
     /* Hero section */
@@ -148,7 +158,7 @@ st.markdown(
     .hero-title {
         font-size: 2.8rem;
         font-weight: 800;
-        color: var(--accent);
+        color: var(--accent-strong);
         margin: 0;
         letter-spacing: -0.8px;
     }
@@ -169,10 +179,100 @@ st.markdown(
         letter-spacing: 0.08em;
         text-transform: uppercase;
     }
+    .pulse-card {
+        background: linear-gradient(180deg, rgba(255, 251, 247, 0.98) 0%, rgba(243, 236, 228, 0.98) 100%);
+        border: 1px solid rgba(171, 164, 155, 0.24);
+        border-radius: 18px;
+        padding: 18px;
+        min-height: 132px;
+        box-shadow: 0 14px 28px rgba(136, 123, 110, 0.08);
+    }
+    .pulse-label {
+        color: var(--text-muted);
+        font-size: 0.84rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+    }
+    .pulse-value {
+        color: var(--accent-strong);
+        font-size: 1.55rem;
+        font-weight: 800;
+        margin-top: 8px;
+    }
+    .pulse-note {
+        color: var(--text-main);
+        font-size: 0.96rem;
+        margin-top: 8px;
+        line-height: 1.55;
+    }
+    .market-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: rgba(255, 250, 246, 0.94);
+        border: 1px solid rgba(171, 164, 155, 0.22);
+        color: var(--text-main);
+        font-size: 0.92rem;
+        font-weight: 600;
+        margin: 4px 8px 0 0;
+    }
+    .market-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        display: inline-block;
+    }
+    .fade-up {
+        animation: fadeUp 0.65s ease both;
+    }
+    .fade-delay-1 { animation-delay: 0.08s; }
+    .fade-delay-2 { animation-delay: 0.16s; }
+    .fade-delay-3 { animation-delay: 0.24s; }
+    .summary-banner {
+        background: linear-gradient(135deg, rgba(255, 250, 245, 0.98) 0%, rgba(239, 230, 221, 0.98) 100%);
+        border: 1px solid rgba(171, 164, 155, 0.28);
+        border-radius: 22px;
+        padding: 22px 24px;
+        box-shadow: 0 18px 38px rgba(136, 123, 110, 0.09);
+    }
+    .summary-banner-title {
+        color: var(--accent-strong);
+        font-size: 1.2rem;
+        font-weight: 800;
+        margin-bottom: 8px;
+    }
+    .summary-banner-lead {
+        color: var(--text-main);
+        font-size: 1rem;
+        line-height: 1.65;
+    }
+    .summary-pill {
+        display: inline-block;
+        margin: 8px 10px 0 0;
+        padding: 7px 12px;
+        border-radius: 999px;
+        background: rgba(255, 251, 247, 0.92);
+        border: 1px solid rgba(171, 164, 155, 0.22);
+        color: var(--text-main);
+        font-size: 0.82rem;
+        font-weight: 700;
+    }
+    @keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(14px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
 
     /* Section headers */
     .section-header {
-        font-size: 1.3rem;
+        font-size: 1.48rem;
         font-weight: 700;
         color: var(--accent);
         border-bottom: 1px solid rgba(171, 164, 155, 0.28);
@@ -188,7 +288,7 @@ st.markdown(
         padding: 14px 18px;
         margin: 10px 0;
         color: #73807d;
-        font-size: 0.9rem;
+        font-size: 1rem;
         line-height: 1.6;
         box-shadow: 0 12px 28px rgba(136, 123, 110, 0.08);
     }
@@ -208,19 +308,19 @@ st.markdown(
     }
     .summary-tile-label {
         color: var(--text-muted);
-        font-size: 0.78rem;
+        font-size: 0.86rem;
         text-transform: uppercase;
         letter-spacing: 0.08em;
     }
     .summary-tile-value {
         color: var(--text-main);
-        font-size: 1.2rem;
+        font-size: 1.34rem;
         font-weight: 700;
         margin-top: 8px;
     }
     .summary-tile-note {
         color: #8f9995;
-        font-size: 0.82rem;
+        font-size: 0.93rem;
         margin-top: 8px;
         line-height: 1.5;
     }
@@ -234,13 +334,13 @@ st.markdown(
     }
     .spotlight-label {
         color: var(--text-muted);
-        font-size: 0.76rem;
+        font-size: 0.84rem;
         text-transform: uppercase;
         letter-spacing: 0.08em;
     }
     .spotlight-value {
         color: var(--text-main);
-        font-size: 1.3rem;
+        font-size: 1.45rem;
         font-weight: 800;
         margin-top: 8px;
     }
@@ -248,15 +348,24 @@ st.markdown(
     .spotlight-value.negative { color: #c48f87; }
     .spotlight-note {
         color: #8f9995;
-        font-size: 0.84rem;
+        font-size: 0.94rem;
         line-height: 1.55;
         margin-top: 10px;
     }
     .mini-section-title {
         color: var(--accent);
-        font-size: 0.98rem;
+        font-size: 1.08rem;
         font-weight: 700;
         margin: 0 0 10px 0;
+    }
+    code {
+        background: #f1e8df !important;
+        color: #5d726d !important;
+        border-radius: 6px;
+        padding: 0.15rem 0.35rem;
+    }
+    ul, ol {
+        color: var(--text-main);
     }
 
     /* Divider */
@@ -265,6 +374,20 @@ st.markdown(
     /* Streamlit overrides */
     .stAlert { border-radius: 12px; }
     div[data-testid="stExpander"] { background: rgba(252, 248, 243, 0.96); border: 1px solid var(--border); border-radius: 12px; }
+    div[data-testid="stMarkdownContainer"] p,
+    div[data-testid="stMarkdownContainer"] li,
+    div[data-testid="stMarkdownContainer"] span {
+        color: inherit;
+        line-height: 1.72;
+    }
+    [style*="#f0b90b"] { color: var(--accent-strong) !important; }
+    [style*="#8ca0b8"], [style*="#6688aa"] { color: var(--text-muted) !important; }
+    [style*="background:#0d1f3c"], [style*="background:#0a1628"] {
+        background: linear-gradient(180deg, rgba(255, 251, 247, 0.96) 0%, rgba(246, 240, 233, 0.98) 100%) !important;
+    }
+    [style*="border:1px solid #1e3050"], [style*="border-color:#1e3050"] {
+        border-color: var(--border) !important;
+    }
     [data-testid="stMarkdownContainer"], label, p, span, div {
         color: inherit;
     }
@@ -302,6 +425,8 @@ from visualization.charts import (
     plot_impact_network,
     plot_car_distribution,
     plot_multi_asset_forecast,
+    plot_market_snapshot,
+    plot_world_event_map,
     plot_historical_comparison,
     plot_portfolio_waterfall,
     plot_event_timeline,
@@ -316,12 +441,12 @@ from portfolio.stress_test import (
 
 # ─── Category colour map ──────────────────────────────────────────────────────
 CAT_COLORS = {
-    "貨幣政策": "#2ca02c",
-    "地緣政治": "#d62728",
-    "金融危機": "#ff3d3d",
-    "商品衝擊": "#f0b90b",
-    "科技產業": "#17becf",
-    "自然災害": "#9467bd",
+    "貨幣政策": "#8fa89d",
+    "地緣政治": "#b98b81",
+    "金融危機": "#a87068",
+    "商品衝擊": "#b59b74",
+    "科技產業": "#819daf",
+    "自然災害": "#9aa287",
 }
 
 PORTFOLIO_PRESETS = {
@@ -374,6 +499,109 @@ def rows_to_portfolio(rows: list[dict]) -> dict:
 def format_asset_label(ticker: str) -> str:
     info = ASSET_UNIVERSE.get(ticker, {})
     return f"{info.get('name_zh', ticker)} ({ticker})"
+
+
+MARKET_SNAPSHOT_TICKERS = [
+    "^GSPC", "^IXIC", "^DJI", "^N225", "^HSI", "^FTSE", "GLD",
+    "CL=F", "^DXY", "BTC-USD", "IEF", "EEM",
+]
+
+REGION_COORDS = {
+    "全球": (10, 15),
+    "北美": (42, -98),
+    "拉丁美洲": (-16, -60),
+    "歐洲": (51, 12),
+    "中東": (27, 45),
+    "亞洲": (27, 105),
+    "非洲": (2, 20),
+    "跨區域": (24, 0),
+}
+
+
+def build_market_snapshot() -> pd.DataFrame:
+    rows = []
+    for idx, ticker in enumerate(MARKET_SNAPSHOT_TICKERS):
+        info = ASSET_UNIVERSE.get(ticker, {})
+        base = np.mean([
+            pattern.get(ticker, 0.0)
+            for pattern in SYNTHETIC_PATTERNS.values()
+        ])
+        rng = np.random.default_rng(abs(hash((ticker, idx))) % (2**32))
+        one_day = float(base * 0.35 + rng.normal(0, 0.008))
+        one_week = float(base * 1.4 + rng.normal(0, 0.018))
+        momentum = "risk-on" if one_week > 0.01 else "risk-off" if one_week < -0.01 else "neutral"
+        rows.append(
+            {
+                "ticker": ticker,
+                "name_zh": info.get("name_zh", ticker),
+                "category": info.get("category", "其他"),
+                "color": info.get("color", "#9bb2ba"),
+                "one_day": one_day,
+                "one_week": one_week,
+                "signal": abs(one_week) + abs(one_day) * 0.7,
+                "momentum": momentum,
+            }
+        )
+    return pd.DataFrame(rows).sort_values("signal", ascending=False)
+
+
+def build_world_event_df() -> pd.DataFrame:
+    rows = []
+    for event in HISTORICAL_EVENTS:
+        region = get_event_region(event)
+        lat, lon = REGION_COORDS.get(region, REGION_COORDS["全球"])
+        rows.append(
+            {
+                "name_zh": event["name_zh"],
+                "category": event["category"],
+                "region": region,
+                "date": event["date"],
+                "magnitude": event["magnitude"],
+                "lat": lat,
+                "lon": lon,
+            }
+        )
+    return pd.DataFrame(rows)
+
+
+def build_executive_summary(event: dict, sim_results: pd.DataFrame, net: dict, port_result: dict) -> dict:
+    if sim_results.empty:
+        return {
+            "headline": "目前沒有足夠模擬資料可生成摘要。",
+            "bullets": [],
+            "pills": [],
+        }
+
+    top_gain = sim_results.sort_values("mean_return", ascending=False).iloc[0]
+    top_loss = sim_results.sort_values("mean_return", ascending=True).iloc[0]
+    deepest_tail = sim_results.sort_values("p5").iloc[0]
+    centrality = net.get("centrality", {}) if isinstance(net, dict) else {}
+    top_hub = max(centrality.items(), key=lambda x: x[1])[0] if centrality else None
+
+    headline = (
+        f"{event['name_zh']} 情境下，{ASSET_UNIVERSE.get(top_loss['ticker'], {}).get('name_zh', top_loss['ticker'])}"
+        f" 壓力最大，而 {ASSET_UNIVERSE.get(top_gain['ticker'], {}).get('name_zh', top_gain['ticker'])} 相對具備韌性。"
+    )
+
+    bullets = [
+        f"下行主軸集中在 {format_asset_label(str(top_loss['ticker']))}，期望報酬 {float(top_loss['mean_return']):.2%}，尾端最差情境可達 {float(deepest_tail['p5']):.2%}。",
+        f"潛在防禦資產是 {format_asset_label(str(top_gain['ticker']))}，期望報酬 {float(top_gain['mean_return']):.2%}，上緣區間約 {float(top_gain['p95']):.2%}。",
+    ]
+    if top_hub:
+        bullets.append(f"傳導網路顯示 {format_asset_label(top_hub)} 是主要擴散節點，值得優先觀察連鎖反應。")
+    if port_result:
+        bullets.append(
+            f"若套用目前投資組合，VaR 95% 為 {port_result['var_95']:.2%}，期望報酬 {port_result['expected_return']:.2%}。"
+        )
+
+    pills = [
+        f"最脆弱: {ASSET_UNIVERSE.get(top_loss['ticker'], {}).get('name_zh', top_loss['ticker'])}",
+        f"最穩健: {ASSET_UNIVERSE.get(top_gain['ticker'], {}).get('name_zh', top_gain['ticker'])}",
+        f"事件類型: {event['category']}",
+    ]
+    if top_hub:
+        pills.append(f"核心節點: {ASSET_UNIVERSE.get(top_hub, {}).get('name_zh', top_hub)}")
+    return {"headline": headline, "bullets": bullets, "pills": pills}
 
 # ─── Session state init ───────────────────────────────────────────────────────
 for key in [
@@ -522,10 +750,10 @@ with st.sidebar:
         """
         <div style="text-align:center; padding: 20px 0 10px 0;">
           <div style="font-size:2.2rem;">📡</div>
-          <div style="font-size:1.5rem; font-weight:800; color:#f0b90b;">EventScope</div>
-          <div style="font-size:0.78rem; color:#6688aa; margin-top:4px;">金融事件模擬平台</div>
+          <div style="font-size:1.5rem; font-weight:800; color:var(--accent-strong);">EventScope</div>
+          <div style="font-size:0.78rem; color:var(--text-muted); margin-top:4px;">金融事件模擬平台</div>
         </div>
-        <hr style="border-color:#1e3050; margin:10px 0;">
+        <hr style="border-color:var(--border); margin:10px 0;">
         """,
         unsafe_allow_html=True,
     )
@@ -536,11 +764,11 @@ with st.sidebar:
         label_visibility="collapsed",
     )
 
-    st.markdown("<hr style='border-color:#1e3050; margin:20px 0 10px 0;'>", unsafe_allow_html=True)
+    st.markdown("<hr style='border-color:var(--border); margin:20px 0 10px 0;'>", unsafe_allow_html=True)
     st.markdown(
         """
-        <div style="font-size:0.78rem; color:#6688aa; text-align:center; line-height:1.6;">
-          <b style="color:#8ca0b8;">EventScope v1.0</b><br>
+        <div style="font-size:0.78rem; color:var(--text-muted); text-align:center; line-height:1.6;">
+          <b style="color:var(--accent-strong);">EventScope v1.0</b><br>
           金融科技課程專案<br>
           Powered by Streamlit + Plotly
         </div>
@@ -561,13 +789,13 @@ if page == "🏠 首頁":
           <div class="hero-kicker">Scenario Intelligence Studio</div>
           <div class="hero-title">📡 EventScope</div>
           <div class="hero-subtitle">金融事件情境模擬與衝擊傳導分析平台</div>
-          <div style="margin-top:14px; color:#6688aa; font-size:0.9rem;">
+          <div style="margin-top:14px; color:var(--text-muted); font-size:0.98rem; font-weight:600;">
             Financial Event Simulation · Contagion Network · Monte Carlo Risk Assessment
           </div>
           <div style="margin-top:22px; display:flex; justify-content:center; gap:10px; flex-wrap:wrap;">
-            <span class="badge" style="background:rgba(240,185,11,0.12); color:#ffd56a; border:1px solid rgba(240,185,11,0.18);">事件研究</span>
-            <span class="badge" style="background:rgba(23,190,207,0.12); color:#86e6ef; border:1px solid rgba(23,190,207,0.18);">傳導網路</span>
-            <span class="badge" style="background:rgba(0,200,83,0.12); color:#70e3a1; border:1px solid rgba(0,200,83,0.18);">投組壓測</span>
+            <span class="badge" style="background:rgba(143,168,161,0.12); color:var(--accent-strong); border:1px solid rgba(143,168,161,0.18);">事件研究</span>
+            <span class="badge" style="background:rgba(169,183,197,0.16); color:#748892; border:1px solid rgba(169,183,197,0.22);">傳導網路</span>
+            <span class="badge" style="background:rgba(200,160,146,0.14); color:#9c766d; border:1px solid rgba(200,160,146,0.18);">投組壓測</span>
           </div>
         </div>
         """,
@@ -585,6 +813,90 @@ if page == "🏠 首頁":
     with col4:
         years = set(e["date"][:4] for e in HISTORICAL_EVENTS)
         st.metric("時間跨度", f"{min(years)}–{max(years)}")
+
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    st.markdown('<div class="section-header">🌍 全球市場覆蓋</div>', unsafe_allow_html=True)
+    region_counts = {}
+    for event in HISTORICAL_EVENTS:
+        region = get_event_region(event)
+        region_counts[region] = region_counts.get(region, 0) + 1
+    asset_category_counts = {}
+    for info in ASSET_UNIVERSE.values():
+        asset_category_counts[info["category"]] = asset_category_counts.get(info["category"], 0) + 1
+    p1, p2, p3 = st.columns(3)
+    with p1:
+        st.markdown(
+            f"""
+            <div class="pulse-card">
+              <div class="pulse-label">事件覆蓋</div>
+              <div class="pulse-value">{len(HISTORICAL_EVENTS)} 件</div>
+              <div class="pulse-note">涵蓋 {len(region_counts)} 個地區維度，從北美、歐洲到亞洲與拉美市場。</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+    with p2:
+        top_region = max(region_counts.items(), key=lambda x: x[1])
+        st.markdown(
+            f"""
+            <div class="pulse-card">
+              <div class="pulse-label">地區最密集</div>
+              <div class="pulse-value">{top_region[0]}</div>
+              <div class="pulse-note">目前收錄 {top_region[1]} 件重大事件，並持續保留全球與跨區域情境。</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+    with p3:
+        st.markdown(
+            f"""
+            <div class="pulse-card">
+              <div class="pulse-label">可分析標的</div>
+              <div class="pulse-value">{len(ASSET_UNIVERSE)} 種</div>
+              <div class="pulse-note">從股市、外匯、商品、債券到加密貨幣，支援跨市場壓力測試。</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+    chips_html = "".join(
+        f"<span class='market-chip'><span class='market-dot' style='background:{ASSET_UNIVERSE[next(k for k,v in ASSET_UNIVERSE.items() if v['category']==cat)]['color']};'></span>{cat} {count} 檔</span>"
+        for cat, count in sorted(asset_category_counts.items())
+    )
+    st.markdown(f"<div style='margin-top:6px; margin-bottom:8px;'>{chips_html}</div>", unsafe_allow_html=True)
+
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    st.markdown('<div class="section-header">📡 全球市場脈動</div>', unsafe_allow_html=True)
+    snapshot_df = build_market_snapshot()
+    world_event_df = build_world_event_df()
+    pulse_col1, pulse_col2 = st.columns([1.1, 1])
+    with pulse_col1:
+        st.plotly_chart(plot_market_snapshot(snapshot_df), use_container_width=True)
+    with pulse_col2:
+        st.plotly_chart(plot_world_event_map(world_event_df), use_container_width=True)
+
+    pulse_cards = st.columns(3)
+    top_positive = snapshot_df.sort_values("one_week", ascending=False).iloc[0]
+    top_negative = snapshot_df.sort_values("one_week", ascending=True).iloc[0]
+    cards = [
+        ("本週最強市場", f"{top_positive['name_zh']} {top_positive['one_week']:.2%}", "由風險偏好與題材驅動的代表性資產。"),
+        ("本週承壓市場", f"{top_negative['name_zh']} {top_negative['one_week']:.2%}", "可作為近期避險或脆弱資產觀察視角。"),
+        ("事件資料密度", f"{len(world_event_df)} 件事件 / {len(EVENT_REGIONS)} 個地區", "首頁現在可以同時看市場脈動與全球事件熱點。"),
+    ]
+    for col, (label, value, note) in zip(pulse_cards, cards):
+        with col:
+            st.markdown(
+                f"""
+                <div class="glass-panel fade-up fade-delay-1">
+                  <div class="mini-section-title">{label}</div>
+                  <div class="summary-tile-value" style="margin-top:0;">{value}</div>
+                  <div class="summary-tile-note">{note}</div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
 
     st.markdown("<br>", unsafe_allow_html=True)
 
@@ -613,8 +925,11 @@ if page == "🏠 首頁":
 
     # Featured recent events
     st.markdown('<div class="section-header">⭐ 精選重大事件</div>', unsafe_allow_html=True)
-    featured_ids = ["covid_crash_2020", "fed_hike_cycle_2022", "svb_collapse_2023",
-                    "deepseek_shock_2025", "russia_ukraine_2022", "lehman_2008"]
+    featured_ids = [
+        "covid_crash_2020", "fed_hike_cycle_2022", "deepseek_shock_2025",
+        "russia_ukraine_2022", "asian_financial_crisis_1997", "uk_gilt_crisis_2022",
+        "india_rice_ban_2023", "japan_earthquake_2011", "argentina_default_2001",
+    ]
     featured = [get_event_by_id(eid) for eid in featured_ids if get_event_by_id(eid)]
 
     fc1, fc2, fc3 = st.columns(3)
@@ -627,7 +942,8 @@ if page == "🏠 首頁":
                 f"""
                 <div class="event-card">
                   <span class="badge" style="background:{cat_color}22; color:{cat_color};">{ev["category"]}</span>
-                  <span style="color:#6688aa; font-size:0.8rem;">{ev["date"]}</span>
+                  <span class="badge" style="background:#ebe3db; color:var(--text-main);">{get_event_region(ev)}</span>
+                  <span style="color:var(--text-muted); font-size:0.8rem;">{ev["date"]}</span>
                   <h4 style="margin-top:6px;">{ev["name_zh"]}</h4>
                   <p>{ev["description_zh"]}</p>
                   <div style="margin-top:8px; color:{cat_color}; font-size:0.85rem;">{mag_stars}</div>
@@ -641,12 +957,12 @@ if page == "🏠 首頁":
     # CTA
     st.markdown(
         """
-        <div style="text-align:center; padding:30px; background:#0d1f3c; border-radius:12px; border:1px solid #1e3050;">
-          <div style="font-size:1.2rem; color:#e0e8f0; margin-bottom:12px;">
+        <div style="text-align:center; padding:30px; background:linear-gradient(180deg, var(--paper-soft) 0%, var(--paper-strong) 100%); border-radius:18px; border:1px solid var(--border); box-shadow:0 14px 30px rgba(136,123,110,0.08);">
+          <div style="font-size:1.2rem; color:var(--text-main); margin-bottom:12px; font-weight:700;">
             選擇左側「🔬 事件分析」開始模擬任一歷史事件的市場衝擊
           </div>
-          <div style="color:#6688aa; font-size:0.9rem;">
-            支援 30+ 歷史事件 · 12 種資產 · 離線合成資料備援
+          <div style="color:var(--text-muted); font-size:0.95rem;">
+            支援 60+ 歷史事件 · 20+ 種資產 · 全球區域篩選 · 離線合成資料備援
           </div>
         </div>
         """,
@@ -754,37 +1070,34 @@ elif page == "🔬 事件分析":
         cat_color = CAT_COLORS.get(selected_event["category"], "#888")
         mag = selected_event["magnitude"]
         mag_bar = "█" * round(mag) + "░" * (5 - round(mag))
-        calibration_note = ""
-        if selected_event.get("is_custom"):
-            calibration_note = (
-                f"&nbsp;&nbsp;<span style='color:#8ca0b8; font-size:0.82rem;'>校準基準：</span>"
-                f"<span style='color:#e0e8f0; font-weight:600;'>{selected_event['reference_event_name']}</span>"
-            )
+        event_card_html = (
+            f"<div class='event-card' style='border-left-color:{cat_color};'>"
+            f"<span class='badge' style='background:{cat_color}22; color:{cat_color};'>{selected_event['category']}</span>"
+            f"<span class='badge' style='background:#ebe3db; color:#7f8f8b;'>{get_event_region(selected_event)}</span>"
+            f"<span class='badge' style='background:#e8dfd5; color:var(--text-main);'>主要衝擊：{selected_event['primary_shock']}</span>"
+            f"<h4>{selected_event['name_zh']} <span style='color:var(--text-muted); font-weight:500;'>({selected_event['name_en']})</span></h4>"
+            f"<p>{selected_event['description_zh']}</p>"
+            f"</div>"
+        )
         st.markdown(
-            f"""
-            <div class="event-card" style="border-left-color:{cat_color};">
-                <span class="badge" style="background:{cat_color}22; color:{cat_color};">{selected_event["category"]}</span>
-              <span class="badge" style="background:#ebe3db; color:#7f8f8b;">{get_event_region(selected_event)}</span>
-              <span class="badge" style="background:#1e3050; color:#8ca0b8;">主要衝擊：{selected_event["primary_shock"]}</span>
-              <h4>{selected_event["name_zh"]} <span style="color:#6688aa; font-weight:400;">({selected_event["name_en"]})</span></h4>
-              <p>{selected_event["description_zh"]}</p>
-              <div style="margin-top:8px;">
-                <span style="color:#8ca0b8; font-size:0.82rem;">事件日期：</span>
-                <span style="color:{cat_color}; font-weight:600;">{selected_event["date"]}</span>
-                {calibration_note}
-                &nbsp;&nbsp;
-                <span style="color:#8ca0b8; font-size:0.82rem;">嚴重程度：</span>
-                <span style="color:{cat_color}; font-family:monospace;">{mag_bar} ({mag}/5)</span>
-              </div>
-            </div>
-            """,
+            event_card_html,
             unsafe_allow_html=True,
         )
         summary_cols = st.columns(3)
+        calibration_value = selected_event.get("reference_event_name", "歷史事件基準")
+        calibration_note = (
+            "自訂情境會繼承基準事件的市場結構"
+            if selected_event.get("is_custom")
+            else "直接以所選歷史事件作為模擬校準"
+        )
         summary_items = [
-            ("事件類型", selected_event["category"], f"主衝擊資產：{selected_event['primary_shock']}"),
-            ("校準尺度", f"{intensity:.1f}x", "0.5x 溫和 / 1.0x 歷史基準 / 2.0x 極端"),
-            ("可分析資產", f"{len(ASSET_UNIVERSE)} 項", "支援股市、商品、債券、匯率與加密資產"),
+            ("事件日期", selected_event["date"], f"地區：{get_event_region(selected_event)}"),
+            ("嚴重程度", f"{mag:.1f} / 5", mag_bar),
+            (
+                "校準基準" if selected_event.get("is_custom") else "主要衝擊",
+                calibration_value if selected_event.get("is_custom") else selected_event["primary_shock"],
+                calibration_note if selected_event.get("is_custom") else f"校準尺度：{intensity:.1f}x",
+            ),
         ]
         for col, (label, value, note) in zip(summary_cols, summary_items):
             with col:
@@ -881,6 +1194,21 @@ elif page == "🔬 事件分析":
             f'<div class="section-header">📊 分析結果 — {current_event["name_zh"]}</div>',
             unsafe_allow_html=True,
         )
+        summary = build_executive_summary(current_event, sim_results, net, port_result)
+        summary_html = "".join(f"<span class='summary-pill'>{pill}</span>" for pill in summary["pills"])
+        bullets_html = "".join(f"<li>{bullet}</li>" for bullet in summary["bullets"][:4])
+        st.markdown(
+            f"""
+            <div class="summary-banner fade-up">
+              <div class="summary-banner-title">Executive Summary</div>
+              <div class="summary-banner-lead">{summary["headline"]}</div>
+              <ul style="margin:12px 0 4px 18px; line-height:1.75;">{bullets_html}</ul>
+              <div style="margin-top:10px;">{summary_html}</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+        st.markdown("<br>", unsafe_allow_html=True)
 
         lead_asset = sim_results.sort_values("mean_return", ascending=False).iloc[0]
         risk_asset = sim_results.sort_values("p5").iloc[0]
@@ -950,9 +1278,9 @@ elif page == "🔬 事件分析":
                 with col:
                     st.markdown(
                         f"""
-                        <div class="glass-panel">
+                        <div class="glass-panel fade-up fade-delay-2">
                           <div class="mini-section-title">{label}</div>
-                          <div style="color:#e7edf5; font-weight:700;">{format_asset_label(str(row['ticker']))}</div>
+                          <div style="color:var(--text-main); font-weight:700;">{format_asset_label(str(row['ticker']))}</div>
                           <div class="spotlight-value {value_class}" style="font-size:1.15rem;">{float(row[metric_key]):.2%}</div>
                           <div class="spotlight-note" style="margin-top:6px;">{note}</div>
                         </div>
@@ -1014,7 +1342,7 @@ elif page == "🔬 事件分析":
                         for ticker, ret in top5:
                             name = ASSET_UNIVERSE.get(ticker, {}).get("name_zh", ticker)
                             color = "#00c853" if ret >= 0 else "#ff3d3d"
-                            st.markdown(f"<span style='color:#8ca0b8;font-size:0.85rem;'>{name}:</span> <span style='color:{color};font-weight:600;'>{ret:.2%}</span>", unsafe_allow_html=True)
+                            st.markdown(f"<span style='color:var(--text-muted);font-size:0.85rem;'>{name}:</span> <span style='color:{color};font-weight:700;'>{ret:.2%}</span>", unsafe_allow_html=True)
 
         # ── Tab 2: Contagion Network ──────────────────────────────────────
         with tab2:
@@ -1059,10 +1387,10 @@ elif page == "🔬 事件分析":
                         color = "#00c853" if e.get("direction") == "positive" else "#ff3d3d"
                         arrow = "➡️" if e.get("direction") == "positive" else "⬇️"
                         st.markdown(
-                            f"<div style='font-size:0.85rem; margin:6px 0; padding:6px 10px; background:#0d1f3c; border-radius:6px;'>"
-                            f"<span style='color:#f0b90b;'>{src_name}</span> {arrow} "
+                            f"<div style='font-size:0.85rem; margin:6px 0; padding:8px 10px; background:#f7efe7; border:1px solid var(--border); border-radius:10px;'>"
+                            f"<span style='color:var(--accent-strong); font-weight:700;'>{src_name}</span> {arrow} "
                             f"<span style='color:{color};'>{tgt_name}</span>"
-                            f"<span style='color:#6688aa; float:right;'>強度: {e['weight']:.2f}</span>"
+                            f"<span style='color:var(--text-muted); float:right;'>強度: {e['weight']:.2f}</span>"
                             f"</div>",
                             unsafe_allow_html=True,
                         )
@@ -1074,9 +1402,9 @@ elif page == "🔬 事件分析":
                             name = ASSET_UNIVERSE.get(ticker, {}).get("name_zh", ticker)
                             bar_width = int(c_val * 100)
                             st.markdown(
-                                f"<div style='margin:4px 0;'><span style='color:#e0e8f0;font-size:0.82rem;'>{name}</span>"
-                                f"<div style='background:#1e3050; border-radius:4px; margin-top:2px;'>"
-                                f"<div style='background:#f0b90b; width:{bar_width}%; height:6px; border-radius:4px;'></div></div></div>",
+                                f"<div style='margin:6px 0;'><span style='color:var(--text-main);font-size:0.84rem; font-weight:600;'>{name}</span>"
+                                f"<div style='background:#e7ddd3; border-radius:6px; margin-top:4px;'>"
+                                f"<div style='background:var(--accent); width:{bar_width}%; height:8px; border-radius:6px;'></div></div></div>",
                                 unsafe_allow_html=True,
                             )
                 else:
@@ -1157,12 +1485,12 @@ elif page == "🔬 事件分析":
                     with st.expander(expander_label, expanded=is_anchor):
                         st.markdown(
                             f"""
-                            <div style="color:#b0c4d8; font-size:0.9rem; line-height:1.7;">
-                            <b style="color:#f0b90b;">事件描述：</b>{ev['description_zh']}<br>
-                            <b style="color:#f0b90b;">英文名稱：</b>{ev['name_en']}<br>
-                            <b style="color:#f0b90b;">主要衝擊：</b><span style="color:{cat_color};">{ev['primary_shock']}</span>
+                            <div style="color:var(--text-main); font-size:0.92rem; line-height:1.8;">
+                            <b style="color:var(--accent-strong);">事件描述：</b>{ev['description_zh']}<br>
+                            <b style="color:var(--accent-strong);">英文名稱：</b>{ev['name_en']}<br>
+                            <b style="color:var(--accent-strong);">主要衝擊：</b><span style="color:{cat_color};">{ev['primary_shock']}</span>
                             &nbsp;&nbsp;
-                            <b style="color:#f0b90b;">嚴重程度：</b>{'★' * round(ev['magnitude'])} ({ev['magnitude']}/5)
+                            <b style="color:var(--accent-strong);">嚴重程度：</b>{'★' * round(ev['magnitude'])} ({ev['magnitude']}/5)
                             </div>
                             """,
                             unsafe_allow_html=True,
@@ -1330,11 +1658,11 @@ elif page == "🔬 事件分析":
                         )
                     )
                     pie_fig.update_layout(
-                        plot_bgcolor="#0a1628",
-                        paper_bgcolor="#0d1f3c",
-                        font=dict(color="#e0e8f0", family="Avenir Next, PingFang TC, sans-serif"),
+                        plot_bgcolor="#f7f3ee",
+                        paper_bgcolor="#fffaf5",
+                        font=dict(color="#4f5a59", family="Avenir Next, PingFang TC, sans-serif"),
                         margin=dict(l=10, r=10, t=30, b=10),
-                        title=dict(text="投資組合配置占比", font=dict(color="#f0b90b", size=15)),
+                        title=dict(text="投資組合配置占比", font=dict(color="#677f78", size=15)),
                         height=320,
                     )
                     st.plotly_chart(pie_fig, use_container_width=True)
@@ -1378,15 +1706,15 @@ elif page == "🔬 事件分析":
                     opacity=0.7,
                 ))
                 fig_hist.add_vline(x=port_result["var_95"] * 100, line_dash="dash",
-                                   line_color="#ff3d3d", annotation_text="  VaR 95%",
-                                   annotation_font_color="#ff3d3d")
+                                   line_color="#c48f87", annotation_text="  VaR 95%",
+                                   annotation_font_color="#c48f87")
                 fig_hist.add_vline(x=port_result["expected_return"] * 100, line_dash="dash",
-                                   line_color="#f0b90b", annotation_text="  期望值",
-                                   annotation_font_color="#f0b90b")
+                                   line_color="#7f998f", annotation_text="  期望值",
+                                   annotation_font_color="#7f998f")
                 fig_hist.update_layout(
-                    plot_bgcolor="#0a1628", paper_bgcolor="#0d1f3c",
-                    font=dict(color="#e0e8f0"), height=280,
-                    title=dict(text="投資組合報酬模擬分佈", font=dict(color="#f0b90b", size=14)),
+                    plot_bgcolor="#f7f3ee", paper_bgcolor="#fffaf5",
+                    font=dict(color="#4f5a59"), height=280,
+                    title=dict(text="投資組合報酬模擬分佈", font=dict(color="#677f78", size=14)),
                     xaxis_title="報酬 (%)", showlegend=False,
                     margin=dict(l=40, r=20, t=50, b=40),
                 )
@@ -1406,10 +1734,10 @@ elif page == "🔬 事件分析":
                       <h4>🛡️ {asset_name} ({h['asset']}) {already}</h4>
                       <p>{h['reason_zh']}</p>
                       <div style="margin-top:8px; font-size:0.85rem;">
-                        <span style="color:#8ca0b8;">預期報酬：</span>
+                        <span style="color:var(--text-muted);">預期報酬：</span>
                         <span style="color:{ret_color}; font-weight:600;">{h['expected_return']:.2%}</span>
                         &nbsp;&nbsp;
-                        <span style="color:#8ca0b8;">對沖有效性：</span>
+                        <span style="color:var(--text-muted);">對沖有效性：</span>
                         <span style="color:#00c853; font-weight:600;">{eff_pct}%</span>
                       </div>
                     </div>
@@ -1495,10 +1823,10 @@ elif page == "📚 事件資料庫":
             with dc1:
                 st.markdown(
                     f"""
-                    <div style="color:#b0c4d8; line-height:1.8; font-size:0.9rem;">
-                    <b style="color:#f0b90b;">中文描述：</b>{ev['description_zh']}<br>
-                    <b style="color:#f0b90b;">English：</b>{ev['description_en']}<br>
-                    <b style="color:#f0b90b;">主要衝擊資產：</b><span style="color:{cat_color};">{ev['primary_shock']}</span>
+                    <div style="color:var(--text-main); line-height:1.8; font-size:0.92rem;">
+                    <b style="color:var(--accent-strong);">中文描述：</b>{ev['description_zh']}<br>
+                    <b style="color:var(--accent-strong);">English：</b>{ev['description_en']}<br>
+                    <b style="color:var(--accent-strong);">主要衝擊資產：</b><span style="color:{cat_color};">{ev['primary_shock']}</span>
                     </div>
                     """,
                     unsafe_allow_html=True,
@@ -1506,9 +1834,9 @@ elif page == "📚 事件資料庫":
             with dc2:
                 st.markdown(
                     f"""
-                    <div style="text-align:center; padding:10px; background:#0d1f3c; border-radius:10px; border:1px solid #1e3050;">
+                    <div style="text-align:center; padding:10px; background:#fffaf5; border-radius:10px; border:1px solid var(--border);">
                     <div style="font-size:2rem; color:{cat_color};">{mag_stars}</div>
-                    <div style="color:#8ca0b8; font-size:0.8rem; margin-top:4px;">嚴重程度 {ev['magnitude']}/5</div>
+                    <div style="color:var(--text-muted); font-size:0.8rem; margin-top:4px;">嚴重程度 {ev['magnitude']}/5</div>
                     <div style="margin-top:8px;">
                       <span class="badge" style="background:{cat_color}22; color:{cat_color}; padding:4px 10px; border-radius:20px; font-size:0.8rem;">
                         {ev['category']}

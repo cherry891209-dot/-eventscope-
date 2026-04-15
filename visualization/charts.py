@@ -11,10 +11,10 @@ from plotly.subplots import make_subplots
 BG_COLOR = "#f7f3ee"
 PAPER_BG = "#fffaf5"
 GRID_COLOR = "#ddd3ca"
-TEXT_COLOR = "#4f5a59"
-ACCENT = "#8fa8a1"
-POSITIVE_COLOR = "#9eb3ad"
-NEGATIVE_COLOR = "#c79a92"
+TEXT_COLOR = "#3f4b4a"
+ACCENT = "#7f998f"
+POSITIVE_COLOR = "#8ea6a0"
+NEGATIVE_COLOR = "#c48f87"
 
 _LAYOUT_BASE = dict(
     plot_bgcolor=BG_COLOR,
@@ -28,11 +28,22 @@ _LAYOUT_BASE = dict(
 CATEGORY_COLORS = {
     "美國股市": "#9bb2ba",
     "亞洲股市": "#c6a892",
+    "歐洲股市": "#9eb0b4",
+    "拉丁美洲": "#b69982",
     "商品": "#9eb5ae",
     "固定收益": "#b7c3ad",
     "外匯": "#c9cfb8",
     "加密貨幣": "#d2b29e",
     "新興市場": "#a9b7c5",
+}
+
+EVENT_CATEGORY_COLORS = {
+    "貨幣政策": "#8fa89d",
+    "地緣政治": "#b98b81",
+    "金融危機": "#a87068",
+    "商品衝擊": "#b59b74",
+    "科技產業": "#819daf",
+    "自然災害": "#9aa287",
 }
 
 
@@ -250,6 +261,100 @@ def plot_multi_asset_forecast(
     return fig
 
 
+def plot_market_snapshot(snapshot_df: pd.DataFrame) -> go.Figure:
+    """Horizontal bar chart for global market pulse."""
+    if snapshot_df.empty:
+        return go.Figure()
+
+    df = snapshot_df.copy().sort_values("one_week")
+    colors = [POSITIVE_COLOR if v >= 0 else NEGATIVE_COLOR for v in df["one_week"]]
+    fig = go.Figure(
+        go.Bar(
+            x=df["one_week"] * 100,
+            y=df["name_zh"],
+            orientation="h",
+            marker_color=colors,
+            text=[f"{v:.2f}%" for v in df["one_week"] * 100],
+            textposition="outside",
+            customdata=np.column_stack([df["one_day"] * 100, df["ticker"]]),
+            hovertemplate=(
+                "<b>%{y}</b><br>"
+                "Ticker: %{customdata[1]}<br>"
+                "近一週: %{x:.2f}%<br>"
+                "近一日: %{customdata[0]:.2f}%<extra></extra>"
+            ),
+        )
+    )
+    fig.add_vline(x=0, line_color=GRID_COLOR, line_width=1)
+    fig.update_layout(
+        **_LAYOUT_BASE,
+        title=dict(text="全球市場快照", font=dict(color=ACCENT, size=16)),
+        xaxis_title="近一週變化 (%)",
+        yaxis_title="",
+        height=420,
+    )
+    return fig
+
+
+def plot_world_event_map(events_df: pd.DataFrame) -> go.Figure:
+    """World map showing event coverage and severity by region."""
+    if events_df.empty:
+        return go.Figure()
+
+    fig = go.Figure()
+    for category, grp in events_df.groupby("category"):
+        fig.add_trace(
+            go.Scattergeo(
+                lon=grp["lon"],
+                lat=grp["lat"],
+                text=grp["name_zh"],
+                customdata=np.column_stack([grp["region"], grp["date"], grp["magnitude"]]),
+                mode="markers",
+                name=category,
+                marker=dict(
+                    size=(grp["magnitude"] * 5 + 8).tolist(),
+                    color=EVENT_CATEGORY_COLORS.get(category, ACCENT),
+                    line=dict(color=PAPER_BG, width=1),
+                    opacity=0.85,
+                ),
+                hovertemplate=(
+                    "<b>%{text}</b><br>"
+                    "地區: %{customdata[0]}<br>"
+                    "日期: %{customdata[1]}<br>"
+                    "強度: %{customdata[2]} / 5<extra></extra>"
+                ),
+            )
+        )
+
+    fig.update_layout(
+        paper_bgcolor=PAPER_BG,
+        font=dict(color=TEXT_COLOR, family="Avenir Next, PingFang TC, Microsoft JhengHei, sans-serif"),
+        title=dict(text="全球事件分布地圖", font=dict(color=ACCENT, size=16)),
+        geo=dict(
+            projection_type="natural earth",
+            showframe=False,
+            showcoastlines=True,
+            coastlinecolor="#ccbfb3",
+            showland=True,
+            landcolor="#f1e7dd",
+            showocean=True,
+            oceancolor="#faf4ee",
+            bgcolor=PAPER_BG,
+        ),
+        height=420,
+        margin=dict(l=20, r=20, t=60, b=20),
+        legend=dict(
+            orientation="h",
+            yanchor="bottom",
+            y=0.98,
+            xanchor="center",
+            x=0.5,
+            bgcolor="rgba(255,250,245,0.7)",
+        ),
+    )
+    return fig
+
+
 # ─── Historical Comparison Heatmap ───────────────────────────────────────────
 
 def plot_historical_comparison(
@@ -354,12 +459,12 @@ def plot_event_timeline(events: list) -> go.Figure:
         return go.Figure()
 
     cat_color_map = {
-        "貨幣政策": "#2ca02c",
-        "地緣政治": "#d62728",
-        "金融危機": "#ff3d3d",
-        "商品衝擊": "#f0b90b",
-        "科技產業": "#17becf",
-        "自然災害": "#9467bd",
+        "貨幣政策": "#8fa89d",
+        "地緣政治": "#b98b81",
+        "金融危機": "#a87068",
+        "商品衝擊": "#b59b74",
+        "科技產業": "#819daf",
+        "自然災害": "#9aa287",
     }
 
     df = pd.DataFrame(events)
