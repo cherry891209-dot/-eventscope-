@@ -1251,27 +1251,57 @@ with st.sidebar:
 
     recent_events = [get_event_by_id(eid) for eid in st.session_state["recent_event_ids"][:4] if get_event_by_id(eid)]
     favorite_events = [get_event_by_id(eid) for eid in st.session_state["favorite_event_ids"][:4] if get_event_by_id(eid)]
-    favorites_html = "".join(
-        f"<div class='sidebar-route-step'><span class='sidebar-step-index'>★</span><span>{ev['name_zh']}</span></div>"
-        for ev in favorite_events
-    ) or "<div class='sidebar-card-note'>還沒有收藏事件。</div>"
-    recent_html = "".join(
-        f"<div class='sidebar-route-step'><span class='sidebar-step-index'>↺</span><span>{ev['name_zh']}</span></div>"
-        for ev in recent_events
-    ) or "<div class='sidebar-card-note'>還沒有最近瀏覽事件。</div>"
-    st.markdown(
-        f"""
-        <div class="sidebar-card">
-          <div class="sidebar-card-title">Favorites</div>
-          <div class="sidebar-route">{favorites_html}</div>
-        </div>
-        <div class="sidebar-card">
-          <div class="sidebar-card-title">Recent Events</div>
-          <div class="sidebar-route">{recent_html}</div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+
+    st.markdown('<div class="sidebar-card"><div class="sidebar-card-title">Favorites</div></div>', unsafe_allow_html=True)
+    if favorite_events:
+        for ev in favorite_events:
+            st.markdown(
+                f"<div class='sidebar-route-step'><span class='sidebar-step-index'>★</span><span>{ev['name_zh']}</span></div>",
+                unsafe_allow_html=True,
+            )
+            fav_btn1, fav_btn2, fav_btn3 = st.columns(3)
+            if fav_btn1.button("分析", key=f"fav_analysis_{ev['id']}", use_container_width=True):
+                st.session_state["quick_event_id"] = ev["id"]
+                st.session_state["global_category_filter"] = ev["category"]
+                st.session_state["global_region_filter"] = get_event_region(ev)
+                st.session_state["nav_page"] = "🔬 事件分析"
+                st.rerun()
+            if fav_btn2.button("資料庫", key=f"fav_db_{ev['id']}", use_container_width=True):
+                st.session_state["quick_event_id"] = ev["id"]
+                st.session_state["global_category_filter"] = ev["category"]
+                st.session_state["global_region_filter"] = get_event_region(ev)
+                st.session_state["nav_page"] = "📚 事件資料庫"
+                st.rerun()
+            if fav_btn3.button("移除", key=f"fav_remove_{ev['id']}", use_container_width=True):
+                st.session_state["favorite_event_ids"] = [
+                    eid for eid in st.session_state["favorite_event_ids"] if eid != ev["id"]
+                ]
+                st.rerun()
+    else:
+        st.markdown("<div class='sidebar-card-note'>還沒有收藏事件。</div>", unsafe_allow_html=True)
+
+    st.markdown('<div class="sidebar-card"><div class="sidebar-card-title">Recent Events</div></div>', unsafe_allow_html=True)
+    if recent_events:
+        for ev in recent_events:
+            st.markdown(
+                f"<div class='sidebar-route-step'><span class='sidebar-step-index'>↺</span><span>{ev['name_zh']}</span></div>",
+                unsafe_allow_html=True,
+            )
+            recent_btn1, recent_btn2 = st.columns(2)
+            if recent_btn1.button("分析", key=f"recent_analysis_{ev['id']}", use_container_width=True):
+                st.session_state["quick_event_id"] = ev["id"]
+                st.session_state["global_category_filter"] = ev["category"]
+                st.session_state["global_region_filter"] = get_event_region(ev)
+                st.session_state["nav_page"] = "🔬 事件分析"
+                st.rerun()
+            if recent_btn2.button("資料庫", key=f"recent_db_{ev['id']}", use_container_width=True):
+                st.session_state["quick_event_id"] = ev["id"]
+                st.session_state["global_category_filter"] = ev["category"]
+                st.session_state["global_region_filter"] = get_event_region(ev)
+                st.session_state["nav_page"] = "📚 事件資料庫"
+                st.rerun()
+    else:
+        st.markdown("<div class='sidebar-card-note'>還沒有最近瀏覽事件。</div>", unsafe_allow_html=True)
 
     st.markdown('<div class="sidebar-card-title" style="margin-top:18px;">Quick Actions</div>', unsafe_allow_html=True)
     action_col1, action_col2 = st.columns(2)
