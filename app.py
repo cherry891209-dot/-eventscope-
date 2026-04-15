@@ -218,6 +218,32 @@ st.markdown(
         font-weight: 600;
         margin: 4px 8px 0 0;
     }
+    .rich-grid-card {
+        background: linear-gradient(180deg, rgba(255, 251, 247, 0.98) 0%, rgba(244, 238, 231, 0.98) 100%);
+        border: 1px solid rgba(171, 164, 155, 0.24);
+        border-radius: 18px;
+        padding: 18px 18px 16px 18px;
+        min-height: 145px;
+        box-shadow: 0 14px 30px rgba(136, 123, 110, 0.08);
+    }
+    .rich-grid-title {
+        color: var(--text-muted);
+        font-size: 0.84rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+    }
+    .rich-grid-value {
+        color: var(--accent-strong);
+        font-size: 1.55rem;
+        font-weight: 800;
+        margin-top: 8px;
+    }
+    .rich-grid-meta {
+        color: var(--text-main);
+        font-size: 0.94rem;
+        line-height: 1.65;
+        margin-top: 10px;
+    }
     .market-dot {
         width: 10px;
         height: 10px;
@@ -564,6 +590,27 @@ def build_world_event_df() -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
+def build_region_summary() -> list[dict]:
+    counts = {}
+    avg_mag = {}
+    for event in HISTORICAL_EVENTS:
+        region = get_event_region(event)
+        counts[region] = counts.get(region, 0) + 1
+        avg_mag.setdefault(region, []).append(event["magnitude"])
+    rows = []
+    for region in EVENT_REGIONS:
+        if region not in counts:
+            continue
+        rows.append(
+            {
+                "region": region,
+                "count": counts[region],
+                "avg_magnitude": float(np.mean(avg_mag[region])),
+            }
+        )
+    return sorted(rows, key=lambda x: (-x["count"], -x["avg_magnitude"]))
+
+
 def build_executive_summary(event: dict, sim_results: pd.DataFrame, net: dict, port_result: dict) -> dict:
     if sim_results.empty:
         return {
@@ -821,6 +868,7 @@ if page == "🏠 首頁":
     for event in HISTORICAL_EVENTS:
         region = get_event_region(event)
         region_counts[region] = region_counts.get(region, 0) + 1
+    region_summary = build_region_summary()
     asset_category_counts = {}
     for info in ASSET_UNIVERSE.values():
         asset_category_counts[info["category"]] = asset_category_counts.get(info["category"], 0) + 1
@@ -865,6 +913,20 @@ if page == "🏠 首頁":
         for cat, count in sorted(asset_category_counts.items())
     )
     st.markdown(f"<div style='margin-top:6px; margin-bottom:8px;'>{chips_html}</div>", unsafe_allow_html=True)
+
+    richness_cols = st.columns(4)
+    for col, item in zip(richness_cols, region_summary[:4]):
+        with col:
+            st.markdown(
+                f"""
+                <div class="rich-grid-card fade-up">
+                  <div class="rich-grid-title">{item['region']} 事件群</div>
+                  <div class="rich-grid-value">{item['count']} 件</div>
+                  <div class="rich-grid-meta">平均強度 {item['avg_magnitude']:.1f} / 5，已納入全球事件比較視圖。</div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
 
     st.markdown("<br>", unsafe_allow_html=True)
 
@@ -952,6 +1014,47 @@ if page == "🏠 首頁":
                 unsafe_allow_html=True,
             )
 
+    with st.expander("查看更多事件與標的覆蓋", expanded=False):
+        exp_col1, exp_col2 = st.columns([1.15, 1])
+        with exp_col1:
+            latest_events = sorted(HISTORICAL_EVENTS, key=lambda x: x["date"], reverse=True)[:18]
+            preview_html = "".join(
+                f"<div style='padding:10px 0; border-bottom:1px solid rgba(171,164,155,0.18);'>"
+                f"<div style='font-size:0.9rem; color:var(--text-muted);'>{ev['date']} · {get_event_region(ev)} · "
+                f"<span style='color:{CAT_COLORS.get(ev['category'], '#888')}; font-weight:700;'>{ev['category']}</span></div>"
+                f"<div style='font-size:1rem; color:var(--text-main); font-weight:700; margin-top:3px;'>{ev['name_zh']}</div>"
+                f"</div>"
+                for ev in latest_events
+            )
+            st.markdown(
+                f"""
+                <div class="glass-panel">
+                  <div class="mini-section-title">最新事件預覽</div>
+                  {preview_html}
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+        with exp_col2:
+            asset_preview = sorted(asset_category_counts.items(), key=lambda x: (-x[1], x[0]))
+            asset_preview_html = "".join(
+                f"<div style='padding:10px 0; border-bottom:1px solid rgba(171,164,155,0.18); display:flex; justify-content:space-between; gap:12px;'>"
+                f"<span style='color:var(--text-main); font-size:0.98rem; font-weight:700;'>{cat}</span>"
+                f"<span style='color:var(--accent-strong); font-size:0.96rem;'>{count} 檔</span>"
+                f"</div>"
+                for cat, count in asset_preview
+            )
+            st.markdown(
+                f"""
+                <div class="glass-panel">
+                  <div class="mini-section-title">標的宇宙一覽</div>
+                  <div class="summary-tile-note" style="margin-top:0;">目前可直接分析股市、商品、債券、外匯與加密資產。</div>
+                  {asset_preview_html}
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+
     st.markdown("<br>", unsafe_allow_html=True)
 
     # CTA
@@ -962,7 +1065,7 @@ if page == "🏠 首頁":
             選擇左側「🔬 事件分析」開始模擬任一歷史事件的市場衝擊
           </div>
           <div style="color:var(--text-muted); font-size:0.95rem;">
-            支援 60+ 歷史事件 · 20+ 種資產 · 全球區域篩選 · 離線合成資料備援
+            支援 70 件歷史事件 · 25 種資產 · 8 個地區維度 · 離線合成資料備援
           </div>
         </div>
         """,
@@ -1813,9 +1916,12 @@ elif page == "📚 事件資料庫":
 
     st.dataframe(df_display, use_container_width=True, hide_index=True, height=320)
 
-    # Detail cards
-    st.markdown('<div class="section-header">事件詳情</div>', unsafe_allow_html=True)
-    for ev in display_events[:10]:  # Show top 10 to keep UI manageable
+    detail_limit = min(18, len(display_events))
+    st.markdown(
+        f'<div class="section-header">事件詳情</div><div style="color:var(--text-muted); margin:-6px 0 14px 0;">目前展開前 {detail_limit} 件事件，方便快速瀏覽全球資料庫。</div>',
+        unsafe_allow_html=True,
+    )
+    for ev in display_events[:detail_limit]:
         cat_color = CAT_COLORS.get(ev["category"], "#888")
         mag_stars = "★" * round(ev["magnitude"]) + "☆" * (5 - round(ev["magnitude"]))
         with st.expander(f"📌 {ev['date']} — {ev['name_zh']}"):
