@@ -3094,7 +3094,17 @@ elif page == "📚 事件資料庫":
         cat_color = CAT_COLORS.get(ev["category"], "#888")
         mag_stars = "★" * round(ev["magnitude"]) + "☆" * (5 - round(ev["magnitude"]))
         is_quick_target = quick_event_id == ev["id"]
+        scene, scene_color = pick_scene_for_event(ev)
         with st.expander(f"📌 {ev['date']} — {ev['name_zh']}" + ("（捷徑目標）" if is_quick_target else ""), expanded=is_quick_target):
+            st.markdown(
+                build_visual_card_html(
+                    ev["name_zh"],
+                    f"{ev['date']} · {get_event_region(ev)} · {ev['category']} · 主要衝擊 {ev['primary_shock']}",
+                    build_scene_image(scene, scene_color, "#c8a092"),
+                    "Database Image",
+                ),
+                unsafe_allow_html=True,
+            )
             dc1, dc2 = st.columns([3, 1])
             with dc1:
                 st.markdown(
