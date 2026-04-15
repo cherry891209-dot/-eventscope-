@@ -50,11 +50,54 @@ st.markdown(
         background: linear-gradient(180deg, rgba(236, 230, 223, 0.96) 0%, rgba(228, 221, 213, 0.96) 100%);
         border-right: 1px solid var(--border);
         backdrop-filter: blur(10px);
+        min-width: 310px;
+        max-width: 310px;
     }
+    section[data-testid="stSidebar"] > div { width: 310px !important; }
+    [data-testid="stSidebarContent"] { padding: 0.75rem 0.85rem 1.2rem 0.85rem; }
     [data-testid="stSidebar"] * { color: var(--text-main); }
     [data-testid="stSidebar"] .stRadio label p {
         color: var(--text-main) !important;
         font-weight: 600;
+        font-size: 1.02rem !important;
+    }
+    .sidebar-card {
+        background: linear-gradient(180deg, rgba(255, 251, 247, 0.94) 0%, rgba(242, 235, 227, 0.98) 100%);
+        border: 1px solid rgba(171, 164, 155, 0.24);
+        border-radius: 18px;
+        padding: 14px 14px 12px 14px;
+        margin: 10px 0 12px 0;
+        box-shadow: 0 10px 24px rgba(136, 123, 110, 0.08);
+    }
+    .sidebar-card-title {
+        color: var(--accent-strong);
+        font-size: 0.9rem;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+    }
+    .sidebar-card-value {
+        color: var(--text-main);
+        font-size: 1.18rem;
+        font-weight: 800;
+        margin-top: 8px;
+    }
+    .sidebar-card-note {
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        line-height: 1.6;
+        margin-top: 8px;
+    }
+    .sidebar-chip {
+        display: inline-block;
+        padding: 6px 10px;
+        margin: 6px 6px 0 0;
+        border-radius: 999px;
+        background: rgba(255, 250, 246, 0.92);
+        border: 1px solid rgba(171, 164, 155, 0.22);
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: var(--text-main);
     }
 
     [data-testid="stMetric"] {
@@ -875,6 +918,7 @@ def build_custom_scenario(
 # ─── Sidebar Navigation ───────────────────────────────────────────────────────
 
 with st.sidebar:
+    sidebar_top_region = max(build_region_summary(), key=lambda x: x["count"])["region"]
     st.markdown(
         """
         <div style="text-align:center; padding: 20px 0 10px 0;">
@@ -891,6 +935,32 @@ with st.sidebar:
         "導覽",
         options=["🏠 首頁", "🔬 事件分析", "📚 事件資料庫", "📖 方法論說明"],
         label_visibility="collapsed",
+    )
+
+    st.markdown(
+        f"""
+        <div class="sidebar-card">
+          <div class="sidebar-card-title">Quick Overview</div>
+          <div class="sidebar-card-value">{len(HISTORICAL_EVENTS)} 件事件 · {len(ASSET_UNIVERSE)} 種標的</div>
+          <div class="sidebar-card-note">目前覆蓋 {len(EVENT_REGIONS)} 個地區維度，事件最密集區域是 {sidebar_top_region}。</div>
+          <div style="margin-top:6px;">
+            <span class="sidebar-chip">事件比較</span>
+            <span class="sidebar-chip">投組壓測</span>
+            <span class="sidebar-chip">全球地圖</span>
+          </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    st.markdown(
+        """
+        <div class="sidebar-card">
+          <div class="sidebar-card-title">Recommended Path</div>
+          <div class="sidebar-card-note">先看首頁的全球市場脈動，再到事件分析做模擬，最後用事件比較或持倉壓測收斂成結論。</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
     )
 
     st.markdown("<hr style='border-color:var(--border); margin:20px 0 10px 0;'>", unsafe_allow_html=True)
