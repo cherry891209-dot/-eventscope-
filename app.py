@@ -1001,6 +1001,8 @@ if "portfolio_input_mode" not in st.session_state:
     st.session_state["portfolio_input_mode"] = "快速配置器"
 if "nav_page" not in st.session_state:
     st.session_state["nav_page"] = "🏠 首頁"
+if "pending_nav_page" not in st.session_state:
+    st.session_state["pending_nav_page"] = None
 if "global_category_filter" not in st.session_state:
     st.session_state["global_category_filter"] = "全部"
 if "global_region_filter" not in st.session_state:
@@ -1150,9 +1152,18 @@ def build_custom_scenario(
     }
 
 
+def queue_nav(page: str) -> None:
+    """Queue a page change so Streamlit can apply it before the nav widget is created."""
+    st.session_state["pending_nav_page"] = page
+
+
 # ─── Sidebar Navigation ───────────────────────────────────────────────────────
 
 with st.sidebar:
+    if st.session_state["pending_nav_page"] is not None:
+        st.session_state["nav_page"] = st.session_state["pending_nav_page"]
+        st.session_state["pending_nav_page"] = None
+
     sidebar_region_summary = build_region_summary()
     sidebar_top_region = max(sidebar_region_summary, key=lambda x: x["count"])["region"]
     sidebar_snapshot = build_market_snapshot()
@@ -1264,13 +1275,13 @@ with st.sidebar:
         st.session_state["quick_event_id"] = quick_event["id"]
         st.session_state["global_category_filter"] = quick_event["category"]
         st.session_state["global_region_filter"] = get_event_region(quick_event)
-        st.session_state["nav_page"] = "🔬 事件分析"
+        queue_nav("🔬 事件分析")
         st.rerun()
     if quick_btn2.button("看資料庫", use_container_width=True):
         st.session_state["quick_event_id"] = quick_event["id"]
         st.session_state["global_category_filter"] = quick_event["category"]
         st.session_state["global_region_filter"] = get_event_region(quick_event)
-        st.session_state["nav_page"] = "📚 事件資料庫"
+        queue_nav("📚 事件資料庫")
         st.rerun()
     if quick_btn3.button("收藏", use_container_width=True):
         if quick_event["id"] not in st.session_state["favorite_event_ids"]:
@@ -1344,13 +1355,13 @@ with st.sidebar:
                 st.session_state["quick_event_id"] = ev["id"]
                 st.session_state["global_category_filter"] = ev["category"]
                 st.session_state["global_region_filter"] = get_event_region(ev)
-                st.session_state["nav_page"] = "🔬 事件分析"
+                queue_nav("🔬 事件分析")
                 st.rerun()
             if fav_btn2.button("資料庫", key=f"fav_db_{ev['id']}", use_container_width=True):
                 st.session_state["quick_event_id"] = ev["id"]
                 st.session_state["global_category_filter"] = ev["category"]
                 st.session_state["global_region_filter"] = get_event_region(ev)
-                st.session_state["nav_page"] = "📚 事件資料庫"
+                queue_nav("📚 事件資料庫")
                 st.rerun()
             if fav_btn3.button("移除", key=f"fav_remove_{ev['id']}", use_container_width=True):
                 st.session_state["favorite_event_ids"] = [
@@ -1372,13 +1383,13 @@ with st.sidebar:
                 st.session_state["quick_event_id"] = ev["id"]
                 st.session_state["global_category_filter"] = ev["category"]
                 st.session_state["global_region_filter"] = get_event_region(ev)
-                st.session_state["nav_page"] = "🔬 事件分析"
+                queue_nav("🔬 事件分析")
                 st.rerun()
             if recent_btn2.button("資料庫", key=f"recent_db_{ev['id']}", use_container_width=True):
                 st.session_state["quick_event_id"] = ev["id"]
                 st.session_state["global_category_filter"] = ev["category"]
                 st.session_state["global_region_filter"] = get_event_region(ev)
-                st.session_state["nav_page"] = "📚 事件資料庫"
+                queue_nav("📚 事件資料庫")
                 st.rerun()
     else:
         st.markdown("<div class='sidebar-card-note'>還沒有最近瀏覽事件。</div>", unsafe_allow_html=True)
@@ -1386,10 +1397,10 @@ with st.sidebar:
     st.markdown('<div class="sidebar-card-title" style="margin-top:18px;">Quick Actions</div>', unsafe_allow_html=True)
     action_col1, action_col2 = st.columns(2)
     if action_col1.button("前往分析", use_container_width=True):
-        st.session_state["nav_page"] = "🔬 事件分析"
+        queue_nav("🔬 事件分析")
         st.rerun()
     if action_col2.button("前往資料庫", use_container_width=True):
-        st.session_state["nav_page"] = "📚 事件資料庫"
+        queue_nav("📚 事件資料庫")
         st.rerun()
     action_col3, action_col4 = st.columns(2)
     if action_col3.button("重設篩選", use_container_width=True):
@@ -1407,11 +1418,11 @@ with st.sidebar:
         st.session_state["portfolio_editor_rows"] = portfolio_to_rows(DEFAULT_PORTFOLIO)
         st.rerun()
     if action_col6.button("打開事件比較", use_container_width=True):
-        st.session_state["nav_page"] = "🔬 事件分析"
+        queue_nav("🔬 事件分析")
         st.session_state["open_compare_tab"] = True
         st.rerun()
     if st.button("一鍵執行分析", use_container_width=True):
-        st.session_state["nav_page"] = "🔬 事件分析"
+        queue_nav("🔬 事件分析")
         st.session_state["trigger_run_analysis"] = True
         st.rerun()
 
@@ -2867,7 +2878,7 @@ elif page == "📚 事件資料庫":
                 action_cols = st.columns(2)
                 if action_cols[0].button("載入到分析頁", key=f"db_to_analysis_{ev['id']}", use_container_width=True):
                     st.session_state["quick_event_id"] = ev["id"]
-                    st.session_state["nav_page"] = "🔬 事件分析"
+                    queue_nav("🔬 事件分析")
                     st.rerun()
                 if action_cols[1].button("收藏", key=f"db_favorite_{ev['id']}", use_container_width=True):
                     if ev["id"] not in st.session_state["favorite_event_ids"]:
