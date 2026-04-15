@@ -1,0 +1,12 @@
+[server]
+headless = true
+runOnSave = true
+port = 8505
+
+[theme]
+base = "light"
+primaryColor = "#8fa8a1"
+backgroundColor = "#f7f3ee"
+secondaryBackgroundColor = "#fffaf5"
+textColor = "#4f5a59"
+

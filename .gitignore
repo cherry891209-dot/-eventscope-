@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.streamlit.pid
+streamlit.log
+.DS_Store
+.claude/
+
