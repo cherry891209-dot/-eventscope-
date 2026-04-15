@@ -944,6 +944,10 @@ if "recent_event_ids" not in st.session_state:
     st.session_state["recent_event_ids"] = []
 if "selected_tickers" not in st.session_state:
     st.session_state["selected_tickers"] = list(DEFAULT_PORTFOLIO.keys())
+if "trigger_run_analysis" not in st.session_state:
+    st.session_state["trigger_run_analysis"] = False
+if "open_compare_tab" not in st.session_state:
+    st.session_state["open_compare_tab"] = False
 
 
 # ─── Cached Analysis Functions ───────────────────────────────────────────────
@@ -1320,6 +1324,19 @@ with st.sidebar:
         st.rerun()
     if action_col4.button("清空收藏", use_container_width=True):
         st.session_state["favorite_event_ids"] = []
+        st.rerun()
+    action_col5, action_col6 = st.columns(2)
+    if action_col5.button("套用示範投組", use_container_width=True):
+        st.session_state["portfolio_dict"] = DEFAULT_PORTFOLIO.copy()
+        st.session_state["portfolio_editor_rows"] = portfolio_to_rows(DEFAULT_PORTFOLIO)
+        st.rerun()
+    if action_col6.button("打開事件比較", use_container_width=True):
+        st.session_state["nav_page"] = "🔬 事件分析"
+        st.session_state["open_compare_tab"] = True
+        st.rerun()
+    if st.button("一鍵執行分析", use_container_width=True):
+        st.session_state["nav_page"] = "🔬 事件分析"
+        st.session_state["trigger_run_analysis"] = True
         st.rerun()
 
     st.markdown("<hr style='border-color:var(--border); margin:20px 0 10px 0;'>", unsafe_allow_html=True)
@@ -1846,6 +1863,9 @@ elif page == "🔬 事件分析":
     run_col, status_col = st.columns([1, 3])
     with run_col:
         run_analysis = st.button("🚀 執行分析", type="primary", use_container_width=True)
+    if st.session_state.get("trigger_run_analysis"):
+        run_analysis = True
+        st.session_state["trigger_run_analysis"] = False
 
     if run_analysis and selected_event:
         tickers_tuple = tuple(selected_tickers)
@@ -2460,6 +2480,9 @@ elif page == "🔬 事件分析":
 
         # ── Tab 5: Event Comparison ──────────────────────────────────────
         with tab5:
+            if st.session_state.get("open_compare_tab"):
+                st.info("已從左側快捷操作切到事件比較區，請選第二個事件開始對照。")
+                st.session_state["open_compare_tab"] = False
             compare_candidates = [
                 e for e in HISTORICAL_EVENTS
                 if e["id"] != current_event.get("id")
