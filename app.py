@@ -911,6 +911,80 @@ def build_event_comparison_summary(
         "top_changes": merged.sort_values("abs_gap", ascending=False),
     }
 
+
+def build_action_recommendations(event: dict, sim_results: pd.DataFrame, port_result: dict) -> list[dict]:
+    if sim_results.empty:
+        return []
+    weakest = sim_results.sort_values("mean_return").iloc[0]
+    strongest = sim_results.sort_values("mean_return", ascending=False).iloc[0]
+    volatile = sim_results.sort_values("std_return", ascending=False).iloc[0]
+    ideas = [
+        {
+            "title": "降低脆弱曝險",
+            "detail": f"優先檢查 {format_asset_label(str(weakest['ticker']))}，期望報酬 {float(weakest['mean_return']):.2%}。",
+        },
+        {
+            "title": "保留防禦資產",
+            "detail": f"{format_asset_label(str(strongest['ticker']))} 在此情境下相對有韌性，可作防守核心。",
+        },
+        {
+            "title": "控制波動來源",
+            "detail": f"{format_asset_label(str(volatile['ticker']))} 波動最高，適合降低部位或搭配對沖。",
+        },
+    ]
+    if port_result:
+        ideas.append(
+            {
+                "title": "投組風險提醒",
+                "detail": f"目前投組 VaR 95% 為 {port_result['var_95']:.2%}，若展示報告可直接引用這個指標。",
+            }
+        )
+    return ideas
+
+
+def build_export_summary_text(event: dict, sim_results: pd.DataFrame, port_result: dict, net: dict) -> str:
+    centrality = net.get("centrality", {}) if isinstance(net, dict) else {}
+    top_hub = max(centrality.items(), key=lambda x: x[1])[0] if centrality else "資料不足"
+    weakest = sim_results.sort_values("mean_return").iloc[0] if not sim_results.empty else None
+    strongest = sim_results.sort_values("mean_return", ascending=False).iloc[0] if not sim_results.empty else None
+    lines = [
+        f"EventScope 分析摘要",
+        f"事件：{event['name_zh']} ({event['date']})",
+        f"類別：{event['category']} / 地區：{get_event_region(event)}",
+        f"主要衝擊：{event['primary_shock']}",
+        "",
+    ]
+    if weakest is not None and strongest is not None:
+        lines.extend([
+            f"最脆弱資產：{format_asset_label(str(weakest['ticker']))} / 期望報酬 {float(weakest['mean_return']):.2%}",
+            f"最具韌性資產：{format_asset_label(str(strongest['ticker']))} / 期望報酬 {float(strongest['mean_return']):.2%}",
+            f"傳導核心節點：{format_asset_label(top_hub) if top_hub != '資料不足' else top_hub}",
+        ])
+    if port_result:
+        lines.extend([
+            f"投組期望報酬：{port_result['expected_return']:.2%}",
+            f"投組 VaR 95%：{port_result['var_95']:.2%}",
+            f"投組 CVaR：{port_result['expected_shortfall']:.2%}",
+        ])
+    return "\n".join(lines)
+
+
+def compare_portfolios(portfolios: dict[str, dict], simulation_results: pd.DataFrame) -> pd.DataFrame:
+    rows = []
+    for name, portfolio in portfolios.items():
+        result = portfolio_stress_test(portfolio, simulation_results)
+        rows.append(
+            {
+                "投組": name,
+                "資產數": len(portfolio),
+                "期望報酬": result["expected_return"],
+                "VaR 95%": result["var_95"],
+                "CVaR": result["expected_shortfall"],
+                "最佳情境": result["best_case"],
+            }
+        )
+    return pd.DataFrame(rows)
+
 # ─── Session state init ───────────────────────────────────────────────────────
 for key in [
     "analysis_done", "selected_event", "simulation_results",
@@ -948,6 +1022,8 @@ if "trigger_run_analysis" not in st.session_state:
     st.session_state["trigger_run_analysis"] = False
 if "open_compare_tab" not in st.session_state:
     st.session_state["open_compare_tab"] = False
+if "saved_portfolios" not in st.session_state:
+    st.session_state["saved_portfolios"] = {}
 
 
 # ─── Cached Analysis Functions ───────────────────────────────────────────────
@@ -1942,6 +2018,30 @@ elif page == "🔬 事件分析":
             unsafe_allow_html=True,
         )
         st.markdown("<br>", unsafe_allow_html=True)
+        export_summary_text = build_export_summary_text(current_event, sim_results, port_result, net)
+        recommendation_items = build_action_recommendations(current_event, sim_results, port_result)
+        export_df = sim_results[["ticker", "mean_return", "std_return", "p5", "p95", "prob_negative"]].copy()
+        export_df.insert(1, "name_zh", export_df["ticker"].apply(lambda t: ASSET_UNIVERSE.get(t, {}).get("name_zh", t)))
+        export_csv = export_df.to_csv(index=False).encode("utf-8-sig")
+        util_col1, util_col2, util_col3 = st.columns([1, 1, 2])
+        with util_col1:
+            st.download_button("下載結果 CSV", export_csv, file_name="eventscope_results.csv", mime="text/csv", use_container_width=True)
+        with util_col2:
+            st.download_button("下載文字摘要", export_summary_text, file_name="eventscope_summary.txt", mime="text/plain", use_container_width=True)
+        with util_col3:
+            rec_html = "".join(
+                f"<div style='padding:8px 0; border-bottom:1px solid rgba(171,164,155,0.16);'><b style='color:var(--accent-strong);'>{item['title']}</b><div style='color:var(--text-muted); margin-top:4px;'>{item['detail']}</div></div>"
+                for item in recommendation_items[:4]
+            )
+            st.markdown(
+                f"""
+                <div class="glass-panel">
+                  <div class="mini-section-title">智能建議</div>
+                  {rec_html}
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
 
         lead_asset = sim_results.sort_values("mean_return", ascending=False).iloc[0]
         risk_asset = sim_results.sort_values("p5").iloc[0]
@@ -2274,6 +2374,11 @@ elif page == "🔬 事件分析":
                 st.session_state["portfolio_dict"] = DEFAULT_PORTFOLIO.copy()
                 st.session_state["portfolio_editor_rows"] = portfolio_to_rows(DEFAULT_PORTFOLIO)
                 current_portfolio = DEFAULT_PORTFOLIO.copy()
+            save_portfolio_name = st.text_input("儲存目前投組為", value="", placeholder="例如：我的防禦版", key="save_portfolio_name")
+            if st.button("儲存目前投組", use_container_width=True, key="save_current_portfolio"):
+                if save_portfolio_name.strip():
+                    st.session_state["saved_portfolios"][save_portfolio_name.strip()] = current_portfolio.copy()
+                    st.success(f"已儲存投組：{save_portfolio_name.strip()}")
 
             pt_col1, pt_col2 = st.columns([2.2, 1])
             if input_mode == "文字輸入":
@@ -2452,6 +2557,19 @@ elif page == "🔬 事件分析":
                     margin=dict(l=40, r=20, t=50, b=40),
                 )
                 st.plotly_chart(fig_hist, use_container_width=True)
+
+                st.markdown('<div class="section-header" style="font-size:1rem;">📚 多投組比較</div>', unsafe_allow_html=True)
+                compare_portfolios_dict = {"目前投組": port_dict}
+                for name, portfolio in PORTFOLIO_PRESETS.items():
+                    compare_portfolios_dict[f"預設｜{name}"] = portfolio
+                for name, portfolio in st.session_state.get("saved_portfolios", {}).items():
+                    compare_portfolios_dict[f"自訂｜{name}"] = portfolio
+                portfolio_compare_df = compare_portfolios(compare_portfolios_dict, sim_results)
+                if not portfolio_compare_df.empty:
+                    display_portfolio_compare_df = portfolio_compare_df.copy()
+                    for col_name in ["期望報酬", "VaR 95%", "CVaR", "最佳情境"]:
+                        display_portfolio_compare_df[col_name] = display_portfolio_compare_df[col_name].map(lambda x: f"{x:.2%}")
+                    st.dataframe(display_portfolio_compare_df, use_container_width=True, hide_index=True)
 
             # Hedge suggestions
             st.markdown('<div class="section-header" style="font-size:1rem;">🛡️ 對沖建議</div>', unsafe_allow_html=True)
