@@ -1264,7 +1264,7 @@ FEATURED_EVENT_IMAGE_QUERIES = {
 
 def build_remote_event_image(event_id: str) -> str:
     query = FEATURED_EVENT_IMAGE_QUERIES.get(event_id, "global finance market")
-    return f"https://loremflickr.com/1200/800/{quote(query)}?lock={abs(hash(event_id)) % 9973}"
+    return f"https://picsum.photos/seed/{quote(query + '-' + event_id)}/1200/800"
 
 
 def build_event_marquee_html(events: list[dict]) -> str:
@@ -2064,6 +2064,19 @@ if page == "🏠 首頁":
         unsafe_allow_html=True,
     )
 
+    featured_ids = [
+        "covid_crash_2020", "fed_hike_cycle_2022", "deepseek_shock_2025",
+        "russia_ukraine_2022", "asian_financial_crisis_1997", "uk_gilt_crisis_2022",
+        "india_rice_ban_2023", "japan_earthquake_2011", "argentina_default_2001",
+    ]
+    featured = [get_event_by_id(eid) for eid in featured_ids if get_event_by_id(eid)]
+    st.markdown('<div class="section-header">⭐ 重大事件跑馬燈</div>', unsafe_allow_html=True)
+    st.markdown(
+        '<div style="color:var(--text-muted); margin:-6px 0 14px 0;">首頁最上方直接看重大事件快帶，改用更穩定的遠端圖片來源。</div>',
+        unsafe_allow_html=True,
+    )
+    st.markdown(build_event_marquee_html(featured), unsafe_allow_html=True)
+
     st.markdown(
         f"""
         <div class="cta-strip fade-up">
@@ -2129,19 +2142,6 @@ if page == "🏠 首頁":
     for col, card in zip([hv1, hv2, hv3], hero_visuals):
         with col:
             st.markdown(build_visual_card_html(*card), unsafe_allow_html=True)
-
-    featured_ids = [
-        "covid_crash_2020", "fed_hike_cycle_2022", "deepseek_shock_2025",
-        "russia_ukraine_2022", "asian_financial_crisis_1997", "uk_gilt_crisis_2022",
-        "india_rice_ban_2023", "japan_earthquake_2011", "argentina_default_2001",
-    ]
-    featured = [get_event_by_id(eid) for eid in featured_ids if get_event_by_id(eid)]
-    st.markdown('<div class="section-header">⭐ 重大事件跑馬燈</div>', unsafe_allow_html=True)
-    st.markdown(
-        '<div style="color:var(--text-muted); margin:-6px 0 14px 0;">首頁改成橫向事件快帶，用網路圖片快速掃過重大事件，不再是一整排厚重卡片。</div>',
-        unsafe_allow_html=True,
-    )
-    st.markdown(build_event_marquee_html(featured), unsafe_allow_html=True)
 
     st.markdown(
         f"""
