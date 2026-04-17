@@ -6,6 +6,13 @@ import pandas as pd
 from scipy import stats
 
 
+def _safe_sharpe(mean_return: float, std_return: float, risk_free_rate: float = 0.0) -> float:
+    """Return Sharpe ratio with a zero-safe denominator."""
+    if std_return <= 1e-12:
+        return 0.0
+    return float((mean_return - risk_free_rate) / std_return)
+
+
 def simulate_event_impact(
     historical_cars: pd.DataFrame,
     n_simulations: int = 10000,
@@ -53,6 +60,7 @@ def simulate_event_impact(
                 "mean_return": float(np.mean(simulated)),
                 "median_return": float(np.median(simulated)),
                 "std_return": float(np.std(simulated)),
+                "sharpe_ratio": _safe_sharpe(float(np.mean(simulated)), float(np.std(simulated))),
                 "p5": float(np.percentile(simulated, 5)),
                 "p25": float(np.percentile(simulated, 25)),
                 "p75": float(np.percentile(simulated, 75)),
@@ -85,6 +93,8 @@ def portfolio_stress_test(
     if simulation_results.empty or not portfolio:
         return {
             "expected_return": 0.0,
+            "volatility": 0.0,
+            "sharpe_ratio": 0.0,
             "var_95": 0.0,
             "var_99": 0.0,
             "expected_shortfall": 0.0,
@@ -137,9 +147,13 @@ def portfolio_stress_test(
     var_99 = float(np.percentile(port_sim, 1))
     es_mask = port_sim <= var_95
     expected_shortfall = float(np.mean(port_sim[es_mask])) if es_mask.any() else var_95
+    volatility = float(np.std(port_sim))
+    expected_return = float(np.mean(port_sim))
 
     return {
-        "expected_return": round(float(np.mean(port_sim)), 6),
+        "expected_return": round(expected_return, 6),
+        "volatility": round(volatility, 6),
+        "sharpe_ratio": round(_safe_sharpe(expected_return, volatility), 6),
         "var_95": round(var_95, 6),
         "var_99": round(var_99, 6),
         "expected_shortfall": round(expected_shortfall, 6),

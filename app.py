@@ -1193,7 +1193,7 @@ def build_executive_summary(event: dict, sim_results: pd.DataFrame, net: dict, p
         bullets.append(f"傳導網路顯示 {format_asset_label(top_hub)} 是主要擴散節點，值得優先觀察連鎖反應。")
     if port_result:
         bullets.append(
-            f"若套用目前投資組合，VaR 95% 為 {port_result['var_95']:.2%}，期望報酬 {port_result['expected_return']:.2%}。"
+            f"若套用目前投資組合，VaR 95% 為 {port_result['var_95']:.2%}，期望報酬 {port_result['expected_return']:.2%}，夏普值 {port_result['sharpe_ratio']:.2f}。"
         )
 
     pills = [
@@ -1276,7 +1276,7 @@ def build_action_recommendations(event: dict, sim_results: pd.DataFrame, port_re
         ideas.append(
             {
                 "title": "投組風險提醒",
-                "detail": f"目前投組 VaR 95% 為 {port_result['var_95']:.2%}，若展示報告可直接引用這個指標。",
+                "detail": f"目前投組 VaR 95% 為 {port_result['var_95']:.2%}，夏普值 {port_result['sharpe_ratio']:.2f}，若展示報告可一起引用。",
             }
         )
     return ideas
@@ -1303,6 +1303,8 @@ def build_export_summary_text(event: dict, sim_results: pd.DataFrame, port_resul
     if port_result:
         lines.extend([
             f"投組期望報酬：{port_result['expected_return']:.2%}",
+            f"投組波動率：{port_result['volatility']:.2%}",
+            f"投組夏普值：{port_result['sharpe_ratio']:.2f}",
             f"投組 VaR 95%：{port_result['var_95']:.2%}",
             f"投組 CVaR：{port_result['expected_shortfall']:.2%}",
         ])
@@ -1318,6 +1320,7 @@ def compare_portfolios(portfolios: dict[str, dict], simulation_results: pd.DataF
                 "投組": name,
                 "資產數": len(portfolio),
                 "期望報酬": result["expected_return"],
+                "夏普值": result["sharpe_ratio"],
                 "VaR 95%": result["var_95"],
                 "CVaR": result["expected_shortfall"],
                 "最佳情境": result["best_case"],
@@ -2496,7 +2499,7 @@ elif page == "🔬 事件分析":
         st.markdown("<br>", unsafe_allow_html=True)
         export_summary_text = build_export_summary_text(current_event, sim_results, port_result, net)
         recommendation_items = build_action_recommendations(current_event, sim_results, port_result)
-        export_df = sim_results[["ticker", "mean_return", "std_return", "p5", "p95", "prob_negative"]].copy()
+        export_df = sim_results[["ticker", "mean_return", "std_return", "sharpe_ratio", "p5", "p95", "prob_negative"]].copy()
         export_df.insert(1, "name_zh", export_df["ticker"].apply(lambda t: ASSET_UNIVERSE.get(t, {}).get("name_zh", t)))
         export_csv = export_df.to_csv(index=False).encode("utf-8-sig")
         util_col1, util_col2, util_col3 = st.columns([1, 1, 2])
@@ -2549,9 +2552,9 @@ elif page == "🔬 事件分析":
             (
                 "投組壓力結果",
                 f"{port_result['var_95']:.2%}" if port_result else "--",
-                f"{port_result['expected_return']:.2%}" if port_result else "--",
+                f"{port_result['sharpe_ratio']:.2f}" if port_result else "--",
                 "negative" if port_result and port_result["var_95"] < 0 else "positive",
-                "左側數值為 VaR 95%，右側為期望報酬" if port_result else "尚未完成投組壓力測試",
+                "左側數值為 VaR 95%，右側為投組夏普值" if port_result else "尚未完成投組壓力測試",
             ),
         ]
         for col, (label, title, value, value_class, note) in zip(spotlight_cols, spotlight_items):
@@ -2618,10 +2621,11 @@ elif page == "🔬 事件分析":
 
             st.markdown('<div class="section-header" style="font-size:1rem;">各資產詳細統計</div>', unsafe_allow_html=True)
 
-            display_df = sim_results[["ticker", "mean_return", "std_return", "p5", "p95", "prob_negative"]].copy()
-            display_df.columns = ["資產", "期望報酬", "標準差", "P5 (最差5%)", "P95 (最佳5%)", "下跌機率"]
+            display_df = sim_results[["ticker", "mean_return", "std_return", "sharpe_ratio", "p5", "p95", "prob_negative"]].copy()
+            display_df.columns = ["資產", "期望報酬", "標準差", "夏普值", "P5 (最差5%)", "P95 (最佳5%)", "下跌機率"]
             for col in ["期望報酬", "標準差", "P5 (最差5%)", "P95 (最佳5%)"]:
                 display_df[col] = display_df[col].apply(lambda x: f"{x:.2%}")
+            display_df["夏普值"] = display_df["夏普值"].apply(lambda x: f"{float(x):.2f}")
             display_df["下跌機率"] = display_df["下跌機率"].apply(lambda x: f"{x:.1%}")
 
             # Add asset names
@@ -2990,18 +2994,20 @@ elif page == "🔬 事件分析":
             st.markdown('<div class="section-header" style="font-size:1rem;">📊 風險指標</div>', unsafe_allow_html=True)
 
             if port_result:
-                m1, m2, m3, m4, m5 = st.columns(5)
+                m1, m2, m3, m4, m5, m6, m7 = st.columns(7)
                 metrics = [
                     ("期望報酬", port_result["expected_return"], ""),
+                    ("波動率", port_result["volatility"], "模擬報酬標準差"),
+                    ("夏普值", port_result["sharpe_ratio"], "以 0 無風險利率計算"),
                     ("VaR (95%)", port_result["var_95"], "5%最壞情境"),
                     ("VaR (99%)", port_result["var_99"], "1%最壞情境"),
                     ("CVaR (ES)", port_result["expected_shortfall"], "尾端期望損失"),
                     ("最佳情境", port_result["best_case"], "P95"),
                 ]
-                for col, (label, val, help_text) in zip([m1, m2, m3, m4, m5], metrics):
+                for col, (label, val, help_text) in zip([m1, m2, m3, m4, m5, m6, m7], metrics):
                     with col:
-                        color = "normal" if val >= 0 else "inverse"
-                        st.metric(label, f"{val:.2%}", help=help_text)
+                        metric_value = f"{val:.2f}" if label == "夏普值" else f"{val:.2%}"
+                        st.metric(label, metric_value, help=help_text)
 
                 # Waterfall chart
                 st.plotly_chart(
@@ -3045,6 +3051,7 @@ elif page == "🔬 事件分析":
                     display_portfolio_compare_df = portfolio_compare_df.copy()
                     for col_name in ["期望報酬", "VaR 95%", "CVaR", "最佳情境"]:
                         display_portfolio_compare_df[col_name] = display_portfolio_compare_df[col_name].map(lambda x: f"{x:.2%}")
+                    display_portfolio_compare_df["夏普值"] = display_portfolio_compare_df["夏普值"].map(lambda x: f"{float(x):.2f}")
                     st.dataframe(display_portfolio_compare_df, use_container_width=True, hide_index=True)
 
             # Hedge suggestions
@@ -3529,6 +3536,7 @@ elif page == "📖 方法論說明":
             <ul style="margin:8px 0; padding-left:20px;">
               <li><b>期望報酬（Mean）</b>：5,000 次模擬的平均值</li>
               <li><b>標準差（Std）</b>：波動程度量化</li>
+              <li><b>夏普值（Sharpe Ratio）</b>：以 0 無風險利率近似的風險調整後報酬</li>
               <li><b>P5 / P25 / P75 / P95</b>：分位數分佈</li>
               <li><b>下跌機率</b>：模擬結果為負值的比例</li>
             </ul>
