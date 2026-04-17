@@ -262,6 +262,86 @@ def plot_multi_asset_forecast(
     return fig
 
 
+def plot_risk_adjusted_rankings(
+    simulation_results: pd.DataFrame,
+    asset_info: dict,
+) -> go.Figure:
+    """Grouped bar chart for Sharpe and Sortino rankings."""
+    if simulation_results.empty:
+        return go.Figure()
+
+    df = simulation_results.copy()
+    df["name_zh"] = df["ticker"].apply(lambda t: asset_info.get(t, {}).get("name_zh", t))
+    df = df.sort_values("sortino_ratio", ascending=False).head(8)
+
+    fig = go.Figure()
+    fig.add_trace(
+        go.Bar(
+            y=df["name_zh"],
+            x=df["sharpe_ratio"],
+            orientation="h",
+            name="Sharpe",
+            marker_color=ACCENT,
+            hovertemplate="<b>%{y}</b><br>Sharpe: %{x:.2f}<extra></extra>",
+        )
+    )
+    fig.add_trace(
+        go.Bar(
+            y=df["name_zh"],
+            x=df["sortino_ratio"],
+            orientation="h",
+            name="Sortino",
+            marker_color="#d4a479",
+            hovertemplate="<b>%{y}</b><br>Sortino: %{x:.2f}<extra></extra>",
+        )
+    )
+    fig.update_layout(
+        **_LAYOUT_BASE,
+        title=dict(text="風險調整後報酬排行", font=dict(color=ACCENT, size=16)),
+        xaxis_title="比率",
+        yaxis_title="",
+        barmode="group",
+        height=380,
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+    )
+    return fig
+
+
+def plot_taiwan_indicator_panel(indicators: dict) -> go.Figure:
+    """Compact dashboard chart for Taiwan-specific metrics."""
+    if not indicators:
+        return go.Figure()
+
+    labels = ["台灣事件密度", "半導體比重", "政策風險比重", "平均強度"]
+    values = [
+        indicators.get("event_density_score", 0.0),
+        indicators.get("semiconductor_share", 0.0) * 100,
+        indicators.get("policy_risk_share", 0.0) * 100,
+        indicators.get("avg_magnitude", 0.0) * 20,
+    ]
+    colors = ["#d9925b", "#9a8fbe", "#c48f87", "#8fa89d"]
+
+    fig = go.Figure(
+        go.Bar(
+            x=labels,
+            y=values,
+            marker_color=colors,
+            text=[f"{v:.0f}" for v in values],
+            textposition="outside",
+            hovertemplate="<b>%{x}</b><br>指標分數: %{y:.1f}<extra></extra>",
+        )
+    )
+    fig.update_layout(
+        **_LAYOUT_BASE,
+        title=dict(text="台灣市場專屬指標", font=dict(color=ACCENT, size=16)),
+        yaxis_title="指標分數",
+        xaxis_title="",
+        height=340,
+        margin=dict(l=50, r=30, t=60, b=60),
+    )
+    return fig
+
+
 def plot_market_snapshot(snapshot_df: pd.DataFrame) -> go.Figure:
     """Horizontal bar chart for global market pulse."""
     if snapshot_df.empty:

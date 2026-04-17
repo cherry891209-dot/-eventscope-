@@ -13,6 +13,112 @@ def _safe_sharpe(mean_return: float, std_return: float, risk_free_rate: float = 
     return float((mean_return - risk_free_rate) / std_return)
 
 
+def _safe_sortino(simulated: np.ndarray, risk_free_rate: float = 0.0) -> float:
+    """Return Sortino ratio using downside deviation."""
+    if simulated.size == 0:
+        return 0.0
+    excess = simulated - risk_free_rate
+    downside = excess[excess < 0]
+    downside_dev = float(np.sqrt(np.mean(np.square(downside)))) if downside.size else 0.0
+    if downside_dev <= 1e-12:
+        return 0.0
+    return float(np.mean(excess) / downside_dev)
+
+
+def _max_drawdown(simulated: np.ndarray) -> float:
+    """Approximate max drawdown from a cumulative pseudo-path."""
+    if simulated.size == 0:
+        return 0.0
+    wealth = np.cumprod(1 + simulated)
+    running_peak = np.maximum.accumulate(wealth)
+    drawdowns = wealth / np.maximum(running_peak, 1e-12) - 1
+    return float(np.min(drawdowns))
+
+
+def _safe_calmar(mean_return: float, max_drawdown: float) -> float:
+    """Return Calmar ratio with a zero-safe denominator."""
+    if abs(max_drawdown) <= 1e-12:
+        return 0.0
+    return float(mean_return / abs(max_drawdown))
+
+
+def _profit_loss_ratio(simulated: np.ndarray) -> float:
+    """Average positive outcome divided by average absolute loss."""
+    wins = simulated[simulated > 0]
+    losses = simulated[simulated < 0]
+    if wins.size == 0 or losses.size == 0:
+        return 0.0
+    avg_loss = abs(float(np.mean(losses)))
+    if avg_loss <= 1e-12:
+        return 0.0
+    return float(np.mean(wins) / avg_loss)
+
+
+def _alpha_beta(target: np.ndarray, benchmark: np.ndarray) -> tuple[float, float]:
+    """Return alpha and beta of target against benchmark."""
+    if target.size == 0 or benchmark.size == 0:
+        return 0.0, 0.0
+    min_len = min(len(target), len(benchmark))
+    if min_len == 0:
+        return 0.0, 0.0
+    tgt = target[:min_len]
+    bench = benchmark[:min_len]
+    bench_var = float(np.var(bench))
+    beta = 0.0 if bench_var <= 1e-12 else float(np.cov(tgt, bench, ddof=0)[0, 1] / bench_var)
+    alpha = float(np.mean(tgt) - beta * np.mean(bench))
+    return alpha, beta
+
+
+def classify_risk_grade(
+    sharpe_ratio: float,
+    max_drawdown: float,
+    prob_negative: float,
+) -> str:
+    """Simple website-friendly risk grade."""
+    score = 0
+    if sharpe_ratio >= 1.0:
+        score += 2
+    elif sharpe_ratio >= 0.4:
+        score += 1
+    elif sharpe_ratio < 0:
+        score -= 1
+
+    if max_drawdown >= -0.08:
+        score += 2
+    elif max_drawdown >= -0.16:
+        score += 1
+    elif max_drawdown <= -0.28:
+        score -= 1
+
+    if prob_negative <= 0.4:
+        score += 1
+    elif prob_negative >= 0.62:
+        score -= 1
+
+    if score >= 4:
+        return "A 穩健"
+    if score >= 2:
+        return "B 均衡"
+    if score >= 0:
+        return "C 波動"
+    return "D 高風險"
+
+
+def _select_benchmark_series(sim_indexed: pd.DataFrame) -> tuple[str, np.ndarray | None]:
+    """Pick a reasonable benchmark simulation series from the available assets."""
+    candidates = ["^GSPC", "^TWII", "^IXIC", "^DJI", "0050.TW"]
+    for ticker in candidates:
+        if ticker in sim_indexed.index:
+            arr = sim_indexed.loc[ticker].get("_simulated")
+            if isinstance(arr, np.ndarray):
+                return ticker, arr
+    for ticker in sim_indexed.index:
+        arr = sim_indexed.loc[ticker].get("_simulated")
+        if isinstance(arr, np.ndarray):
+            return str(ticker), arr
+    return "", None
+
+
 def simulate_event_impact(
     historical_cars: pd.DataFrame,
     n_simulations: int = 10000,
@@ -36,6 +142,7 @@ def simulate_event_impact(
 
     results = []
     rng = np.random.default_rng(seed=2024)
+    benchmark_draws: dict[str, np.ndarray] = {}
 
     for ticker in historical_cars.columns:
         obs = historical_cars[ticker].dropna().values
@@ -50,17 +157,26 @@ def simulate_event_impact(
         draws = rng.choice(obs, size=n_simulations, replace=True)
         noise = rng.normal(0, std_obs * 0.15, n_simulations)
         simulated = (draws + noise) * event_intensity
+        benchmark_draws[ticker] = simulated
 
         prob_neg = float(np.mean(simulated < 0))
         prob_pos = float(np.mean(simulated > 0))
+        mean_return = float(np.mean(simulated))
+        std_return = float(np.std(simulated))
+        max_drawdown = _max_drawdown(simulated)
 
         results.append(
             {
                 "ticker": ticker,
-                "mean_return": float(np.mean(simulated)),
+                "mean_return": mean_return,
                 "median_return": float(np.median(simulated)),
-                "std_return": float(np.std(simulated)),
-                "sharpe_ratio": _safe_sharpe(float(np.mean(simulated)), float(np.std(simulated))),
+                "std_return": std_return,
+                "sharpe_ratio": _safe_sharpe(mean_return, std_return),
+                "sortino_ratio": _safe_sortino(simulated),
+                "max_drawdown": max_drawdown,
+                "calmar_ratio": _safe_calmar(mean_return, max_drawdown),
+                "win_rate": prob_pos,
+                "profit_loss_ratio": _profit_loss_ratio(simulated),
                 "p5": float(np.percentile(simulated, 5)),
                 "p25": float(np.percentile(simulated, 25)),
                 "p75": float(np.percentile(simulated, 75)),
@@ -70,8 +186,27 @@ def simulate_event_impact(
                 "_simulated": simulated,  # Store for portfolio use
             }
         )
+    df = pd.DataFrame(results)
+    if df.empty:
+        return df
 
-    return pd.DataFrame(results)
+    sim_indexed = df.set_index("ticker")
+    benchmark_ticker, benchmark_series = _select_benchmark_series(sim_indexed)
+    alphas, betas, grades, benchmark_labels = [], [], [], []
+    for _, row in df.iterrows():
+        simulated = row["_simulated"]
+        alpha, beta = (0.0, 0.0)
+        if isinstance(benchmark_series, np.ndarray):
+            alpha, beta = _alpha_beta(simulated, benchmark_series)
+        alphas.append(alpha)
+        betas.append(beta)
+        grades.append(classify_risk_grade(float(row["sharpe_ratio"]), float(row["max_drawdown"]), float(row["prob_negative"])))
+        benchmark_labels.append(benchmark_ticker or "--")
+    df["alpha"] = alphas
+    df["beta"] = betas
+    df["risk_grade"] = grades
+    df["benchmark_ticker"] = benchmark_labels
+    return df
 
 
 def portfolio_stress_test(
@@ -95,6 +230,15 @@ def portfolio_stress_test(
             "expected_return": 0.0,
             "volatility": 0.0,
             "sharpe_ratio": 0.0,
+            "sortino_ratio": 0.0,
+            "max_drawdown": 0.0,
+            "calmar_ratio": 0.0,
+            "alpha": 0.0,
+            "beta": 0.0,
+            "win_rate": 0.0,
+            "profit_loss_ratio": 0.0,
+            "risk_grade": "C 波動",
+            "benchmark_ticker": "--",
             "var_95": 0.0,
             "var_99": 0.0,
             "expected_shortfall": 0.0,
@@ -149,11 +293,27 @@ def portfolio_stress_test(
     expected_shortfall = float(np.mean(port_sim[es_mask])) if es_mask.any() else var_95
     volatility = float(np.std(port_sim))
     expected_return = float(np.mean(port_sim))
+    max_drawdown = _max_drawdown(port_sim)
+    benchmark_ticker, benchmark_series = _select_benchmark_series(sim_indexed)
+    alpha, beta = (0.0, 0.0)
+    if isinstance(benchmark_series, np.ndarray):
+        alpha, beta = _alpha_beta(port_sim, benchmark_series)
+    win_rate = float(np.mean(port_sim > 0))
+    prob_negative = float(np.mean(port_sim < 0))
 
     return {
         "expected_return": round(expected_return, 6),
         "volatility": round(volatility, 6),
         "sharpe_ratio": round(_safe_sharpe(expected_return, volatility), 6),
+        "sortino_ratio": round(_safe_sortino(port_sim), 6),
+        "max_drawdown": round(max_drawdown, 6),
+        "calmar_ratio": round(_safe_calmar(expected_return, max_drawdown), 6),
+        "alpha": round(alpha, 6),
+        "beta": round(beta, 6),
+        "win_rate": round(win_rate, 6),
+        "profit_loss_ratio": round(_profit_loss_ratio(port_sim), 6),
+        "risk_grade": classify_risk_grade(_safe_sharpe(expected_return, volatility), max_drawdown, prob_negative),
+        "benchmark_ticker": benchmark_ticker or "--",
         "var_95": round(var_95, 6),
         "var_99": round(var_99, 6),
         "expected_shortfall": round(expected_shortfall, 6),

@@ -671,7 +671,9 @@ from visualization.charts import (
     plot_impact_network,
     plot_car_distribution,
     plot_multi_asset_forecast,
+    plot_risk_adjusted_rankings,
     plot_market_snapshot,
+    plot_taiwan_indicator_panel,
     plot_world_event_map,
     plot_historical_comparison,
     plot_portfolio_waterfall,
@@ -1035,6 +1037,9 @@ def build_taiwan_focus_summary() -> dict:
         dominant_category = max(categories, key=categories.get)
     flagship_assets = list(tw_assets.keys())[:4]
     avg_mag = float(np.mean([e["magnitude"] for e in tw_events])) if tw_events else 0.0
+    semiconductor_events = [e for e in tw_events if "半導體" in derive_event_tags(e)]
+    policy_events = [e for e in tw_events if "地緣風險" in derive_event_tags(e) or "利率政策" in derive_event_tags(e)]
+    total_events = len(HISTORICAL_EVENTS) or 1
     return {
         "event_count": len(tw_events),
         "asset_count": len(tw_assets),
@@ -1042,6 +1047,9 @@ def build_taiwan_focus_summary() -> dict:
         "latest_event": latest_event,
         "dominant_category": dominant_category,
         "flagship_assets": flagship_assets,
+        "semiconductor_share": len(semiconductor_events) / max(len(tw_events), 1),
+        "policy_risk_share": len(policy_events) / max(len(tw_events), 1),
+        "event_density_score": min(100.0, len(tw_events) / total_events * 260),
     }
 
 
@@ -1305,6 +1313,12 @@ def build_export_summary_text(event: dict, sim_results: pd.DataFrame, port_resul
             f"投組期望報酬：{port_result['expected_return']:.2%}",
             f"投組波動率：{port_result['volatility']:.2%}",
             f"投組夏普值：{port_result['sharpe_ratio']:.2f}",
+            f"投組 Sortino：{port_result['sortino_ratio']:.2f}",
+            f"投組 Calmar：{port_result['calmar_ratio']:.2f}",
+            f"投組最大回撤：{port_result['max_drawdown']:.2%}",
+            f"投組 Alpha / Beta：{port_result['alpha']:.2f} / {port_result['beta']:.2f}",
+            f"投組勝率 / 盈虧比：{port_result['win_rate']:.2%} / {port_result['profit_loss_ratio']:.2f}",
+            f"投組風險分級：{port_result['risk_grade']}",
             f"投組 VaR 95%：{port_result['var_95']:.2%}",
             f"投組 CVaR：{port_result['expected_shortfall']:.2%}",
         ])
@@ -1321,6 +1335,12 @@ def compare_portfolios(portfolios: dict[str, dict], simulation_results: pd.DataF
                 "資產數": len(portfolio),
                 "期望報酬": result["expected_return"],
                 "夏普值": result["sharpe_ratio"],
+                "Sortino": result["sortino_ratio"],
+                "Calmar": result["calmar_ratio"],
+                "最大回撤": result["max_drawdown"],
+                "勝率": result["win_rate"],
+                "盈虧比": result["profit_loss_ratio"],
+                "風險分級": result["risk_grade"],
                 "VaR 95%": result["var_95"],
                 "CVaR": result["expected_shortfall"],
                 "最佳情境": result["best_case"],
@@ -2013,6 +2033,25 @@ if page == "🏠 首頁":
             st.session_state["portfolio_editor_rows"] = portfolio_to_rows(PORTFOLIO_PRESETS["台灣核心"])
             st.rerun()
 
+    tw_metric_col1, tw_metric_col2 = st.columns([1.15, 1])
+    with tw_metric_col1:
+        st.plotly_chart(plot_taiwan_indicator_panel(tw_focus), use_container_width=True)
+    with tw_metric_col2:
+        st.markdown(
+            f"""
+            <div class="glass-panel" style="min-height:340px;">
+              <div class="mini-section-title">台灣專區專屬指標</div>
+              <div style="display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:10px; margin-top:14px;">
+                <div class="summary-tile"><div class="summary-tile-label">半導體占比</div><div class="summary-tile-value">{tw_focus['semiconductor_share']:.0%}</div><div class="summary-tile-note">台灣事件中與晶片供應鏈相關的比例</div></div>
+                <div class="summary-tile"><div class="summary-tile-label">政策風險占比</div><div class="summary-tile-value">{tw_focus['policy_risk_share']:.0%}</div><div class="summary-tile-note">政治、兩岸與利率政策訊號的比重</div></div>
+                <div class="summary-tile"><div class="summary-tile-label">事件密度分數</div><div class="summary-tile-value">{tw_focus['event_density_score']:.0f}</div><div class="summary-tile-note">台灣事件在全球資料庫中的存在感</div></div>
+                <div class="summary-tile"><div class="summary-tile-label">研究定位</div><div class="summary-tile-value" style="font-size:1.05rem;">區域核心市場</div><div class="summary-tile-note">可直接銜接台股、半導體與全球風險主線</div></div>
+              </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
     if tw_focus["flagship_assets"]:
         tw_assets_html = "".join(
             f"<span class='market-chip'><span class='market-dot' style='background:{ASSET_UNIVERSE[t]['color']};'></span>{ASSET_UNIVERSE[t]['name_zh']}</span>"
@@ -2499,7 +2538,7 @@ elif page == "🔬 事件分析":
         st.markdown("<br>", unsafe_allow_html=True)
         export_summary_text = build_export_summary_text(current_event, sim_results, port_result, net)
         recommendation_items = build_action_recommendations(current_event, sim_results, port_result)
-        export_df = sim_results[["ticker", "mean_return", "std_return", "sharpe_ratio", "p5", "p95", "prob_negative"]].copy()
+        export_df = sim_results[["ticker", "mean_return", "std_return", "sharpe_ratio", "sortino_ratio", "max_drawdown", "calmar_ratio", "alpha", "beta", "win_rate", "profit_loss_ratio", "risk_grade", "p5", "p95", "prob_negative"]].copy()
         export_df.insert(1, "name_zh", export_df["ticker"].apply(lambda t: ASSET_UNIVERSE.get(t, {}).get("name_zh", t)))
         export_csv = export_df.to_csv(index=False).encode("utf-8-sig")
         util_col1, util_col2, util_col3 = st.columns([1, 1, 2])
@@ -2608,6 +2647,39 @@ elif page == "🔬 事件分析":
                 use_container_width=True,
             )
 
+            rank_col1, rank_col2 = st.columns([1.2, 1])
+            with rank_col1:
+                st.plotly_chart(
+                    plot_risk_adjusted_rankings(sim_results, ASSET_UNIVERSE),
+                    use_container_width=True,
+                )
+            with rank_col2:
+                best_sortino = sim_results.sort_values("sortino_ratio", ascending=False).iloc[0]
+                safest_drawdown = sim_results.sort_values("max_drawdown", ascending=False).iloc[0]
+                st.markdown(
+                    f"""
+                    <div class="glass-panel" style="min-height:380px;">
+                      <div class="mini-section-title">網站化分析摘要</div>
+                      <div class="summary-tile" style="margin-top:12px;">
+                        <div class="summary-tile-label">Sortino 最佳</div>
+                        <div class="summary-tile-value">{format_asset_label(str(best_sortino['ticker']))}</div>
+                        <div class="summary-tile-note">Sortino {float(best_sortino['sortino_ratio']):.2f}，勝率 {float(best_sortino['win_rate']):.1%}</div>
+                      </div>
+                      <div class="summary-tile" style="margin-top:10px;">
+                        <div class="summary-tile-label">回撤控制最佳</div>
+                        <div class="summary-tile-value">{format_asset_label(str(safest_drawdown['ticker']))}</div>
+                        <div class="summary-tile-note">最大回撤 {float(safest_drawdown['max_drawdown']):.2%}，風險分級 {safest_drawdown['risk_grade']}</div>
+                      </div>
+                      <div class="summary-tile" style="margin-top:10px;">
+                        <div class="summary-tile-label">基準參照</div>
+                        <div class="summary-tile-value" style="font-size:1.05rem;">{best_sharpe['benchmark_ticker']}</div>
+                        <div class="summary-tile-note">Alpha / Beta 皆以這個市場基準做相對比較。</div>
+                      </div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+
             dist_col1, dist_col2 = st.columns([1, 2])
             with dist_col1:
                 selected_dist_ticker = st.selectbox(
@@ -2624,11 +2696,12 @@ elif page == "🔬 事件分析":
 
             st.markdown('<div class="section-header" style="font-size:1rem;">各資產詳細統計</div>', unsafe_allow_html=True)
 
-            display_df = sim_results[["ticker", "mean_return", "std_return", "sharpe_ratio", "p5", "p95", "prob_negative"]].copy()
-            display_df.columns = ["資產", "期望報酬", "標準差", "夏普值", "P5 (最差5%)", "P95 (最佳5%)", "下跌機率"]
-            for col in ["期望報酬", "標準差", "P5 (最差5%)", "P95 (最佳5%)"]:
+            display_df = sim_results[["ticker", "mean_return", "std_return", "sharpe_ratio", "sortino_ratio", "max_drawdown", "calmar_ratio", "alpha", "beta", "win_rate", "profit_loss_ratio", "risk_grade", "p5", "p95", "prob_negative"]].copy()
+            display_df.columns = ["資產", "期望報酬", "標準差", "夏普值", "Sortino", "最大回撤", "Calmar", "Alpha", "Beta", "勝率", "盈虧比", "風險分級", "P5 (最差5%)", "P95 (最佳5%)", "下跌機率"]
+            for col in ["期望報酬", "標準差", "最大回撤", "P5 (最差5%)", "P95 (最佳5%)", "勝率"]:
                 display_df[col] = display_df[col].apply(lambda x: f"{x:.2%}")
-            display_df["夏普值"] = display_df["夏普值"].apply(lambda x: f"{float(x):.2f}")
+            for col in ["夏普值", "Sortino", "Calmar", "Alpha", "Beta", "盈虧比"]:
+                display_df[col] = display_df[col].apply(lambda x: f"{float(x):.2f}")
             display_df["下跌機率"] = display_df["下跌機率"].apply(lambda x: f"{x:.1%}")
 
             # Add asset names
@@ -2997,20 +3070,48 @@ elif page == "🔬 事件分析":
             st.markdown('<div class="section-header" style="font-size:1rem;">📊 風險指標</div>', unsafe_allow_html=True)
 
             if port_result:
+                top_metrics = st.columns(5)
+                primary_metrics = [
+                    ("期望報酬", port_result["expected_return"], "", True),
+                    ("夏普值", port_result["sharpe_ratio"], "以 0 無風險利率計算", False),
+                    ("Sortino", port_result["sortino_ratio"], "只看下行波動", False),
+                    ("最大回撤", port_result["max_drawdown"], "模擬路徑中的最深跌幅", True),
+                    ("風險分級", port_result["risk_grade"], f"基準 {port_result['benchmark_ticker']}", None),
+                ]
+                for col, (label, val, help_text, as_percent) in zip(top_metrics, primary_metrics):
+                    with col:
+                        if label == "風險分級":
+                            st.metric(label, str(val), help=help_text)
+                        else:
+                            metric_value = f"{val:.2%}" if as_percent else f"{val:.2f}"
+                            st.metric(label, metric_value, help=help_text)
+
                 m1, m2, m3, m4, m5, m6, m7 = st.columns(7)
                 metrics = [
-                    ("期望報酬", port_result["expected_return"], ""),
                     ("波動率", port_result["volatility"], "模擬報酬標準差"),
-                    ("夏普值", port_result["sharpe_ratio"], "以 0 無風險利率計算"),
+                    ("Calmar", port_result["calmar_ratio"], "報酬 / 最大回撤"),
+                    ("Alpha", port_result["alpha"], f"相對 {port_result['benchmark_ticker']} 的超額報酬"),
+                    ("Beta", port_result["beta"], f"相對 {port_result['benchmark_ticker']} 的敏感度"),
+                    ("勝率", port_result["win_rate"], "模擬結果為正的比例"),
+                    ("盈虧比", port_result["profit_loss_ratio"], "平均獲利 / 平均虧損"),
                     ("VaR (95%)", port_result["var_95"], "5%最壞情境"),
-                    ("VaR (99%)", port_result["var_99"], "1%最壞情境"),
-                    ("CVaR (ES)", port_result["expected_shortfall"], "尾端期望損失"),
-                    ("最佳情境", port_result["best_case"], "P95"),
                 ]
                 for col, (label, val, help_text) in zip([m1, m2, m3, m4, m5, m6, m7], metrics):
                     with col:
-                        metric_value = f"{val:.2f}" if label == "夏普值" else f"{val:.2%}"
+                        metric_value = f"{val:.2f}" if label in {"Calmar", "Alpha", "Beta", "盈虧比"} else f"{val:.2%}"
                         st.metric(label, metric_value, help=help_text)
+
+                tail_metrics = st.columns(3)
+                for col, (label, val, help_text) in zip(
+                    tail_metrics,
+                    [
+                        ("VaR (99%)", port_result["var_99"], "1%最壞情境"),
+                        ("CVaR (ES)", port_result["expected_shortfall"], "尾端期望損失"),
+                        ("最佳情境", port_result["best_case"], "P95"),
+                    ],
+                ):
+                    with col:
+                        st.metric(label, f"{val:.2%}", help=help_text)
 
                 # Waterfall chart
                 st.plotly_chart(
@@ -3052,9 +3153,10 @@ elif page == "🔬 事件分析":
                 portfolio_compare_df = compare_portfolios(compare_portfolios_dict, sim_results)
                 if not portfolio_compare_df.empty:
                     display_portfolio_compare_df = portfolio_compare_df.copy()
-                    for col_name in ["期望報酬", "VaR 95%", "CVaR", "最佳情境"]:
+                    for col_name in ["期望報酬", "最大回撤", "勝率", "VaR 95%", "CVaR", "最佳情境"]:
                         display_portfolio_compare_df[col_name] = display_portfolio_compare_df[col_name].map(lambda x: f"{x:.2%}")
-                    display_portfolio_compare_df["夏普值"] = display_portfolio_compare_df["夏普值"].map(lambda x: f"{float(x):.2f}")
+                    for col_name in ["夏普值", "Sortino", "Calmar", "盈虧比"]:
+                        display_portfolio_compare_df[col_name] = display_portfolio_compare_df[col_name].map(lambda x: f"{float(x):.2f}")
                     st.dataframe(display_portfolio_compare_df, use_container_width=True, hide_index=True)
 
             # Hedge suggestions
@@ -3181,7 +3283,7 @@ elif page == "🔬 事件分析":
                             <div class="glass-panel">
                               <div class="mini-section-title">{current_event['name_zh']}</div>
                               <div class="summary-tile-value" style="margin-top:0;">{port_result['var_95']:.2%}</div>
-                              <div class="summary-tile-note">投組 VaR 95%，期望報酬 {port_result['expected_return']:.2%}，夏普值 {port_result['sharpe_ratio']:.2f}</div>
+                              <div class="summary-tile-note">投組 VaR 95%，期望報酬 {port_result['expected_return']:.2%}，夏普值 {port_result['sharpe_ratio']:.2f}，Sortino {port_result['sortino_ratio']:.2f}</div>
                             </div>
                             """,
                             unsafe_allow_html=True,
@@ -3192,11 +3294,22 @@ elif page == "🔬 事件分析":
                             <div class="glass-panel">
                               <div class="mini-section-title">{compare_event['name_zh']}</div>
                               <div class="summary-tile-value" style="margin-top:0;">{compare_port['var_95']:.2%}</div>
-                              <div class="summary-tile-note">投組 VaR 95%，期望報酬 {compare_port['expected_return']:.2%}，夏普值 {compare_port['sharpe_ratio']:.2f}</div>
+                              <div class="summary-tile-note">投組 VaR 95%，期望報酬 {compare_port['expected_return']:.2%}，夏普值 {compare_port['sharpe_ratio']:.2f}，Sortino {compare_port['sortino_ratio']:.2f}</div>
                             </div>
                             """,
                             unsafe_allow_html=True,
                         )
+
+                    compare_delta_cols = st.columns(4)
+                    compare_delta_metrics = [
+                        ("夏普差", port_result["sharpe_ratio"] - compare_port["sharpe_ratio"], False),
+                        ("Sortino 差", port_result["sortino_ratio"] - compare_port["sortino_ratio"], False),
+                        ("最大回撤差", port_result["max_drawdown"] - compare_port["max_drawdown"], True),
+                        ("勝率差", port_result["win_rate"] - compare_port["win_rate"], True),
+                    ]
+                    for col, (label, val, as_pct) in zip(compare_delta_cols, compare_delta_metrics):
+                        with col:
+                            st.metric(label, f"{val:+.2%}" if as_pct else f"{val:+.2f}")
 
                     compare_table = top_changes[[
                         "ticker", "mean_return_base", "mean_return_compare",
@@ -3540,6 +3653,9 @@ elif page == "📖 方法論說明":
               <li><b>期望報酬（Mean）</b>：5,000 次模擬的平均值</li>
               <li><b>標準差（Std）</b>：波動程度量化</li>
               <li><b>夏普值（Sharpe Ratio）</b>：以 0 無風險利率近似的風險調整後報酬</li>
+              <li><b>Sortino / Calmar</b>：分別衡量下行風險調整後報酬與回撤效率</li>
+              <li><b>Alpha / Beta</b>：相對基準市場的超額報酬與敏感度</li>
+              <li><b>勝率 / 盈虧比</b>：模擬中正報酬機率與平均獲利損失比</li>
               <li><b>P5 / P25 / P75 / P95</b>：分位數分佈</li>
               <li><b>下跌機率</b>：模擬結果為負值的比例</li>
             </ul>
@@ -3588,6 +3704,10 @@ elif page == "📖 方法論說明":
             <code style="background:#0d1f3c; padding:4px 8px; border-radius:4px; color:#17becf;">
               Contribution_i = w_i × E[R_i]
             </code>
+
+            <br><br><b style="color:#f0b90b;">風險調整後報酬</b><br>
+            系統同時計算 Sharpe、Sortino、Calmar、最大回撤、勝率與盈虧比，
+            並依回撤與下跌機率給出網站化的風險分級，方便快速比較不同事件與投組。
 
             <br><br><b style="color:#f0b90b;">瀑布圖（Waterfall Chart）</b><br>
             視覺化每個資產對組合總報酬的貢獻，
