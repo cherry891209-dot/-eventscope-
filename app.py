@@ -1414,17 +1414,20 @@ def build_event_marquee_html(events: list[dict]) -> str:
 def build_photo_band_html(items: list[dict]) -> str:
     cards = []
     for idx, item in enumerate(items):
+        title = str(item["title"]).replace("<", "").replace(">", "")
+        note = str(item["note"]).replace("<", "").replace(">", "")
+        kicker = str(item["kicker"]).replace("<", "").replace(">", "")
+        image = str(item["image"])
+        tilt = -2 if idx % 2 == 0 else 2
         cards.append(
-            f"""
-            <div class="photo-band-card" style="--tilt:{-2 if idx % 2 == 0 else 2};">
-              <img src="{item['image']}" alt="{item['title']}">
-              <div class="photo-band-overlay">
-                <div class="photo-band-kicker">{item['kicker']}</div>
-                <div class="photo-band-title">{item['title']}</div>
-                <div class="photo-band-note">{item['note']}</div>
-              </div>
-            </div>
-            """
+            f'<div class="photo-band-card" style="--tilt:{tilt};">'
+            f'<img src="{image}" alt="{title}">'
+            f'<div class="photo-band-overlay">'
+            f'<div class="photo-band-kicker">{kicker}</div>'
+            f'<div class="photo-band-title">{title}</div>'
+            f'<div class="photo-band-note">{note}</div>'
+            f"</div>"
+            f"</div>"
         )
     return f'<div class="photo-band">{"".join(cards)}</div>'
 
