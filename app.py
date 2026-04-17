@@ -1779,268 +1779,134 @@ with st.sidebar:
         label_visibility="collapsed",
     )
 
-    st.markdown('<div class="sidebar-card-title" style="margin-top:18px;">Workspace Views</div>', unsafe_allow_html=True)
-    workspace_btn1, workspace_btn2 = st.columns(2)
-    if workspace_btn1.button("市場總覽", use_container_width=True, key="side_workspace_market"):
-        queue_workspace("🌍 市場總覽")
-        st.rerun()
-    if workspace_btn2.button("台灣專區", use_container_width=True, key="side_workspace_taiwan"):
-        queue_workspace("🇹🇼 台灣專區")
-        st.rerun()
-    workspace_btn3, workspace_btn4 = st.columns(2)
-    if workspace_btn3.button("事件分析", use_container_width=True, key="side_workspace_analysis"):
-        queue_workspace("🔬 事件分析")
-        st.rerun()
-    if workspace_btn4.button("投組壓測", use_container_width=True, key="side_workspace_portfolio"):
-        queue_workspace("💼 投組壓測")
-        st.rerun()
-    if st.button("事件比較", use_container_width=True, key="side_workspace_compare"):
-        queue_workspace("⚔️ 事件比較")
-        st.rerun()
+    current_selected_event = st.session_state.get("selected_event")
+    workspace_event = get_event_by_id(st.session_state["quick_event_id"]) if st.session_state.get("quick_event_id") else None
+    workspace_event_name = workspace_event["name_zh"] if workspace_event else (current_selected_event["name_zh"] if current_selected_event else "尚未選擇")
+    favorite_events = [get_event_by_id(eid) for eid in st.session_state["favorite_event_ids"][:8] if get_event_by_id(eid)]
+    recent_events = [get_event_by_id(eid) for eid in st.session_state["recent_event_ids"][:8] if get_event_by_id(eid)]
+    quick_event_options = {f"{e['date']} · {e['name_zh']}": e["id"] for e in sidebar_featured_events}
+
     st.markdown(
         f"""
         <div class="sidebar-card" style="padding:12px 14px;">
-          <div class="sidebar-card-title">Current View</div>
+          <div class="sidebar-card-title">目前視圖</div>
           <div class="sidebar-card-value">{st.session_state['workspace_view']}</div>
-          <div class="sidebar-card-note">你要的多欄位入口現在都集中在左側，不需要拆成太多主頁面。</div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    st.markdown(
-        f"""
-        <div class="sidebar-card">
-          <div class="sidebar-card-title">Quick Overview</div>
-          <div class="sidebar-card-value">{len(HISTORICAL_EVENTS)} 件事件 · {len(ASSET_UNIVERSE)} 種標的</div>
-          <div class="sidebar-card-note">目前覆蓋 {len(EVENT_REGIONS)} 個地區維度，事件最密集區域是 {sidebar_top_region}。</div>
-          <div class="sidebar-status"><span class="sidebar-status-dot"></span>System ready for scenario simulation</div>
-          <div style="margin-top:6px;">
-            <span class="sidebar-chip">市場總覽</span>
-            <span class="sidebar-chip">台灣專區</span>
-            <span class="sidebar-chip">投組壓測</span>
-            <span class="sidebar-chip">事件比較</span>
-          </div>
-          <div class="sidebar-mini-grid">
-            <div class="sidebar-mini-tile">
-              <div class="sidebar-mini-label">Risk-On</div>
-              <div class="sidebar-mini-value">{sidebar_signal_summary['risk_on_count']}</div>
-            </div>
-            <div class="sidebar-mini-tile">
-              <div class="sidebar-mini-label">Risk-Off</div>
-              <div class="sidebar-mini-value">{sidebar_signal_summary['risk_off_count']}</div>
-            </div>
-            <div class="sidebar-mini-tile">
-              <div class="sidebar-mini-label">跨區域事件</div>
-              <div class="sidebar-mini-value">{sidebar_signal_summary['cross_region_count']}</div>
-            </div>
-            <div class="sidebar-mini-tile">
-              <div class="sidebar-mini-label">平均強度</div>
-              <div class="sidebar-mini-value">{sidebar_signal_summary['avg_magnitude']:.1f}/5</div>
-            </div>
-          </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    st.markdown('<div class="sidebar-card-title" style="margin-top:6px;">Quick Filters</div>', unsafe_allow_html=True)
-    filter_col1, filter_col2 = st.columns(2)
-    with filter_col1:
-        global_cat = st.selectbox(
-            "類別",
-            ["全部"] + EVENT_CATEGORIES,
-            index=(["全部"] + EVENT_CATEGORIES).index(st.session_state["global_category_filter"]),
-            key="global_category_filter_widget",
-        )
-    with filter_col2:
-        global_region = st.selectbox(
-            "地區",
-            ["全部"] + EVENT_REGIONS,
-            index=(["全部"] + EVENT_REGIONS).index(st.session_state["global_region_filter"]),
-            key="global_region_filter_widget",
-        )
-    global_mag = st.slider(
-        "最低嚴重程度",
-        1.0, 5.0, float(st.session_state["global_min_magnitude"]), 0.5,
-        key="global_min_magnitude_widget",
-    )
-    global_years = st.slider(
-        "年份區間",
-        min(all_years), max(all_years),
-        value=st.session_state["global_year_range"],
-        key="global_year_range_widget",
-    )
-    st.session_state["global_category_filter"] = global_cat
-    st.session_state["global_region_filter"] = global_region
-    st.session_state["global_min_magnitude"] = global_mag
-    st.session_state["global_year_range"] = global_years
-
-    st.markdown('<div class="sidebar-card-title" style="margin-top:18px;">Hot Events</div>', unsafe_allow_html=True)
-    quick_event_options = {
-        f"{e['date']} · {e['name_zh']}": e["id"]
-        for e in sidebar_featured_events
-    }
-    quick_event_label = st.selectbox(
-        "熱門事件捷徑",
-        list(quick_event_options.keys()),
-        key="sidebar_quick_event_label",
-    )
-    quick_event = get_event_by_id(quick_event_options[quick_event_label])
-    quick_btn1, quick_btn2, quick_btn3 = st.columns(3)
-    if quick_btn1.button("載入分析", use_container_width=True):
-        st.session_state["quick_event_id"] = quick_event["id"]
-        st.session_state["global_category_filter"] = quick_event["category"]
-        st.session_state["global_region_filter"] = get_event_region(quick_event)
-        queue_nav("🔬 事件分析")
-        st.rerun()
-    if quick_btn2.button("看資料庫", use_container_width=True):
-        st.session_state["quick_event_id"] = quick_event["id"]
-        st.session_state["global_category_filter"] = quick_event["category"]
-        st.session_state["global_region_filter"] = get_event_region(quick_event)
-        queue_nav("📚 事件資料庫")
-        st.rerun()
-    if quick_btn3.button("收藏", use_container_width=True):
-        if quick_event["id"] not in st.session_state["favorite_event_ids"]:
-            st.session_state["favorite_event_ids"] = [quick_event["id"]] + st.session_state["favorite_event_ids"]
-        st.rerun()
-
-    st.markdown(
-        f"""
-        <div class="sidebar-card">
-          <div class="sidebar-card-title">Recommended Path</div>
-          <div class="sidebar-card-note">先看首頁入口，再進市場總覽或台灣專區，最後到事件分析做模擬與投組壓測。</div>
-          <div class="sidebar-route">
-            <div class="sidebar-route-step"><span class="sidebar-step-index">1</span><span>首頁入口與快速路線</span></div>
-            <div class="sidebar-route-step"><span class="sidebar-step-index">2</span><span>市場總覽 / 台灣專區</span></div>
-            <div class="sidebar-route-step"><span class="sidebar-step-index">3</span><span>事件分析與投組壓測</span></div>
-          </div>
-        </div>
-        <div class="sidebar-card">
-          <div class="sidebar-card-title">Live Focus</div>
-          <div class="sidebar-card-value">{sidebar_signal_summary['recommended_pair']}</div>
-          <div class="sidebar-card-note">目前最適合直接拿來展示差異的對照組合，也最能看出平台的比較能力。</div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    current_selected_event = st.session_state.get("selected_event")
-    current_event_name = current_selected_event["name_zh"] if current_selected_event else "尚未執行分析"
-    workspace_event = get_event_by_id(st.session_state["quick_event_id"]) if st.session_state.get("quick_event_id") else None
-    workspace_event_name = workspace_event["name_zh"] if workspace_event else current_event_name
-    st.markdown(
-        f"""
-        <div class="sidebar-card">
-          <div class="sidebar-card-title">Workspace</div>
           <div class="sidebar-card-note">目前事件：{workspace_event_name}</div>
-          <div class="sidebar-mini-grid">
-            <div class="sidebar-mini-tile">
-              <div class="sidebar-mini-label">已選標的</div>
-              <div class="sidebar-mini-value">{len(st.session_state.get('selected_tickers', []))}</div>
-            </div>
-            <div class="sidebar-mini-tile">
-              <div class="sidebar-mini-label">投組資產</div>
-              <div class="sidebar-mini-value">{len(st.session_state.get('portfolio_dict', {}))}</div>
-            </div>
-            <div class="sidebar-mini-tile">
-              <div class="sidebar-mini-label">篩選類別</div>
-              <div class="sidebar-mini-value">{st.session_state['global_category_filter']}</div>
-            </div>
-            <div class="sidebar-mini-tile">
-              <div class="sidebar-mini-label">篩選地區</div>
-              <div class="sidebar-mini-value">{st.session_state['global_region_filter']}</div>
-            </div>
-          </div>
         </div>
         """,
         unsafe_allow_html=True,
     )
 
-    recent_events = [get_event_by_id(eid) for eid in st.session_state["recent_event_ids"][:4] if get_event_by_id(eid)]
-    favorite_events = [get_event_by_id(eid) for eid in st.session_state["favorite_event_ids"][:4] if get_event_by_id(eid)]
+    with st.expander("總覽欄位", expanded=True):
+        overview_btn1, overview_btn2 = st.columns(2)
+        if overview_btn1.button("市場總覽", use_container_width=True, key="clean_workspace_market"):
+            queue_workspace("🌍 市場總覽")
+            st.rerun()
+        if overview_btn2.button("台灣專區", use_container_width=True, key="clean_workspace_taiwan"):
+            queue_workspace("🇹🇼 台灣專區")
+            st.rerun()
+        st.markdown(
+            f"""
+            <div class="sidebar-mini-grid">
+              <div class="sidebar-mini-tile"><div class="sidebar-mini-label">事件數</div><div class="sidebar-mini-value">{len(HISTORICAL_EVENTS)}</div></div>
+              <div class="sidebar-mini-tile"><div class="sidebar-mini-label">標的數</div><div class="sidebar-mini-value">{len(ASSET_UNIVERSE)}</div></div>
+              <div class="sidebar-mini-tile"><div class="sidebar-mini-label">Risk-On</div><div class="sidebar-mini-value">{sidebar_signal_summary['risk_on_count']}</div></div>
+              <div class="sidebar-mini-tile"><div class="sidebar-mini-label">熱門地區</div><div class="sidebar-mini-value">{sidebar_top_region}</div></div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
-    st.markdown('<div class="sidebar-card"><div class="sidebar-card-title">Favorites</div></div>', unsafe_allow_html=True)
-    if favorite_events:
-        for ev in favorite_events:
-            st.markdown(
-                f"<div class='sidebar-route-step'><span class='sidebar-step-index'>★</span><span>{ev['name_zh']}</span></div>",
-                unsafe_allow_html=True,
+    with st.expander("研究欄位", expanded=True):
+        research_btn1, research_btn2 = st.columns(2)
+        if research_btn1.button("事件分析", use_container_width=True, key="clean_workspace_analysis"):
+            queue_workspace("🔬 事件分析")
+            st.rerun()
+        if research_btn2.button("事件比較", use_container_width=True, key="clean_workspace_compare"):
+            queue_workspace("⚔️ 事件比較")
+            st.rerun()
+        quick_event_label = st.selectbox("熱門事件", list(quick_event_options.keys()), key="sidebar_quick_event_label_clean")
+        quick_event = get_event_by_id(quick_event_options[quick_event_label])
+        research_action1, research_action2 = st.columns(2)
+        if research_action1.button("載入事件", use_container_width=True, key="clean_load_event"):
+            st.session_state["quick_event_id"] = quick_event["id"]
+            st.session_state["global_category_filter"] = quick_event["category"]
+            st.session_state["global_region_filter"] = get_event_region(quick_event)
+            queue_workspace("🔬 事件分析")
+            st.rerun()
+        if research_action2.button("加入收藏", use_container_width=True, key="clean_favorite_event"):
+            if quick_event["id"] not in st.session_state["favorite_event_ids"]:
+                st.session_state["favorite_event_ids"] = [quick_event["id"]] + st.session_state["favorite_event_ids"]
+            st.rerun()
+
+    with st.expander("篩選欄位", expanded=False):
+        filter_col1, filter_col2 = st.columns(2)
+        with filter_col1:
+            global_cat = st.selectbox(
+                "類別",
+                ["全部"] + EVENT_CATEGORIES,
+                index=(["全部"] + EVENT_CATEGORIES).index(st.session_state["global_category_filter"]),
+                key="global_category_filter_widget",
             )
-            fav_btn1, fav_btn2, fav_btn3 = st.columns(3)
-            if fav_btn1.button("分析", key=f"fav_analysis_{ev['id']}", use_container_width=True):
-                st.session_state["quick_event_id"] = ev["id"]
-                st.session_state["global_category_filter"] = ev["category"]
-                st.session_state["global_region_filter"] = get_event_region(ev)
-                queue_nav("🔬 事件分析")
-                st.rerun()
-            if fav_btn2.button("資料庫", key=f"fav_db_{ev['id']}", use_container_width=True):
-                st.session_state["quick_event_id"] = ev["id"]
-                st.session_state["global_category_filter"] = ev["category"]
-                st.session_state["global_region_filter"] = get_event_region(ev)
-                queue_nav("📚 事件資料庫")
-                st.rerun()
-            if fav_btn3.button("移除", key=f"fav_remove_{ev['id']}", use_container_width=True):
-                st.session_state["favorite_event_ids"] = [
-                    eid for eid in st.session_state["favorite_event_ids"] if eid != ev["id"]
-                ]
-                st.rerun()
-    else:
-        st.markdown("<div class='sidebar-card-note'>還沒有收藏事件。</div>", unsafe_allow_html=True)
-
-    st.markdown('<div class="sidebar-card"><div class="sidebar-card-title">Recent Events</div></div>', unsafe_allow_html=True)
-    if recent_events:
-        for ev in recent_events:
-            st.markdown(
-                f"<div class='sidebar-route-step'><span class='sidebar-step-index'>↺</span><span>{ev['name_zh']}</span></div>",
-                unsafe_allow_html=True,
+        with filter_col2:
+            global_region = st.selectbox(
+                "地區",
+                ["全部"] + EVENT_REGIONS,
+                index=(["全部"] + EVENT_REGIONS).index(st.session_state["global_region_filter"]),
+                key="global_region_filter_widget",
             )
-            recent_btn1, recent_btn2 = st.columns(2)
-            if recent_btn1.button("分析", key=f"recent_analysis_{ev['id']}", use_container_width=True):
-                st.session_state["quick_event_id"] = ev["id"]
-                st.session_state["global_category_filter"] = ev["category"]
-                st.session_state["global_region_filter"] = get_event_region(ev)
-                queue_nav("🔬 事件分析")
-                st.rerun()
-            if recent_btn2.button("資料庫", key=f"recent_db_{ev['id']}", use_container_width=True):
-                st.session_state["quick_event_id"] = ev["id"]
-                st.session_state["global_category_filter"] = ev["category"]
-                st.session_state["global_region_filter"] = get_event_region(ev)
-                queue_nav("📚 事件資料庫")
-                st.rerun()
-    else:
-        st.markdown("<div class='sidebar-card-note'>還沒有最近瀏覽事件。</div>", unsafe_allow_html=True)
+        global_mag = st.slider("最低嚴重程度", 1.0, 5.0, float(st.session_state["global_min_magnitude"]), 0.5, key="global_min_magnitude_widget")
+        global_years = st.slider("年份區間", min(all_years), max(all_years), value=st.session_state["global_year_range"], key="global_year_range_widget")
+        st.session_state["global_category_filter"] = global_cat
+        st.session_state["global_region_filter"] = global_region
+        st.session_state["global_min_magnitude"] = global_mag
+        st.session_state["global_year_range"] = global_years
+        filter_action1, filter_action2 = st.columns(2)
+        if filter_action1.button("重設篩選", use_container_width=True, key="clean_reset_filters"):
+            st.session_state["global_category_filter"] = "全部"
+            st.session_state["global_region_filter"] = "全部"
+            st.session_state["global_min_magnitude"] = 1.0
+            st.session_state["global_year_range"] = (min(all_years), max(all_years))
+            st.rerun()
+        if filter_action2.button("看資料庫", use_container_width=True, key="clean_to_db"):
+            queue_nav("📚 事件資料庫")
+            st.rerun()
 
-    st.markdown('<div class="sidebar-card-title" style="margin-top:18px;">Quick Actions</div>', unsafe_allow_html=True)
-    action_col1, action_col2 = st.columns(2)
-    if action_col1.button("市場總覽", use_container_width=True):
-        queue_nav("🌍 市場總覽")
-        st.rerun()
-    if action_col2.button("台灣專區", use_container_width=True):
-        queue_nav("🇹🇼 台灣專區")
-        st.rerun()
-    action_col3, action_col4 = st.columns(2)
-    if action_col3.button("重設篩選", use_container_width=True):
-        st.session_state["global_category_filter"] = "全部"
-        st.session_state["global_region_filter"] = "全部"
-        st.session_state["global_min_magnitude"] = 1.0
-        st.session_state["global_year_range"] = (min(all_years), max(all_years))
-        st.rerun()
-    if action_col4.button("清空收藏", use_container_width=True):
-        st.session_state["favorite_event_ids"] = []
-        st.rerun()
-    action_col5, action_col6 = st.columns(2)
-    if action_col5.button("套用示範投組", use_container_width=True):
-        st.session_state["portfolio_dict"] = DEFAULT_PORTFOLIO.copy()
-        st.session_state["portfolio_editor_rows"] = portfolio_to_rows(DEFAULT_PORTFOLIO)
-        st.rerun()
-    if action_col6.button("打開事件比較", use_container_width=True):
-        queue_nav("⚔️ 事件比較")
-        st.rerun()
-    if st.button("一鍵執行分析", use_container_width=True):
-        queue_nav("🔬 事件分析")
-        st.session_state["trigger_run_analysis"] = True
-        st.rerun()
+    with st.expander("投組欄位", expanded=False):
+        portfolio_btn1, portfolio_btn2 = st.columns(2)
+        if portfolio_btn1.button("投組壓測", use_container_width=True, key="clean_workspace_portfolio"):
+            queue_workspace("💼 投組壓測")
+            st.rerun()
+        if portfolio_btn2.button("套用示範", use_container_width=True, key="clean_apply_demo_portfolio"):
+            st.session_state["portfolio_dict"] = DEFAULT_PORTFOLIO.copy()
+            st.session_state["portfolio_editor_rows"] = portfolio_to_rows(DEFAULT_PORTFOLIO)
+            st.rerun()
+        if st.button("一鍵執行分析", use_container_width=True, key="clean_trigger_analysis"):
+            queue_workspace("🔬 事件分析")
+            st.session_state["trigger_run_analysis"] = True
+            st.rerun()
+        st.markdown(
+            f"""
+            <div class="sidebar-mini-grid">
+              <div class="sidebar-mini-tile"><div class="sidebar-mini-label">投組資產</div><div class="sidebar-mini-value">{len(st.session_state.get('portfolio_dict', {}))}</div></div>
+              <div class="sidebar-mini-tile"><div class="sidebar-mini-label">已選標的</div><div class="sidebar-mini-value">{len(st.session_state.get('selected_tickers', []))}</div></div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+    with st.expander("收藏欄位", expanded=False):
+        favorite_labels = [f"{ev['date']} · {ev['name_zh']}" for ev in favorite_events] or ["尚無收藏事件"]
+        recent_labels = [f"{ev['date']} · {ev['name_zh']}" for ev in recent_events] or ["尚無最近事件"]
+        st.selectbox("收藏事件", favorite_labels, key="sidebar_favorites_list_clean")
+        st.selectbox("最近事件", recent_labels, key="sidebar_recent_list_clean")
+        fav_col1, fav_col2 = st.columns(2)
+        if fav_col1.button("清空收藏", use_container_width=True, key="clean_clear_favorites"):
+            st.session_state["favorite_event_ids"] = []
+            st.rerun()
+        if fav_col2.button("方法論", use_container_width=True, key="clean_to_methodology"):
+            queue_nav("📖 方法論說明")
+            st.rerun()
 
     st.markdown("<hr style='border-color:var(--border); margin:20px 0 10px 0;'>", unsafe_allow_html=True)
     st.markdown(
