@@ -626,6 +626,60 @@ st.markdown(
         font-weight: 800;
         margin-top: 6px;
     }
+    .event-marquee-shell {
+        overflow: hidden;
+        border-radius: 24px;
+        border: 1px solid rgba(171, 164, 155, 0.24);
+        background: linear-gradient(180deg, rgba(255,251,247,0.98) 0%, rgba(243,236,228,0.98) 100%);
+        box-shadow: 0 16px 34px rgba(136, 123, 110, 0.08);
+        padding: 14px 0;
+    }
+    .event-marquee-track {
+        display: flex;
+        gap: 18px;
+        width: max-content;
+        animation: marqueeDrift 42s linear infinite;
+        padding: 2px 18px;
+    }
+    .event-marquee-shell:hover .event-marquee-track {
+        animation-play-state: paused;
+    }
+    .event-marquee-card {
+        width: 320px;
+        min-width: 320px;
+        border-radius: 22px;
+        overflow: hidden;
+        background: rgba(255, 250, 246, 0.94);
+        border: 1px solid rgba(171, 164, 155, 0.22);
+        box-shadow: 0 14px 28px rgba(136, 123, 110, 0.08);
+    }
+    .event-marquee-card img {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        display: block;
+    }
+    .event-marquee-body {
+        padding: 14px 16px 16px 16px;
+    }
+    .event-marquee-meta {
+        color: var(--text-muted);
+        font-size: 0.8rem;
+        line-height: 1.5;
+    }
+    .event-marquee-title {
+        color: var(--accent-strong);
+        font-size: 1.08rem;
+        font-weight: 800;
+        line-height: 1.4;
+        margin-top: 8px;
+    }
+    .event-marquee-note {
+        color: var(--text-main);
+        font-size: 0.92rem;
+        line-height: 1.6;
+        margin-top: 8px;
+    }
     @keyframes fadeUp {
         from {
             opacity: 0;
@@ -656,6 +710,10 @@ st.markdown(
     @keyframes softBob {
         0%, 100% { transform: translateY(0px); }
         50% { transform: translateY(-3px); }
+    }
+    @keyframes marqueeDrift {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
     }
     @media (max-width: 1100px) {
         .hero-section {
@@ -701,6 +759,13 @@ st.markdown(
         }
         .visual-card {
             min-height: 220px;
+        }
+        .event-marquee-card {
+            width: 280px;
+            min-width: 280px;
+        }
+        .event-marquee-card img {
+            height: 160px;
         }
         .web-lane-card {
             padding: 16px 16px;
@@ -1179,6 +1244,50 @@ def build_visual_card_html(title: str, note: str, image_uri: str, kicker: str) -
         <div class="visual-card-kicker">{kicker}</div>
         <div class="visual-card-title">{title}</div>
         <div class="visual-card-note">{note}</div>
+      </div>
+    </div>
+    """
+
+
+FEATURED_EVENT_IMAGE_QUERIES = {
+    "covid_crash_2020": "stock market trading floor crisis",
+    "fed_hike_cycle_2022": "federal reserve building washington",
+    "deepseek_shock_2025": "artificial intelligence server racks",
+    "russia_ukraine_2022": "ukraine city skyline war",
+    "asian_financial_crisis_1997": "asia finance skyline",
+    "uk_gilt_crisis_2022": "london bank district",
+    "india_rice_ban_2023": "rice field agriculture india",
+    "japan_earthquake_2011": "japan city earthquake aftermath",
+    "argentina_default_2001": "buenos aires financial district",
+}
+
+
+def build_remote_event_image(event_id: str) -> str:
+    query = FEATURED_EVENT_IMAGE_QUERIES.get(event_id, "global finance market")
+    return f"https://loremflickr.com/1200/800/{quote(query)}?lock={abs(hash(event_id)) % 9973}"
+
+
+def build_event_marquee_html(events: list[dict]) -> str:
+    cards = []
+    duplicated_events = events + events
+    for ev in duplicated_events:
+        if not ev:
+            continue
+        card = f"""
+        <div class="event-marquee-card">
+          <img src="{build_remote_event_image(ev['id'])}" alt="{ev['name_zh']}">
+          <div class="event-marquee-body">
+            <div class="event-marquee-meta">{ev['date']} · {get_event_region(ev)} · {ev['category']}</div>
+            <div class="event-marquee-title">{ev['name_zh']}</div>
+            <div class="event-marquee-note">{ev['description_zh'][:68]}...</div>
+          </div>
+        </div>
+        """
+        cards.append(card)
+    return f"""
+    <div class="event-marquee-shell">
+      <div class="event-marquee-track">
+        {''.join(cards)}
       </div>
     </div>
     """
@@ -2019,6 +2128,19 @@ if page == "🏠 首頁":
         with col:
             st.markdown(build_visual_card_html(*card), unsafe_allow_html=True)
 
+    featured_ids = [
+        "covid_crash_2020", "fed_hike_cycle_2022", "deepseek_shock_2025",
+        "russia_ukraine_2022", "asian_financial_crisis_1997", "uk_gilt_crisis_2022",
+        "india_rice_ban_2023", "japan_earthquake_2011", "argentina_default_2001",
+    ]
+    featured = [get_event_by_id(eid) for eid in featured_ids if get_event_by_id(eid)]
+    st.markdown('<div class="section-header">⭐ 重大事件跑馬燈</div>', unsafe_allow_html=True)
+    st.markdown(
+        '<div style="color:var(--text-muted); margin:-6px 0 14px 0;">首頁改成橫向事件快帶，用網路圖片快速掃過重大事件，不再是一整排厚重卡片。</div>',
+        unsafe_allow_html=True,
+    )
+    st.markdown(build_event_marquee_html(featured), unsafe_allow_html=True)
+
     st.markdown(
         f"""
         <div class="web-lane">
@@ -2342,47 +2464,11 @@ elif page == "🔬 分析控制台" and st.session_state.get("workspace_view") =
         "india_rice_ban_2023", "japan_earthquake_2011", "argentina_default_2001",
     ]
     featured = [get_event_by_id(eid) for eid in featured_ids if get_event_by_id(eid)]
-    fc1, fc2, fc3 = st.columns(3)
-    for i, ev in enumerate(featured):
-        col = [fc1, fc2, fc3][i % 3]
-        cat_color = CAT_COLORS.get(ev["category"], "#888")
-        mag_stars = "★" * round(ev["magnitude"]) + "☆" * (5 - round(ev["magnitude"]))
-        scene, scene_color = pick_scene_for_event(ev)
-        with col:
-            st.markdown(
-                build_visual_card_html(
-                    ev["name_zh"],
-                    f"{ev['date']} · {get_event_region(ev)} · {ev['category']}",
-                    build_scene_image(scene, scene_color, "#c8a092"),
-                    "Featured Event",
-                ),
-                unsafe_allow_html=True,
-            )
-            st.markdown(
-                f"""
-                <div class="event-card">
-                  <span class="badge" style="background:{cat_color}22; color:{cat_color};">{ev["category"]}</span>
-                  <span class="badge" style="background:#ebe3db; color:var(--text-main);">{get_event_region(ev)}</span>
-                  <span style="color:var(--text-muted); font-size:0.8rem;">{ev["date"]}</span>
-                  <h4 style="margin-top:6px;">{ev["name_zh"]}</h4>
-                  <p>{ev["description_zh"]}</p>
-                  <div style="margin-top:8px; color:{cat_color}; font-size:0.85rem;">{mag_stars}</div>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
-            feature_btn1, feature_btn2 = st.columns(2)
-            if feature_btn1.button("直接分析", key=f"market_featured_go_{ev['id']}", use_container_width=True):
-                st.session_state["quick_event_id"] = ev["id"]
-                st.session_state["global_category_filter"] = ev["category"]
-                st.session_state["global_region_filter"] = get_event_region(ev)
-                queue_nav("🔬 事件分析")
-                st.rerun()
-            if feature_btn2.button("進資料庫", key=f"market_featured_db_{ev['id']}", use_container_width=True):
-                st.session_state["quick_event_id"] = ev["id"]
-                st.session_state["global_region_filter"] = get_event_region(ev)
-                queue_nav("📚 事件資料庫")
-                st.rerun()
+    st.markdown(
+        '<div style="color:var(--text-muted); margin:-6px 0 14px 0;">精選事件改成快帶形式，這一頁只保留輕量預覽，不再塞滿大卡片。</div>',
+        unsafe_allow_html=True,
+    )
+    st.markdown(build_event_marquee_html(featured), unsafe_allow_html=True)
 
 
 # ════════════════════════════════════════════════════════════════════════════
