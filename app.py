@@ -1261,8 +1261,22 @@ FEATURED_EVENT_IMAGE_QUERIES = {
     "argentina_default_2001": "buenos aires financial district",
 }
 
+FEATURED_EVENT_IMAGE_URLS = {
+    "covid_crash_2020": "https://commons.wikimedia.org/wiki/Special:FilePath/Empty%20Eagle%20Street%20during%20the%20COVID-19%20pandemic%20in%20Brisbane,%20Australia%2005.jpg",
+    "fed_hike_cycle_2022": "https://commons.wikimedia.org/wiki/Special:FilePath/Federal%20reserve%20building%201160435.jpg",
+    "deepseek_shock_2025": "https://commons.wikimedia.org/wiki/Special:FilePath/Semiconductor%20Wafer%20of%20Microelectronics.jpg",
+    "russia_ukraine_2022": "https://commons.wikimedia.org/wiki/Special:FilePath/2022%20Russian%20invasion%20of%20Ukraine%20simplifed.svg",
+    "asian_financial_crisis_1997": "https://commons.wikimedia.org/wiki/Special:FilePath/Trading%20Floor%20at%20the%20New%20York%20Stock%20Exchange.jpg",
+    "uk_gilt_crisis_2022": "https://commons.wikimedia.org/wiki/Special:FilePath/Federal%20Reserve%20Bank%20Building%20%2836344p%29.jpg",
+    "india_rice_ban_2023": "https://commons.wikimedia.org/wiki/Special:FilePath/Wheat%20Field%20in%20India.jpg",
+    "japan_earthquake_2011": "https://commons.wikimedia.org/wiki/Special:FilePath/Tsunami%20Japan%202011.jpg",
+    "argentina_default_2001": "https://commons.wikimedia.org/wiki/Special:FilePath/Trading%20Floor%20at%20the%20New%20York%20Stock%20Exchange.jpg",
+}
+
 
 def build_remote_event_image(event_id: str) -> str:
+    if event_id in FEATURED_EVENT_IMAGE_URLS:
+        return FEATURED_EVENT_IMAGE_URLS[event_id]
     query = FEATURED_EVENT_IMAGE_QUERIES.get(event_id, "global finance market")
     return f"https://picsum.photos/seed/{quote(query + '-' + event_id)}/1200/800"
 
@@ -2039,6 +2053,14 @@ with st.sidebar:
 if page == "🏠 首頁":
     latest_event = max(HISTORICAL_EVENTS, key=lambda e: e["date"])
     latest_tw_event = max((e for e in HISTORICAL_EVENTS if get_event_region(e) == "台灣"), key=lambda e: e["date"], default=None)
+    featured_ids = [
+        "covid_crash_2020", "fed_hike_cycle_2022", "deepseek_shock_2025",
+        "russia_ukraine_2022", "asian_financial_crisis_1997", "uk_gilt_crisis_2022",
+        "india_rice_ban_2023", "japan_earthquake_2011", "argentina_default_2001",
+    ]
+    featured = [get_event_by_id(eid) for eid in featured_ids if get_event_by_id(eid)]
+    st.markdown('<div class="section-header" style="margin-top:6px;">⭐ 重大事件回顧</div>', unsafe_allow_html=True)
+    st.markdown(build_event_marquee_html(featured), unsafe_allow_html=True)
     # Hero section
     st.markdown(
         f"""
@@ -2063,19 +2085,6 @@ if page == "🏠 首頁":
         """,
         unsafe_allow_html=True,
     )
-
-    featured_ids = [
-        "covid_crash_2020", "fed_hike_cycle_2022", "deepseek_shock_2025",
-        "russia_ukraine_2022", "asian_financial_crisis_1997", "uk_gilt_crisis_2022",
-        "india_rice_ban_2023", "japan_earthquake_2011", "argentina_default_2001",
-    ]
-    featured = [get_event_by_id(eid) for eid in featured_ids if get_event_by_id(eid)]
-    st.markdown('<div class="section-header">⭐ 重大事件跑馬燈</div>', unsafe_allow_html=True)
-    st.markdown(
-        '<div style="color:var(--text-muted); margin:-6px 0 14px 0;">首頁最上方直接看重大事件快帶，改用更穩定的遠端圖片來源。</div>',
-        unsafe_allow_html=True,
-    )
-    st.markdown(build_event_marquee_html(featured), unsafe_allow_html=True)
 
     st.markdown(
         f"""
