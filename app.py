@@ -312,6 +312,16 @@ st.markdown(
         background: radial-gradient(circle, rgba(255,255,255,0.42) 0%, rgba(255,255,255,0.08) 48%, transparent 72%);
         pointer-events: none;
     }
+    .hero-section::before {
+        content: "";
+        position: absolute;
+        inset: 18px auto auto 18px;
+        width: 160px;
+        height: 160px;
+        border-radius: 999px;
+        background: radial-gradient(circle, rgba(143,168,157,0.16) 0%, rgba(143,168,157,0.02) 62%, transparent 75%);
+        pointer-events: none;
+    }
     .hero-title {
         font-size: 2.8rem;
         font-weight: 800;
@@ -680,6 +690,79 @@ st.markdown(
         line-height: 1.6;
         margin-top: 8px;
     }
+    .photo-band {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px;
+        margin: 12px 0 22px 0;
+    }
+    .photo-band-card {
+        position: relative;
+        min-height: 220px;
+        border-radius: 22px;
+        overflow: hidden;
+        border: 1px solid rgba(171, 164, 155, 0.24);
+        box-shadow: 0 16px 32px rgba(136, 123, 110, 0.1);
+        transition: transform 0.24s ease, box-shadow 0.24s ease;
+    }
+    .photo-band-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 20px 38px rgba(136, 123, 110, 0.14);
+    }
+    .photo-band-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+    .photo-band-overlay {
+        position: absolute;
+        inset: auto 0 0 0;
+        padding: 16px 16px 14px 16px;
+        background: linear-gradient(180deg, rgba(21,26,28,0.04) 0%, rgba(21,26,28,0.76) 58%, rgba(21,26,28,0.92) 100%);
+        color: #f8f4ef;
+    }
+    .photo-band-kicker {
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        opacity: 0.82;
+    }
+    .photo-band-title {
+        font-size: 1rem;
+        font-weight: 800;
+        margin-top: 8px;
+        line-height: 1.4;
+    }
+    .photo-band-note {
+        font-size: 0.86rem;
+        line-height: 1.55;
+        margin-top: 8px;
+        color: rgba(248, 244, 239, 0.9);
+    }
+    .shape-cloud {
+        position: relative;
+        overflow: hidden;
+        border-radius: 24px;
+        border: 1px solid rgba(171, 164, 155, 0.24);
+        background:
+            radial-gradient(circle at 12% 28%, rgba(143,168,157,0.16), transparent 16%),
+            radial-gradient(circle at 84% 18%, rgba(200,160,146,0.18), transparent 14%),
+            radial-gradient(circle at 78% 78%, rgba(129,157,175,0.18), transparent 16%),
+            linear-gradient(135deg, rgba(255,251,247,0.98) 0%, rgba(243,236,228,0.98) 100%);
+        box-shadow: 0 16px 34px rgba(136, 123, 110, 0.08);
+        padding: 22px 24px;
+    }
+    .shape-cloud::after {
+        content: "";
+        position: absolute;
+        inset: auto -26px -34px auto;
+        width: 140px;
+        height: 140px;
+        border-radius: 24px;
+        background: rgba(255,255,255,0.22);
+        transform: rotate(18deg);
+    }
     @keyframes fadeUp {
         from {
             opacity: 0;
@@ -766,6 +849,9 @@ st.markdown(
         }
         .event-marquee-card img {
             height: 160px;
+        }
+        .photo-band {
+            grid-template-columns: 1fr;
         }
         .web-lane-card {
             padding: 16px 16px;
@@ -1323,6 +1409,24 @@ def build_event_marquee_html(events: list[dict]) -> str:
         "</div>"
         "</div>"
     )
+
+
+def build_photo_band_html(items: list[dict]) -> str:
+    cards = []
+    for idx, item in enumerate(items):
+        cards.append(
+            f"""
+            <div class="photo-band-card" style="--tilt:{-2 if idx % 2 == 0 else 2};">
+              <img src="{item['image']}" alt="{item['title']}">
+              <div class="photo-band-overlay">
+                <div class="photo-band-kicker">{item['kicker']}</div>
+                <div class="photo-band-title">{item['title']}</div>
+                <div class="photo-band-note">{item['note']}</div>
+              </div>
+            </div>
+            """
+        )
+    return f'<div class="photo-band">{"".join(cards)}</div>'
 
 
 def pick_scene_for_event(event: dict) -> tuple[str, str]:
@@ -2169,6 +2273,18 @@ if page == "🏠 首頁":
             st.markdown(build_visual_card_html(*card), unsafe_allow_html=True)
 
     st.markdown(
+        build_photo_band_html(
+            [
+                {"image": build_remote_event_image("covid_crash_2020"), "kicker": "Market Shock", "title": "全球股市急跌", "note": "用真實事件畫面補足首頁敘事感。"},
+                {"image": build_remote_event_image("fed_hike_cycle_2022"), "kicker": "Policy Signal", "title": "升息循環再定價", "note": "利率事件與市場波動直接接上。"},
+                {"image": build_real_scene_image("taiwan"), "kicker": "Taiwan Focus", "title": "台灣主線場景", "note": "把台灣市場與科技鏈做成更滿的視覺入口。"},
+                {"image": build_real_scene_image("network"), "kicker": "Contagion Route", "title": "跨市場傳導", "note": "除了數據，也讓首頁先有研究平台的氣氛。"},
+            ]
+        ),
+        unsafe_allow_html=True,
+    )
+
+    st.markdown(
         f"""
         <div class="web-lane">
           <div class="web-lane-card fade-up">
@@ -2367,7 +2483,7 @@ if page == "🏠 首頁":
 
     st.markdown(
         """
-        <div style="text-align:center; padding:28px; background:linear-gradient(180deg, var(--paper-soft) 0%, var(--paper-strong) 100%); border-radius:18px; border:1px solid var(--border); box-shadow:0 14px 30px rgba(136,123,110,0.08);">
+        <div class="shape-cloud" style="text-align:center;">
           <div style="font-size:1.15rem; color:var(--text-main); margin-bottom:10px; font-weight:700;">
             首頁現在只保留入口、摘要與導覽，詳細內容已分成獨立頁面
           </div>
@@ -2387,6 +2503,17 @@ if page == "🏠 首頁":
 elif page == "🔬 分析控制台" and st.session_state.get("workspace_view") == "🌍 市場總覽":
     st.markdown('<div class="hero-title" style="font-size:2rem; text-align:left;">🌍 市場總覽</div>', unsafe_allow_html=True)
     st.markdown('<div class="hero-subtitle" style="text-align:left; margin-bottom:20px;">把全球市場脈動、事件地圖與精選重大事件拆成同一個總覽頁</div>', unsafe_allow_html=True)
+    st.markdown(
+        build_photo_band_html(
+            [
+                {"image": build_remote_event_image("russia_ukraine_2022"), "kicker": "Geopolitics", "title": "地緣衝擊", "note": "讓總覽頁一進來就有重大事件現場感。"},
+                {"image": build_remote_event_image("fed_hike_cycle_2022"), "kicker": "Rates", "title": "政策再定價", "note": "升息、債市與股票同步連動。"},
+                {"image": build_remote_event_image("deepseek_shock_2025"), "kicker": "Tech", "title": "AI 與供應鏈", "note": "科技主題不只出現在圖表，也出現在視覺敘事。"},
+                {"image": build_real_scene_image("market"), "kicker": "Global Floor", "title": "市場現場", "note": "從交易現場過渡到後面的市場脈動圖。"},
+            ]
+        ),
+        unsafe_allow_html=True,
+    )
 
     snapshot_df = build_market_snapshot()
     world_event_df = build_world_event_df()
@@ -4104,6 +4231,17 @@ elif page == "🔬 分析控制台" and st.session_state.get("workspace_view") =
 elif page == "📚 事件資料庫":
     st.markdown('<div class="hero-title" style="font-size:2rem;">📚 事件資料庫</div>', unsafe_allow_html=True)
     st.markdown('<div class="hero-subtitle" style="text-align:left; margin-bottom:20px;">瀏覽與搜尋 2000–2025 年重大金融事件</div>', unsafe_allow_html=True)
+    st.markdown(
+        build_photo_band_html(
+            [
+                {"image": build_remote_event_image("covid_crash_2020"), "kicker": "Archive", "title": "疫情衝擊", "note": "資料庫不只是一張表，也有事件視覺入口。"},
+                {"image": build_remote_event_image("japan_earthquake_2011"), "kicker": "Disaster", "title": "日本地震", "note": "把自然災害與市場連動做出場景感。"},
+                {"image": build_remote_event_image("india_rice_ban_2023"), "kicker": "Commodity", "title": "糧食供給", "note": "商品與供應面衝擊在資料庫也能一眼看出。"},
+                {"image": build_real_scene_image("banking"), "kicker": "Finance", "title": "金融壓力", "note": "讓資料庫上方先有金融事件氛圍。"},
+            ]
+        ),
+        unsafe_allow_html=True,
+    )
 
     # Timeline
     st.plotly_chart(plot_event_timeline(HISTORICAL_EVENTS), use_container_width=True)
