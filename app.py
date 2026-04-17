@@ -1273,24 +1273,26 @@ def build_event_marquee_html(events: list[dict]) -> str:
     for ev in duplicated_events:
         if not ev:
             continue
-        card = f"""
-        <div class="event-marquee-card">
-          <img src="{build_remote_event_image(ev['id'])}" alt="{ev['name_zh']}">
-          <div class="event-marquee-body">
-            <div class="event-marquee-meta">{ev['date']} · {get_event_region(ev)} · {ev['category']}</div>
-            <div class="event-marquee-title">{ev['name_zh']}</div>
-            <div class="event-marquee-note">{ev['description_zh'][:68]}...</div>
-          </div>
-        </div>
-        """
+        image_url = build_remote_event_image(ev["id"])
+        description = ev["description_zh"][:68].replace("<", "").replace(">", "")
+        card = (
+            f'<div class="event-marquee-card">'
+            f'<img src="{image_url}" alt="{ev["name_zh"]}">'
+            f'<div class="event-marquee-body">'
+            f'<div class="event-marquee-meta">{ev["date"]} · {get_event_region(ev)} · {ev["category"]}</div>'
+            f'<div class="event-marquee-title">{ev["name_zh"]}</div>'
+            f'<div class="event-marquee-note">{description}...</div>'
+            f"</div>"
+            f"</div>"
+        )
         cards.append(card)
-    return f"""
-    <div class="event-marquee-shell">
-      <div class="event-marquee-track">
-        {''.join(cards)}
-      </div>
-    </div>
-    """
+    return (
+        '<div class="event-marquee-shell">'
+        '<div class="event-marquee-track">'
+        f"{''.join(cards)}"
+        "</div>"
+        "</div>"
+    )
 
 
 def pick_scene_for_event(event: dict) -> tuple[str, str]:
