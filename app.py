@@ -1754,7 +1754,7 @@ with st.sidebar:
 
     page = st.radio(
         "導覽",
-        options=["🏠 首頁", "🔬 事件分析", "📚 事件資料庫", "📖 方法論說明"],
+        options=["🏠 首頁", "🌍 市場總覽", "🇹🇼 台灣專區", "🔬 事件分析", "📚 事件資料庫", "📖 方法論說明"],
         key="nav_page",
         label_visibility="collapsed",
     )
@@ -1767,9 +1767,10 @@ with st.sidebar:
           <div class="sidebar-card-note">目前覆蓋 {len(EVENT_REGIONS)} 個地區維度，事件最密集區域是 {sidebar_top_region}。</div>
           <div class="sidebar-status"><span class="sidebar-status-dot"></span>System ready for scenario simulation</div>
           <div style="margin-top:6px;">
+            <span class="sidebar-chip">市場總覽</span>
+            <span class="sidebar-chip">台灣專區</span>
             <span class="sidebar-chip">事件比較</span>
             <span class="sidebar-chip">投組壓測</span>
-            <span class="sidebar-chip">全球地圖</span>
           </div>
           <div class="sidebar-mini-grid">
             <div class="sidebar-mini-tile">
@@ -1859,11 +1860,11 @@ with st.sidebar:
         f"""
         <div class="sidebar-card">
           <div class="sidebar-card-title">Recommended Path</div>
-          <div class="sidebar-card-note">先看首頁的全球市場脈動，再到事件分析做模擬，最後用事件比較或持倉壓測收斂成結論。</div>
+          <div class="sidebar-card-note">先看首頁入口，再進市場總覽或台灣專區，最後到事件分析做模擬與投組壓測。</div>
           <div class="sidebar-route">
-            <div class="sidebar-route-step"><span class="sidebar-step-index">1</span><span>首頁脈動與世界地圖</span></div>
-            <div class="sidebar-route-step"><span class="sidebar-step-index">2</span><span>事件分析與傳導路徑</span></div>
-            <div class="sidebar-route-step"><span class="sidebar-step-index">3</span><span>事件比較與投組壓測</span></div>
+            <div class="sidebar-route-step"><span class="sidebar-step-index">1</span><span>首頁入口與快速路線</span></div>
+            <div class="sidebar-route-step"><span class="sidebar-step-index">2</span><span>市場總覽 / 台灣專區</span></div>
+            <div class="sidebar-route-step"><span class="sidebar-step-index">3</span><span>事件分析與投組壓測</span></div>
           </div>
         </div>
         <div class="sidebar-card">
@@ -1963,11 +1964,11 @@ with st.sidebar:
 
     st.markdown('<div class="sidebar-card-title" style="margin-top:18px;">Quick Actions</div>', unsafe_allow_html=True)
     action_col1, action_col2 = st.columns(2)
-    if action_col1.button("前往分析", use_container_width=True):
-        queue_nav("🔬 事件分析")
+    if action_col1.button("市場總覽", use_container_width=True):
+        queue_nav("🌍 市場總覽")
         st.rerun()
-    if action_col2.button("前往資料庫", use_container_width=True):
-        queue_nav("📚 事件資料庫")
+    if action_col2.button("台灣專區", use_container_width=True):
+        queue_nav("🇹🇼 台灣專區")
         st.rerun()
     action_col3, action_col4 = st.columns(2)
     if action_col3.button("重設篩選", use_container_width=True):
@@ -2258,96 +2259,84 @@ if page == "🏠 首頁":
     )
     st.markdown(f"<div style='margin-top:6px; margin-bottom:8px;'>{chips_html}</div>", unsafe_allow_html=True)
 
-    tw_focus = build_taiwan_focus_summary()
-    latest_tw = tw_focus["latest_event"]
-    st.markdown('<div class="section-header">🇹🇼 台灣焦點專區</div>', unsafe_allow_html=True)
-    tw_col1, tw_col2 = st.columns([1.2, 1])
-    with tw_col1:
-        st.markdown(
-            build_visual_card_html(
-                "台灣市場情境總覽",
-                "把台股、半導體、金融與本地重大事件放進同一個分析主線，適合課堂展示與區域市場報告。",
-                build_scene_image("taiwan", "#d9925b", "#8f9f98"),
-                "Taiwan Focus",
-            ),
-            unsafe_allow_html=True,
-        )
-    with tw_col2:
-        st.markdown(
-            f"""
-            <div class="glass-panel">
-              <div class="mini-section-title">台灣資料面板</div>
-              <div class="summary-tile-note" style="margin-top:0;">已經把台灣事件、台股與台灣核心投組整合進首頁與分析流程。</div>
-              <div style="display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:10px; margin-top:12px;">
-                <div class="summary-tile"><div class="summary-tile-label">台灣事件</div><div class="summary-tile-value">{tw_focus['event_count']} 件</div><div class="summary-tile-note">平均強度 {tw_focus['avg_magnitude']:.1f} / 5</div></div>
-                <div class="summary-tile"><div class="summary-tile-label">台灣標的</div><div class="summary-tile-value">{tw_focus['asset_count']} 檔</div><div class="summary-tile-note">台股與 ETF 可直接進投組分析</div></div>
-                <div class="summary-tile"><div class="summary-tile-label">主力主題</div><div class="summary-tile-value">{tw_focus['dominant_category'] or '--'}</div><div class="summary-tile-note">目前最常見的台灣事件型態</div></div>
-                <div class="summary-tile"><div class="summary-tile-label">最新事件</div><div class="summary-tile-value" style="font-size:1.05rem;">{latest_tw['name_zh'] if latest_tw else '--'}</div><div class="summary-tile-note">{latest_tw['date'] if latest_tw else '暫無資料'}</div></div>
-              </div>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-        tw_action1, tw_action2, tw_action3 = st.columns(3)
-        if tw_action1.button("前往台灣事件", key="home_taiwan_db", use_container_width=True):
-            st.session_state["global_region_filter"] = "台灣"
-            queue_nav("📚 事件資料庫")
-            st.rerun()
-        if tw_action2.button("分析台灣事件", key="home_taiwan_analysis", use_container_width=True):
-            if latest_tw:
-                st.session_state["quick_event_id"] = latest_tw["id"]
-            st.session_state["global_region_filter"] = "台灣"
-            queue_nav("🔬 事件分析")
-            st.rerun()
-        if tw_action3.button("載入台灣核心投組", key="home_taiwan_port", use_container_width=True):
-            st.session_state["portfolio_dict"] = PORTFOLIO_PRESETS["台灣核心"].copy()
-            st.session_state["portfolio_editor_rows"] = portfolio_to_rows(PORTFOLIO_PRESETS["台灣核心"])
-            st.rerun()
-
-    tw_metric_col1, tw_metric_col2 = st.columns([1.15, 1])
-    with tw_metric_col1:
-        st.plotly_chart(plot_taiwan_indicator_panel(tw_focus), use_container_width=True)
-    with tw_metric_col2:
-        st.markdown(
-            f"""
-            <div class="glass-panel" style="min-height:340px;">
-              <div class="mini-section-title">台灣專區專屬指標</div>
-              <div style="display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:10px; margin-top:14px;">
-                <div class="summary-tile"><div class="summary-tile-label">半導體占比</div><div class="summary-tile-value">{tw_focus['semiconductor_share']:.0%}</div><div class="summary-tile-note">台灣事件中與晶片供應鏈相關的比例</div></div>
-                <div class="summary-tile"><div class="summary-tile-label">政策風險占比</div><div class="summary-tile-value">{tw_focus['policy_risk_share']:.0%}</div><div class="summary-tile-note">政治、兩岸與利率政策訊號的比重</div></div>
-                <div class="summary-tile"><div class="summary-tile-label">事件密度分數</div><div class="summary-tile-value">{tw_focus['event_density_score']:.0f}</div><div class="summary-tile-note">台灣事件在全球資料庫中的存在感</div></div>
-                <div class="summary-tile"><div class="summary-tile-label">研究定位</div><div class="summary-tile-value" style="font-size:1.05rem;">區域核心市場</div><div class="summary-tile-note">可直接銜接台股、半導體與全球風險主線</div></div>
-              </div>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-
-    if tw_focus["flagship_assets"]:
-        tw_assets_html = "".join(
-            f"<span class='market-chip'><span class='market-dot' style='background:{ASSET_UNIVERSE[t]['color']};'></span>{ASSET_UNIVERSE[t]['name_zh']}</span>"
-            for t in tw_focus["flagship_assets"]
-        )
-        st.markdown(f"<div style='margin-top:8px; margin-bottom:10px;'>{tw_assets_html}</div>", unsafe_allow_html=True)
-
-    richness_cols = st.columns(4)
-    for col, item in zip(richness_cols, region_summary[:4]):
+    st.markdown('<div class="section-header">🗂️ 分頁導覽</div>', unsafe_allow_html=True)
+    nav_card1, nav_card2, nav_card3 = st.columns(3)
+    home_nav_cards = [
+        (
+            nav_card1,
+            "🌍 市場總覽",
+            "世界地圖、全球市場脈動、精選重大事件都移到這裡，首頁不再塞滿。",
+            "從全球視角快速掃過市場與事件熱點。",
+            "go_market_overview",
+        ),
+        (
+            nav_card2,
+            "🇹🇼 台灣專區",
+            "台灣事件、台股、半導體與政策風險集中到獨立頁面。",
+            "更適合做台灣主題報告或區域市場展示。",
+            "go_taiwan_hub",
+        ),
+        (
+            nav_card3,
+            "🔬 事件分析",
+            "真正開始跑情境模擬、傳導網路、投組壓力測試與事件比較。",
+            "直接進主工作區，做深入分析。",
+            "go_analysis_workspace",
+        ),
+    ]
+    for col, title, desc, note, btn_key in home_nav_cards:
         with col:
             st.markdown(
                 f"""
-                <div class="rich-grid-card fade-up">
-                  <div class="rich-grid-title">{item['region']} 事件群</div>
-                  <div class="rich-grid-value">{item['count']} 件</div>
-                  <div class="rich-grid-meta">平均強度 {item['avg_magnitude']:.1f} / 5，已納入全球事件比較視圖。</div>
+                <div class="event-card">
+                  <h4>{title}</h4>
+                  <p>{desc}</p>
+                  <div style="margin-top:8px; color:var(--text-muted);">{note}</div>
                 </div>
                 """,
                 unsafe_allow_html=True,
             )
+            if st.button(f"打開 {title}", key=btn_key, use_container_width=True):
+                queue_nav(title)
+                st.rerun()
 
     st.markdown("<br>", unsafe_allow_html=True)
 
-    st.markdown('<div class="section-header">📡 全球市場脈動</div>', unsafe_allow_html=True)
+    st.markdown(
+        """
+        <div style="text-align:center; padding:28px; background:linear-gradient(180deg, var(--paper-soft) 0%, var(--paper-strong) 100%); border-radius:18px; border:1px solid var(--border); box-shadow:0 14px 30px rgba(136,123,110,0.08);">
+          <div style="font-size:1.15rem; color:var(--text-main); margin-bottom:10px; font-weight:700;">
+            首頁現在只保留入口、摘要與導覽，詳細內容已分成獨立頁面
+          </div>
+          <div style="color:var(--text-muted); font-size:0.95rem;">
+            這樣分類會更清楚：首頁看路線，市場總覽看全球，台灣專區看區域主線，事件分析才進入工作流。
+          </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+# ════════════════════════════════════════════════════════════════════════════
+# PAGE 2: 市場總覽 / Market Overview
+# ════════════════════════════════════════════════════════════════════════════
+
+elif page == "🌍 市場總覽":
+    st.markdown('<div class="hero-title" style="font-size:2rem; text-align:left;">🌍 市場總覽</div>', unsafe_allow_html=True)
+    st.markdown('<div class="hero-subtitle" style="text-align:left; margin-bottom:20px;">把全球市場脈動、事件地圖與精選重大事件拆成同一個總覽頁</div>', unsafe_allow_html=True)
+
+    snapshot_df = build_market_snapshot()
     world_event_df = build_world_event_df()
+    region_summary = build_region_summary()
+    region_counts = {}
+    asset_category_counts = {}
+    for event in HISTORICAL_EVENTS:
+        region = get_event_region(event)
+        region_counts[region] = region_counts.get(region, 0) + 1
+    for info in ASSET_UNIVERSE.values():
+        asset_category_counts[info["category"]] = asset_category_counts.get(info["category"], 0) + 1
+
+    st.markdown('<div class="section-header">📡 全球市場脈動</div>', unsafe_allow_html=True)
     pulse_col1, pulse_col2 = st.columns([1.1, 1])
     with pulse_col1:
         st.plotly_chart(plot_market_snapshot(snapshot_df), use_container_width=True)
@@ -2360,7 +2349,7 @@ if page == "🏠 首頁":
     cards = [
         ("本週最強市場", f"{top_positive['name_zh']} {top_positive['one_week']:.2%}", "由風險偏好與題材驅動的代表性資產。"),
         ("本週承壓市場", f"{top_negative['name_zh']} {top_negative['one_week']:.2%}", "可作為近期避險或脆弱資產觀察視角。"),
-        ("事件資料密度", f"{len(world_event_df)} 件事件 / {len(EVENT_REGIONS)} 個地區", "首頁現在可以同時看市場脈動與全球事件熱點。"),
+        ("事件資料密度", f"{len(world_event_df)} 件事件 / {len(EVENT_REGIONS)} 個地區", "把市場快照與事件熱點放在同一頁面。"),
     ]
     for col, (label, value, note) in zip(pulse_cards, cards):
         with col:
@@ -2375,32 +2364,63 @@ if page == "🏠 首頁":
                 unsafe_allow_html=True,
             )
 
-    st.markdown("<br>", unsafe_allow_html=True)
-
-    # Platform capabilities
-    st.markdown('<div class="section-header">🚀 平台功能</div>', unsafe_allow_html=True)
-    cap1, cap2, cap3, cap4 = st.columns(4)
-    capabilities = [
-        ("📊", "事件研究", "Market Model + 累積異常報酬（CAR）分析，量化事件對各資產的衝擊"),
-        ("🕸️", "傳導網路", "Granger因果 + 轉移熵 建立有向傳導網路，識別系統性風險擴散路徑"),
-        ("🎲", "蒙地卡羅", "Bootstrap 10,000次模擬，生成各資產報酬分佈與 VaR / CVaR 指標"),
-        ("💼", "壓力測試", "自定義投資組合，模擬極端事件下的持倉損益與對沖建議"),
-    ]
-    for col, (icon, title, desc) in zip([cap1, cap2, cap3, cap4], capabilities):
+    st.markdown('<div class="section-header">🌐 全球覆蓋</div>', unsafe_allow_html=True)
+    richness_cols = st.columns(4)
+    for col, item in zip(richness_cols, region_summary[:4]):
         with col:
             st.markdown(
                 f"""
-                <div class="event-card">
-                  <h4>{icon} {title}</h4>
-                  <p>{desc}</p>
+                <div class="rich-grid-card fade-up">
+                  <div class="rich-grid-title">{item['region']} 事件群</div>
+                  <div class="rich-grid-value">{item['count']} 件</div>
+                  <div class="rich-grid-meta">平均強度 {item['avg_magnitude']:.1f} / 5，已納入全球事件比較視圖。</div>
                 </div>
                 """,
                 unsafe_allow_html=True,
             )
 
-    st.markdown("<br>", unsafe_allow_html=True)
+    p1, p2, p3 = st.columns(3)
+    with p1:
+        st.markdown(
+            f"""
+            <div class="pulse-card">
+              <div class="pulse-label">事件覆蓋</div>
+              <div class="pulse-value">{len(HISTORICAL_EVENTS)} 件</div>
+              <div class="pulse-note">涵蓋 {len(region_counts)} 個地區維度，從北美、歐洲到亞洲與拉美市場。</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+    with p2:
+        top_region = max(region_counts.items(), key=lambda x: x[1])
+        st.markdown(
+            f"""
+            <div class="pulse-card">
+              <div class="pulse-label">地區最密集</div>
+              <div class="pulse-value">{top_region[0]}</div>
+              <div class="pulse-note">目前收錄 {top_region[1]} 件重大事件，並持續保留全球與跨區域情境。</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+    with p3:
+        st.markdown(
+            f"""
+            <div class="pulse-card">
+              <div class="pulse-label">可分析標的</div>
+              <div class="pulse-value">{len(ASSET_UNIVERSE)} 種</div>
+              <div class="pulse-note">從股市、外匯、商品、債券到加密貨幣，支援跨市場壓力測試。</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
-    # Featured recent events
+    chips_html = "".join(
+        f"<span class='market-chip'><span class='market-dot' style='background:{ASSET_UNIVERSE[next(k for k,v in ASSET_UNIVERSE.items() if v['category']==cat)]['color']};'></span>{cat} {count} 檔</span>"
+        for cat, count in sorted(asset_category_counts.items())
+    )
+    st.markdown(f"<div style='margin-top:6px; margin-bottom:8px;'>{chips_html}</div>", unsafe_allow_html=True)
+
     st.markdown('<div class="section-header">⭐ 精選重大事件</div>', unsafe_allow_html=True)
     featured_ids = [
         "covid_crash_2020", "fed_hike_cycle_2022", "deepseek_shock_2025",
@@ -2408,7 +2428,6 @@ if page == "🏠 首頁":
         "india_rice_ban_2023", "japan_earthquake_2011", "argentina_default_2001",
     ]
     featured = [get_event_by_id(eid) for eid in featured_ids if get_event_by_id(eid)]
-
     fc1, fc2, fc3 = st.columns(3)
     for i, ev in enumerate(featured):
         col = [fc1, fc2, fc3][i % 3]
@@ -2439,79 +2458,136 @@ if page == "🏠 首頁":
                 unsafe_allow_html=True,
             )
             feature_btn1, feature_btn2 = st.columns(2)
-            if feature_btn1.button("直接分析", key=f"featured_go_{ev['id']}", use_container_width=True):
+            if feature_btn1.button("直接分析", key=f"market_featured_go_{ev['id']}", use_container_width=True):
                 st.session_state["quick_event_id"] = ev["id"]
                 st.session_state["global_category_filter"] = ev["category"]
                 st.session_state["global_region_filter"] = get_event_region(ev)
                 queue_nav("🔬 事件分析")
                 st.rerun()
-            if feature_btn2.button("進資料庫", key=f"featured_db_{ev['id']}", use_container_width=True):
+            if feature_btn2.button("進資料庫", key=f"market_featured_db_{ev['id']}", use_container_width=True):
                 st.session_state["quick_event_id"] = ev["id"]
                 st.session_state["global_region_filter"] = get_event_region(ev)
                 queue_nav("📚 事件資料庫")
                 st.rerun()
 
-    with st.expander("查看更多事件與標的覆蓋", expanded=False):
-        exp_col1, exp_col2 = st.columns([1.15, 1])
-        with exp_col1:
-            latest_events = sorted(HISTORICAL_EVENTS, key=lambda x: x["date"], reverse=True)[:18]
-            preview_html = "".join(
-                f"<div style='padding:10px 0; border-bottom:1px solid rgba(171,164,155,0.18);'>"
-                f"<div style='font-size:0.9rem; color:var(--text-muted);'>{ev['date']} · {get_event_region(ev)} · "
-                f"<span style='color:{CAT_COLORS.get(ev['category'], '#888')}; font-weight:700;'>{ev['category']}</span></div>"
-                f"<div style='font-size:1rem; color:var(--text-main); font-weight:700; margin-top:3px;'>{ev['name_zh']}</div>"
-                f"</div>"
-                for ev in latest_events
+
+# ════════════════════════════════════════════════════════════════════════════
+# PAGE 3: 台灣專區 / Taiwan Hub
+# ════════════════════════════════════════════════════════════════════════════
+
+elif page == "🇹🇼 台灣專區":
+    tw_focus = build_taiwan_focus_summary()
+    latest_tw = tw_focus["latest_event"]
+    tw_events = sorted([e for e in HISTORICAL_EVENTS if get_event_region(e) == "台灣"], key=lambda x: x["date"], reverse=True)
+    st.markdown('<div class="hero-title" style="font-size:2rem; text-align:left;">🇹🇼 台灣專區</div>', unsafe_allow_html=True)
+    st.markdown('<div class="hero-subtitle" style="text-align:left; margin-bottom:20px;">把台灣事件、台股與半導體主線集中到單一頁面，不再和全球內容混在一起</div>', unsafe_allow_html=True)
+
+    tw_col1, tw_col2 = st.columns([1.2, 1])
+    with tw_col1:
+        st.markdown(
+            build_visual_card_html(
+                "台灣市場情境總覽",
+                "把台股、半導體、金融與本地重大事件放進同一個分析主線，適合課堂展示與區域市場報告。",
+                build_scene_image("taiwan", "#d9925b", "#8f9f98"),
+                "Taiwan Focus",
+            ),
+            unsafe_allow_html=True,
+        )
+    with tw_col2:
+        st.markdown(
+            f"""
+            <div class="glass-panel">
+              <div class="mini-section-title">台灣資料面板</div>
+              <div class="summary-tile-note" style="margin-top:0;">已經把台灣事件、台股與台灣核心投組整合進獨立專區。</div>
+              <div style="display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:10px; margin-top:12px;">
+                <div class="summary-tile"><div class="summary-tile-label">台灣事件</div><div class="summary-tile-value">{tw_focus['event_count']} 件</div><div class="summary-tile-note">平均強度 {tw_focus['avg_magnitude']:.1f} / 5</div></div>
+                <div class="summary-tile"><div class="summary-tile-label">台灣標的</div><div class="summary-tile-value">{tw_focus['asset_count']} 檔</div><div class="summary-tile-note">台股與 ETF 可直接進投組分析</div></div>
+                <div class="summary-tile"><div class="summary-tile-label">主力主題</div><div class="summary-tile-value">{tw_focus['dominant_category'] or '--'}</div><div class="summary-tile-note">目前最常見的台灣事件型態</div></div>
+                <div class="summary-tile"><div class="summary-tile-label">最新事件</div><div class="summary-tile-value" style="font-size:1.05rem;">{latest_tw['name_zh'] if latest_tw else '--'}</div><div class="summary-tile-note">{latest_tw['date'] if latest_tw else '暫無資料'}</div></div>
+              </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+        tw_action1, tw_action2, tw_action3 = st.columns(3)
+        if tw_action1.button("前往台灣事件", key="tw_hub_db", use_container_width=True):
+            st.session_state["global_region_filter"] = "台灣"
+            queue_nav("📚 事件資料庫")
+            st.rerun()
+        if tw_action2.button("分析台灣事件", key="tw_hub_analysis", use_container_width=True):
+            if latest_tw:
+                st.session_state["quick_event_id"] = latest_tw["id"]
+            st.session_state["global_region_filter"] = "台灣"
+            queue_nav("🔬 事件分析")
+            st.rerun()
+        if tw_action3.button("載入台灣核心投組", key="tw_hub_port", use_container_width=True):
+            st.session_state["portfolio_dict"] = PORTFOLIO_PRESETS["台灣核心"].copy()
+            st.session_state["portfolio_editor_rows"] = portfolio_to_rows(PORTFOLIO_PRESETS["台灣核心"])
+            queue_nav("🔬 事件分析")
+            st.rerun()
+
+    tw_metric_col1, tw_metric_col2 = st.columns([1.15, 1])
+    with tw_metric_col1:
+        st.plotly_chart(plot_taiwan_indicator_panel(tw_focus), use_container_width=True)
+    with tw_metric_col2:
+        st.markdown(
+            f"""
+            <div class="glass-panel" style="min-height:340px;">
+              <div class="mini-section-title">台灣專區專屬指標</div>
+              <div style="display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:10px; margin-top:14px;">
+                <div class="summary-tile"><div class="summary-tile-label">半導體占比</div><div class="summary-tile-value">{tw_focus['semiconductor_share']:.0%}</div><div class="summary-tile-note">台灣事件中與晶片供應鏈相關的比例</div></div>
+                <div class="summary-tile"><div class="summary-tile-label">政策風險占比</div><div class="summary-tile-value">{tw_focus['policy_risk_share']:.0%}</div><div class="summary-tile-note">政治、兩岸與利率政策訊號的比重</div></div>
+                <div class="summary-tile"><div class="summary-tile-label">事件密度分數</div><div class="summary-tile-value">{tw_focus['event_density_score']:.0f}</div><div class="summary-tile-note">台灣事件在全球資料庫中的存在感</div></div>
+                <div class="summary-tile"><div class="summary-tile-label">研究定位</div><div class="summary-tile-value" style="font-size:1.05rem;">區域核心市場</div><div class="summary-tile-note">可直接銜接台股、半導體與全球風險主線</div></div>
+              </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+    if tw_focus["flagship_assets"]:
+        tw_assets_html = "".join(
+            f"<span class='market-chip'><span class='market-dot' style='background:{ASSET_UNIVERSE[t]['color']};'></span>{ASSET_UNIVERSE[t]['name_zh']}</span>"
+            for t in tw_focus["flagship_assets"]
+        )
+        st.markdown(f"<div style='margin-top:8px; margin-bottom:10px;'>{tw_assets_html}</div>", unsafe_allow_html=True)
+
+    st.markdown('<div class="section-header">🗓️ 台灣事件時間線</div>', unsafe_allow_html=True)
+    timeline_left, timeline_right = st.columns([1.2, 1])
+    with timeline_left:
+        for ev in tw_events[:8]:
+            tag_html = "".join(
+                f"<span class='market-chip' style='font-size:0.8rem; padding:6px 10px;'>{tag}</span>"
+                for tag in derive_event_tags(ev)[:4]
             )
             st.markdown(
                 f"""
-                <div class="glass-panel">
-                  <div class="mini-section-title">最新事件預覽</div>
-                  {preview_html}
+                <div class="event-card">
+                  <div style="color:var(--text-muted); font-size:0.84rem;">{ev['date']} · {ev['category']}</div>
+                  <h4 style="margin-top:6px;">{ev['name_zh']}</h4>
+                  <p>{ev['description_zh']}</p>
+                  <div style="margin-top:8px;">{tag_html}</div>
                 </div>
                 """,
                 unsafe_allow_html=True,
             )
-        with exp_col2:
-            asset_preview = sorted(asset_category_counts.items(), key=lambda x: (-x[1], x[0]))
-            asset_preview_html = "".join(
-                f"<div style='padding:10px 0; border-bottom:1px solid rgba(171,164,155,0.18); display:flex; justify-content:space-between; gap:12px;'>"
-                f"<span style='color:var(--text-main); font-size:0.98rem; font-weight:700;'>{cat}</span>"
-                f"<span style='color:var(--accent-strong); font-size:0.96rem;'>{count} 檔</span>"
-                f"</div>"
-                for cat, count in asset_preview
-            )
+    with timeline_right:
+        latest_three = tw_events[:3]
+        for ev in latest_three:
+            scene, scene_color = pick_scene_for_event(ev)
             st.markdown(
-                f"""
-                <div class="glass-panel">
-                  <div class="mini-section-title">標的宇宙一覽</div>
-                  <div class="summary-tile-note" style="margin-top:0;">目前可直接分析股市、商品、債券、外匯與加密資產。</div>
-                  {asset_preview_html}
-                </div>
-                """,
+                build_visual_card_html(
+                    ev["name_zh"],
+                    f"{ev['date']} · {ev['category']} · {ev['primary_shock']}",
+                    build_scene_image(scene, scene_color, "#c8a092"),
+                    "Taiwan Event",
+                ),
                 unsafe_allow_html=True,
             )
-
-    st.markdown("<br>", unsafe_allow_html=True)
-
-    # CTA
-    st.markdown(
-        """
-        <div style="text-align:center; padding:30px; background:linear-gradient(180deg, var(--paper-soft) 0%, var(--paper-strong) 100%); border-radius:18px; border:1px solid var(--border); box-shadow:0 14px 30px rgba(136,123,110,0.08);">
-          <div style="font-size:1.2rem; color:var(--text-main); margin-bottom:12px; font-weight:700;">
-            選擇左側「🔬 事件分析」開始模擬任一歷史事件的市場衝擊
-          </div>
-          <div style="color:var(--text-muted); font-size:0.95rem;">
-            支援 70 件歷史事件 · 25 種資產 · 8 個地區維度 · 離線合成資料備援
-          </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
 
 
 # ════════════════════════════════════════════════════════════════════════════
-# PAGE 2: 事件分析 / Event Analysis
+# PAGE 4: 事件分析 / Event Analysis
 # ════════════════════════════════════════════════════════════════════════════
 
 elif page == "🔬 事件分析":
