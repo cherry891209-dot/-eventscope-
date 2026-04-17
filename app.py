@@ -1568,6 +1568,10 @@ if "nav_page" not in st.session_state:
     st.session_state["nav_page"] = "🏠 首頁"
 if "pending_nav_page" not in st.session_state:
     st.session_state["pending_nav_page"] = None
+if "workspace_view" not in st.session_state:
+    st.session_state["workspace_view"] = "🌍 市場總覽"
+if "pending_workspace_view" not in st.session_state:
+    st.session_state["pending_workspace_view"] = None
 if "global_category_filter" not in st.session_state:
     st.session_state["global_category_filter"] = "全部"
 if "global_region_filter" not in st.session_state:
@@ -1721,7 +1725,17 @@ def build_custom_scenario(
 
 def queue_nav(page: str) -> None:
     """Queue a page change so Streamlit can apply it before the nav widget is created."""
-    st.session_state["pending_nav_page"] = page
+    workspace_views = {"🌍 市場總覽", "🇹🇼 台灣專區", "🔬 事件分析", "💼 投組壓測", "⚔️ 事件比較"}
+    if page in workspace_views:
+        st.session_state["pending_nav_page"] = "🔬 分析控制台"
+        st.session_state["pending_workspace_view"] = page
+    else:
+        st.session_state["pending_nav_page"] = page
+
+
+def queue_workspace(view: str) -> None:
+    st.session_state["pending_nav_page"] = "🔬 分析控制台"
+    st.session_state["pending_workspace_view"] = view
 
 
 # ─── Sidebar Navigation ───────────────────────────────────────────────────────
@@ -1730,6 +1744,9 @@ with st.sidebar:
     if st.session_state["pending_nav_page"] is not None:
         st.session_state["nav_page"] = st.session_state["pending_nav_page"]
         st.session_state["pending_nav_page"] = None
+    if st.session_state["pending_workspace_view"] is not None:
+        st.session_state["workspace_view"] = st.session_state["pending_workspace_view"]
+        st.session_state["pending_workspace_view"] = None
 
     sidebar_region_summary = build_region_summary()
     sidebar_top_region = max(sidebar_region_summary, key=lambda x: x["count"])["region"]
@@ -1752,11 +1769,43 @@ with st.sidebar:
         unsafe_allow_html=True,
     )
 
+    nav_options = ["🏠 首頁", "🔬 分析控制台", "📚 事件資料庫", "📖 方法論說明"]
+    if st.session_state["nav_page"] not in nav_options:
+        st.session_state["nav_page"] = "🏠 首頁"
     page = st.radio(
         "導覽",
-        options=["🏠 首頁", "🌍 市場總覽", "🇹🇼 台灣專區", "🔬 事件分析", "💼 投組壓測", "⚔️ 事件比較", "📚 事件資料庫", "📖 方法論說明"],
+        options=nav_options,
         key="nav_page",
         label_visibility="collapsed",
+    )
+
+    st.markdown('<div class="sidebar-card-title" style="margin-top:18px;">Workspace Views</div>', unsafe_allow_html=True)
+    workspace_btn1, workspace_btn2 = st.columns(2)
+    if workspace_btn1.button("市場總覽", use_container_width=True, key="side_workspace_market"):
+        queue_workspace("🌍 市場總覽")
+        st.rerun()
+    if workspace_btn2.button("台灣專區", use_container_width=True, key="side_workspace_taiwan"):
+        queue_workspace("🇹🇼 台灣專區")
+        st.rerun()
+    workspace_btn3, workspace_btn4 = st.columns(2)
+    if workspace_btn3.button("事件分析", use_container_width=True, key="side_workspace_analysis"):
+        queue_workspace("🔬 事件分析")
+        st.rerun()
+    if workspace_btn4.button("投組壓測", use_container_width=True, key="side_workspace_portfolio"):
+        queue_workspace("💼 投組壓測")
+        st.rerun()
+    if st.button("事件比較", use_container_width=True, key="side_workspace_compare"):
+        queue_workspace("⚔️ 事件比較")
+        st.rerun()
+    st.markdown(
+        f"""
+        <div class="sidebar-card" style="padding:12px 14px;">
+          <div class="sidebar-card-title">Current View</div>
+          <div class="sidebar-card-value">{st.session_state['workspace_view']}</div>
+          <div class="sidebar-card-note">你要的多欄位入口現在都集中在左側，不需要拆成太多主頁面。</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
     )
 
     st.markdown(
@@ -2320,7 +2369,7 @@ if page == "🏠 首頁":
 # PAGE 2: 市場總覽 / Market Overview
 # ════════════════════════════════════════════════════════════════════════════
 
-elif page == "🌍 市場總覽":
+elif page == "🔬 分析控制台" and st.session_state.get("workspace_view") == "🌍 市場總覽":
     st.markdown('<div class="hero-title" style="font-size:2rem; text-align:left;">🌍 市場總覽</div>', unsafe_allow_html=True)
     st.markdown('<div class="hero-subtitle" style="text-align:left; margin-bottom:20px;">把全球市場脈動、事件地圖與精選重大事件拆成同一個總覽頁</div>', unsafe_allow_html=True)
 
@@ -2474,7 +2523,7 @@ elif page == "🌍 市場總覽":
 # PAGE 3: 台灣專區 / Taiwan Hub
 # ════════════════════════════════════════════════════════════════════════════
 
-elif page == "🇹🇼 台灣專區":
+elif page == "🔬 分析控制台" and st.session_state.get("workspace_view") == "🇹🇼 台灣專區":
     tw_focus = build_taiwan_focus_summary()
     latest_tw = tw_focus["latest_event"]
     tw_events = sorted([e for e in HISTORICAL_EVENTS if get_event_region(e) == "台灣"], key=lambda x: x["date"], reverse=True)
@@ -2589,7 +2638,7 @@ elif page == "🇹🇼 台灣專區":
 # PAGE 4: 事件分析 / Event Analysis
 # ════════════════════════════════════════════════════════════════════════════
 
-elif page == "🔬 事件分析":
+elif page == "🔬 分析控制台" and st.session_state.get("workspace_view") == "🔬 事件分析":
     st.markdown('<div class="hero-title" style="font-size:2rem; text-align:left;">🔬 事件情境分析</div>', unsafe_allow_html=True)
     st.markdown('<div class="hero-subtitle" style="text-align:left; margin-bottom:20px;">選擇歷史事件，模擬其對各金融資產的衝擊與傳導路徑</div>', unsafe_allow_html=True)
 
@@ -3721,7 +3770,7 @@ elif page == "🔬 事件分析":
 # PAGE 5: 投組壓測 / Portfolio Stress Test
 # ════════════════════════════════════════════════════════════════════════════
 
-elif page == "💼 投組壓測":
+elif page == "🔬 分析控制台" and st.session_state.get("workspace_view") == "💼 投組壓測":
     st.markdown('<div class="hero-title" style="font-size:2rem; text-align:left;">💼 投組壓測</div>', unsafe_allow_html=True)
     st.markdown('<div class="hero-subtitle" style="text-align:left; margin-bottom:20px;">把投資組合設定、風險指標與多投組比較獨立成一頁，避免和事件選擇混在一起</div>', unsafe_allow_html=True)
 
@@ -3939,7 +3988,7 @@ elif page == "💼 投組壓測":
 # PAGE 6: 事件比較 / Event Comparison
 # ════════════════════════════════════════════════════════════════════════════
 
-elif page == "⚔️ 事件比較":
+elif page == "🔬 分析控制台" and st.session_state.get("workspace_view") == "⚔️ 事件比較":
     st.markdown('<div class="hero-title" style="font-size:2rem; text-align:left;">⚔️ 事件比較</div>', unsafe_allow_html=True)
     st.markdown('<div class="hero-subtitle" style="text-align:left; margin-bottom:20px;">把雙事件對照獨立成一頁，專心比較哪個情境更傷、哪個資產差異最大</div>', unsafe_allow_html=True)
 
