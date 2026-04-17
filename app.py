@@ -303,6 +303,15 @@ st.markdown(
         box-shadow: 0 18px 38px rgba(136, 123, 110, 0.12);
         animation: ambientDrift 13s ease-in-out infinite alternate;
     }
+    .hero-section::after {
+        content: "";
+        position: absolute;
+        inset: auto -8% -36% auto;
+        width: 320px;
+        height: 320px;
+        background: radial-gradient(circle, rgba(255,255,255,0.42) 0%, rgba(255,255,255,0.08) 48%, transparent 72%);
+        pointer-events: none;
+    }
     .hero-title {
         font-size: 2.8rem;
         font-weight: 800;
@@ -328,6 +337,80 @@ st.markdown(
         text-transform: uppercase;
         animation: softBob 3.8s ease-in-out infinite;
     }
+    .hero-meta-row {
+        margin-top: 22px;
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+    .hero-meta-pill {
+        padding: 10px 14px;
+        border-radius: 16px;
+        background: rgba(255, 251, 247, 0.68);
+        border: 1px solid rgba(171, 164, 155, 0.24);
+        color: var(--text-main);
+        font-size: 0.92rem;
+        font-weight: 700;
+        box-shadow: 0 10px 22px rgba(136, 123, 110, 0.08);
+        backdrop-filter: blur(6px);
+    }
+    .cta-strip {
+        background: linear-gradient(135deg, rgba(255,251,247,0.98) 0%, rgba(239,232,224,0.98) 100%);
+        border: 1px solid rgba(171, 164, 155, 0.26);
+        border-radius: 24px;
+        padding: 22px 24px;
+        box-shadow: 0 18px 36px rgba(136, 123, 110, 0.08);
+        margin: 20px 0 8px 0;
+    }
+    .cta-strip-title {
+        color: var(--accent-strong);
+        font-size: 1.22rem;
+        font-weight: 800;
+    }
+    .cta-strip-note {
+        color: var(--text-muted);
+        font-size: 0.96rem;
+        line-height: 1.7;
+        margin-top: 8px;
+    }
+    .cta-mini-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 16px;
+    }
+    .cta-mini-card {
+        background: rgba(255, 250, 246, 0.84);
+        border: 1px solid rgba(171, 164, 155, 0.22);
+        border-radius: 18px;
+        padding: 14px 16px;
+        min-height: 116px;
+        transition: transform 0.22s ease, box-shadow 0.22s ease;
+    }
+    .cta-mini-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 14px 28px rgba(136, 123, 110, 0.08);
+    }
+    .cta-mini-label {
+        color: var(--text-muted);
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+    }
+    .cta-mini-value {
+        color: var(--accent-strong);
+        font-size: 1.05rem;
+        font-weight: 800;
+        margin-top: 8px;
+        line-height: 1.45;
+    }
+    .cta-mini-note {
+        color: var(--text-main);
+        font-size: 0.9rem;
+        margin-top: 8px;
+        line-height: 1.55;
+    }
     .visual-card {
         position: relative;
         overflow: hidden;
@@ -336,12 +419,21 @@ st.markdown(
         min-height: 260px;
         box-shadow: 0 16px 34px rgba(136, 123, 110, 0.10);
         background: linear-gradient(180deg, rgba(255,251,247,0.96) 0%, rgba(243,236,228,0.98) 100%);
+        transition: transform 0.24s ease, box-shadow 0.24s ease;
+    }
+    .visual-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(136, 123, 110, 0.14);
     }
     .visual-card img {
         width: 100%;
         height: 100%;
         object-fit: cover;
         display: block;
+        transition: transform 0.45s ease;
+    }
+    .visual-card:hover img {
+        transform: scale(1.035);
     }
     .visual-card-overlay {
         position: absolute;
@@ -484,6 +576,56 @@ st.markdown(
         font-size: 0.82rem;
         font-weight: 700;
     }
+    .web-lane {
+        display: grid;
+        grid-template-columns: 1.4fr 1fr;
+        gap: 16px;
+        margin: 12px 0 22px 0;
+    }
+    .web-lane-card {
+        background: linear-gradient(180deg, rgba(255, 251, 247, 0.98) 0%, rgba(243, 236, 228, 0.98) 100%);
+        border: 1px solid rgba(171, 164, 155, 0.24);
+        border-radius: 22px;
+        padding: 20px 22px;
+        box-shadow: 0 16px 34px rgba(136, 123, 110, 0.08);
+        min-height: 170px;
+    }
+    .web-lane-title {
+        color: var(--accent-strong);
+        font-size: 1.08rem;
+        font-weight: 800;
+    }
+    .web-lane-note {
+        color: var(--text-muted);
+        font-size: 0.96rem;
+        line-height: 1.75;
+        margin-top: 10px;
+    }
+    .web-lane-stats {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 14px;
+    }
+    .web-lane-stat {
+        padding: 10px 12px;
+        border-radius: 14px;
+        background: rgba(255, 250, 246, 0.92);
+        border: 1px solid rgba(171, 164, 155, 0.22);
+        min-width: 138px;
+    }
+    .web-lane-stat-label {
+        color: var(--text-muted);
+        font-size: 0.76rem;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+    }
+    .web-lane-stat-value {
+        color: var(--accent-strong);
+        font-size: 1rem;
+        font-weight: 800;
+        margin-top: 6px;
+    }
     @keyframes fadeUp {
         from {
             opacity: 0;
@@ -514,6 +656,66 @@ st.markdown(
     @keyframes softBob {
         0%, 100% { transform: translateY(0px); }
         50% { transform: translateY(-3px); }
+    }
+    @media (max-width: 1100px) {
+        .hero-section {
+            padding: 32px 24px;
+            text-align: left;
+        }
+        .hero-title {
+            font-size: 2.2rem;
+        }
+        .hero-subtitle {
+            font-size: 1.02rem;
+        }
+        .hero-meta-row {
+            justify-content: flex-start;
+        }
+        .cta-mini-grid,
+        .web-lane {
+            grid-template-columns: 1fr;
+        }
+    }
+    @media (max-width: 768px) {
+        .hero-section {
+            padding: 26px 18px;
+            border-radius: 20px;
+        }
+        .hero-title {
+            font-size: 1.9rem;
+        }
+        .hero-kicker {
+            font-size: 0.72rem;
+            margin-bottom: 10px;
+        }
+        .hero-meta-pill {
+            width: 100%;
+            text-align: center;
+        }
+        .cta-strip {
+            padding: 18px 16px;
+            border-radius: 20px;
+        }
+        .cta-mini-grid {
+            grid-template-columns: 1fr;
+        }
+        .visual-card {
+            min-height: 220px;
+        }
+        .web-lane-card {
+            padding: 16px 16px;
+            min-height: 0;
+        }
+        .section-header {
+            font-size: 1.22rem;
+        }
+        [data-testid="stMetric"] {
+            padding: 10px 12px;
+        }
+        [data-testid="stSidebar"] {
+            min-width: 100%;
+            max-width: 100%;
+        }
     }
 
     /* Section headers */
@@ -1809,15 +2011,22 @@ with st.sidebar:
 # ════════════════════════════════════════════════════════════════════════════
 
 if page == "🏠 首頁":
+    latest_event = max(HISTORICAL_EVENTS, key=lambda e: e["date"])
+    latest_tw_event = max((e for e in HISTORICAL_EVENTS if get_event_region(e) == "台灣"), key=lambda e: e["date"], default=None)
     # Hero section
     st.markdown(
-        """
+        f"""
         <div class="hero-section">
           <div class="hero-kicker">Scenario Intelligence Studio</div>
           <div class="hero-title">📡 EventScope</div>
           <div class="hero-subtitle">金融事件情境模擬與衝擊傳導分析平台</div>
           <div style="margin-top:14px; color:var(--text-muted); font-size:0.98rem; font-weight:600;">
             Financial Event Simulation · Contagion Network · Monte Carlo Risk Assessment
+          </div>
+          <div class="hero-meta-row">
+            <div class="hero-meta-pill">最新事件：{latest_event["date"]} · {latest_event["name_zh"]}</div>
+            <div class="hero-meta-pill">台灣主線：{latest_tw_event["name_zh"] if latest_tw_event else "已建置台灣專區"}</div>
+            <div class="hero-meta-pill">分析路線：首頁 → 事件分析 → 投組壓測</div>
           </div>
           <div style="margin-top:22px; display:flex; justify-content:center; gap:10px; flex-wrap:wrap;">
             <span class="badge" style="background:rgba(143,168,161,0.12); color:var(--accent-strong); border:1px solid rgba(143,168,161,0.18);">事件研究</span>
@@ -1828,6 +2037,47 @@ if page == "🏠 首頁":
         """,
         unsafe_allow_html=True,
     )
+
+    st.markdown(
+        f"""
+        <div class="cta-strip fade-up">
+          <div class="cta-strip-title">把首頁真的變成入口頁</div>
+          <div class="cta-strip-note">從這裡可以直接跳去最常用的三條路線：用最新事件進分析、打開事件資料庫找素材，或直接載入台灣核心投組開始壓力測試。</div>
+          <div class="cta-mini-grid">
+            <div class="cta-mini-card">
+              <div class="cta-mini-label">Live Path</div>
+              <div class="cta-mini-value">最新全球事件進分析</div>
+              <div class="cta-mini-note">{latest_event['date']} · {latest_event['name_zh']}</div>
+            </div>
+            <div class="cta-mini-card">
+              <div class="cta-mini-label">Taiwan Path</div>
+              <div class="cta-mini-value">台灣主題直接展開</div>
+              <div class="cta-mini-note">{latest_tw_event['name_zh'] if latest_tw_event else '台灣事件庫已整理完成'}</div>
+            </div>
+            <div class="cta-mini-card">
+              <div class="cta-mini-label">Portfolio Path</div>
+              <div class="cta-mini-value">投組壓測快速入口</div>
+              <div class="cta-mini-note">用預設投組直接切到持倉壓力測試與事件比較。</div>
+            </div>
+          </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+    cta_btn1, cta_btn2, cta_btn3 = st.columns(3)
+    if cta_btn1.button("用最新事件開始分析", key="home_latest_analysis", use_container_width=True):
+        st.session_state["quick_event_id"] = latest_event["id"]
+        queue_nav("🔬 事件分析")
+        st.rerun()
+    if cta_btn2.button("打開台灣事件資料庫", key="home_latest_taiwan_db", use_container_width=True):
+        st.session_state["global_region_filter"] = "台灣"
+        queue_nav("📚 事件資料庫")
+        st.rerun()
+    if cta_btn3.button("台灣核心投組壓測", key="home_latest_taiwan_port", use_container_width=True):
+        st.session_state["portfolio_dict"] = PORTFOLIO_PRESETS["台灣核心"].copy()
+        st.session_state["portfolio_editor_rows"] = portfolio_to_rows(PORTFOLIO_PRESETS["台灣核心"])
+        queue_nav("🔬 事件分析")
+        st.rerun()
 
     hero_visuals = [
         (
@@ -1853,6 +2103,27 @@ if page == "🏠 首頁":
     for col, card in zip([hv1, hv2, hv3], hero_visuals):
         with col:
             st.markdown(build_visual_card_html(*card), unsafe_allow_html=True)
+
+    st.markdown(
+        f"""
+        <div class="web-lane">
+          <div class="web-lane-card fade-up">
+            <div class="web-lane-title">為什麼這頁更像網站首頁</div>
+            <div class="web-lane-note">現在首頁不只是展示資料，而是把最新事件、台灣主線、事件資料庫與投組壓測串成可直接點擊的敘事入口。這樣在課堂展示或作品集情境裡，訪客一進來就知道下一步該去哪裡。</div>
+            <div class="web-lane-stats">
+              <div class="web-lane-stat"><div class="web-lane-stat-label">Global Focus</div><div class="web-lane-stat-value">{latest_event['name_zh']}</div></div>
+              <div class="web-lane-stat"><div class="web-lane-stat-label">Taiwan Focus</div><div class="web-lane-stat-value">{latest_tw_event['name_zh'] if latest_tw_event else '台灣事件庫'}</div></div>
+              <div class="web-lane-stat"><div class="web-lane-stat-label">Modules</div><div class="web-lane-stat-value">分析、比較、資料庫</div></div>
+            </div>
+          </div>
+          <div class="web-lane-card fade-up fade-delay-1">
+            <div class="web-lane-title">進站 30 秒內可完成</div>
+            <div class="web-lane-note">1. 看首頁脈動與事件熱點。 2. 點最新事件進分析。 3. 切到投組壓測看 Sharpe、Sortino、回撤與 VaR。整體路徑更像真正的金融研究儀表板。</div>
+          </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
     # Quick stats
     col1, col2, col3, col4 = st.columns(4)
