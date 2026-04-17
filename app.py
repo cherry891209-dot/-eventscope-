@@ -1754,7 +1754,7 @@ with st.sidebar:
 
     page = st.radio(
         "導覽",
-        options=["🏠 首頁", "🌍 市場總覽", "🇹🇼 台灣專區", "🔬 事件分析", "📚 事件資料庫", "📖 方法論說明"],
+        options=["🏠 首頁", "🌍 市場總覽", "🇹🇼 台灣專區", "🔬 事件分析", "💼 投組壓測", "⚔️ 事件比較", "📚 事件資料庫", "📖 方法論說明"],
         key="nav_page",
         label_visibility="collapsed",
     )
@@ -1769,8 +1769,8 @@ with st.sidebar:
           <div style="margin-top:6px;">
             <span class="sidebar-chip">市場總覽</span>
             <span class="sidebar-chip">台灣專區</span>
-            <span class="sidebar-chip">事件比較</span>
             <span class="sidebar-chip">投組壓測</span>
+            <span class="sidebar-chip">事件比較</span>
           </div>
           <div class="sidebar-mini-grid">
             <div class="sidebar-mini-tile">
@@ -1986,8 +1986,7 @@ with st.sidebar:
         st.session_state["portfolio_editor_rows"] = portfolio_to_rows(DEFAULT_PORTFOLIO)
         st.rerun()
     if action_col6.button("打開事件比較", use_container_width=True):
-        queue_nav("🔬 事件分析")
-        st.session_state["open_compare_tab"] = True
+        queue_nav("⚔️ 事件比較")
         st.rerun()
     if st.button("一鍵執行分析", use_container_width=True):
         queue_nav("🔬 事件分析")
@@ -2907,6 +2906,13 @@ elif page == "🔬 事件分析":
                 """,
                 unsafe_allow_html=True,
             )
+        flow_btn1, flow_btn2 = st.columns(2)
+        if flow_btn1.button("前往投組壓測頁", key="analysis_to_portfolio_page", use_container_width=True):
+            queue_nav("💼 投組壓測")
+            st.rerun()
+        if flow_btn2.button("前往事件比較頁", key="analysis_to_compare_page", use_container_width=True):
+            queue_nav("⚔️ 事件比較")
+            st.rerun()
 
         lead_asset = sim_results.sort_values("mean_return", ascending=False).iloc[0]
         risk_asset = sim_results.sort_values("p5").iloc[0]
@@ -3712,7 +3718,359 @@ elif page == "🔬 事件分析":
 
 
 # ════════════════════════════════════════════════════════════════════════════
-# PAGE 3: 事件資料庫 / Event Database
+# PAGE 5: 投組壓測 / Portfolio Stress Test
+# ════════════════════════════════════════════════════════════════════════════
+
+elif page == "💼 投組壓測":
+    st.markdown('<div class="hero-title" style="font-size:2rem; text-align:left;">💼 投組壓測</div>', unsafe_allow_html=True)
+    st.markdown('<div class="hero-subtitle" style="text-align:left; margin-bottom:20px;">把投資組合設定、風險指標與多投組比較獨立成一頁，避免和事件選擇混在一起</div>', unsafe_allow_html=True)
+
+    if not st.session_state.get("analysis_done") or st.session_state.get("simulation_results") is None:
+        st.markdown(
+            """
+            <div class="info-box" style="text-align:center; padding:30px;">
+              先在「🔬 事件分析」完成一次模擬，這裡才會帶入該事件的投組壓力測試結果。
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+        if st.button("前往事件分析", use_container_width=True, key="go_analysis_from_portfolio"):
+            queue_nav("🔬 事件分析")
+            st.rerun()
+    else:
+        current_event = st.session_state.get("selected_event")
+        sim_results = st.session_state["simulation_results"]
+        port_result = st.session_state.get("portfolio_result")
+        st.markdown(
+            f"""
+            <div class="summary-banner fade-up">
+              <div class="summary-banner-title">Current Stress Workspace</div>
+              <div class="summary-banner-lead">目前壓測基於事件：{current_event["name_zh"] if current_event else "未命名事件"}。你可以在這頁專心調整投組、看 Sharpe / Sortino / 回撤與多投組比較，不用被其他分析模組打斷。</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+        current_portfolio = st.session_state.get("portfolio_dict", DEFAULT_PORTFOLIO.copy())
+        action_col1, action_col2, action_col3 = st.columns([1.2, 1, 1])
+        with action_col1:
+            preset_name = st.selectbox("預設配置", list(PORTFOLIO_PRESETS.keys()), key="portfolio_page_preset")
+        with action_col2:
+            input_mode = st.radio("編輯方式", ["快速配置器", "文字輸入"], horizontal=True, key="portfolio_page_input_mode")
+        with action_col3:
+            st.markdown(
+                f"""
+                <div class="glass-panel" style="padding:12px 14px; min-height:84px;">
+                  <div class="summary-tile-label">目前資產數</div>
+                  <div class="summary-tile-value" style="font-size:1.05rem;">{len(current_portfolio)} 檔</div>
+                  <div class="summary-tile-note">權重總和 {sum(current_portfolio.values()):.1%}</div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+
+        preset_btn1, preset_btn2, preset_btn3 = st.columns(3)
+        if preset_btn1.button("套用預設配置", use_container_width=True, key="portfolio_page_apply_preset"):
+            preset_portfolio = PORTFOLIO_PRESETS[preset_name].copy()
+            st.session_state["portfolio_dict"] = preset_portfolio
+            st.session_state["portfolio_editor_rows"] = portfolio_to_rows(preset_portfolio)
+            current_portfolio = preset_portfolio
+        if preset_btn2.button("平均分配目前資產", use_container_width=True, key="portfolio_page_equal"):
+            tickers = list(current_portfolio.keys()) or list(DEFAULT_PORTFOLIO.keys())
+            equal_weight = 1 / len(tickers)
+            equal_portfolio = {ticker: equal_weight for ticker in tickers}
+            st.session_state["portfolio_dict"] = equal_portfolio
+            st.session_state["portfolio_editor_rows"] = portfolio_to_rows(equal_portfolio)
+            current_portfolio = equal_portfolio
+        if preset_btn3.button("重設為課堂示範", use_container_width=True, key="portfolio_page_reset"):
+            st.session_state["portfolio_dict"] = DEFAULT_PORTFOLIO.copy()
+            st.session_state["portfolio_editor_rows"] = portfolio_to_rows(DEFAULT_PORTFOLIO)
+            current_portfolio = DEFAULT_PORTFOLIO.copy()
+
+        pt_col1, pt_col2 = st.columns([2.2, 1])
+        if input_mode == "文字輸入":
+            with pt_col1:
+                port_input = st.text_area(
+                    "輸入投資組合（格式：TICKER:權重%）",
+                    value="\n".join(f"{t}:{w*100:.0f}%" for t, w in current_portfolio.items()),
+                    height=180,
+                    key="portfolio_page_text_area",
+                )
+                port_dict = parse_portfolio_input(port_input) or current_portfolio
+            with pt_col2:
+                st.markdown(
+                    '<div class="info-box">支援格式：<br><code>TICKER:30%</code><br><code>TICKER:0.30</code><br><br>適合熟悉 ticker 的快速調整。</div>',
+                    unsafe_allow_html=True,
+                )
+        else:
+            with pt_col1:
+                editor_rows = st.data_editor(
+                    st.session_state.get("portfolio_editor_rows", portfolio_to_rows(current_portfolio)),
+                    num_rows="dynamic",
+                    use_container_width=True,
+                    hide_index=True,
+                    column_config={
+                        "Ticker": st.column_config.SelectboxColumn("Ticker", options=list(ASSET_UNIVERSE.keys()), required=True),
+                        "資產名稱": st.column_config.TextColumn("資產名稱", disabled=True),
+                        "類別": st.column_config.TextColumn("類別", disabled=True),
+                        "權重 (%)": st.column_config.NumberColumn("權重 (%)", min_value=0.0, max_value=100.0, step=1.0, format="%.2f"),
+                    },
+                    key="portfolio_page_editor",
+                )
+                hydrated_rows = []
+                for row in editor_rows:
+                    ticker = str(row.get("Ticker", "")).strip().upper()
+                    info = ASSET_UNIVERSE.get(ticker, {})
+                    hydrated_rows.append(
+                        {"Ticker": ticker, "資產名稱": info.get("name_zh", ticker), "類別": info.get("category", "其他"), "權重 (%)": row.get("權重 (%)", 0.0)}
+                    )
+                st.session_state["portfolio_editor_rows"] = hydrated_rows
+                port_dict = rows_to_portfolio(hydrated_rows) or current_portfolio
+            with pt_col2:
+                st.markdown(
+                    """
+                    <div class="glass-panel">
+                      <div class="summary-tile-label">配置器說明</div>
+                      <div class="summary-tile-note" style="margin-top:10px;">可以直接新增或刪除列，並用下拉選擇資產。這頁只處理投組，不再混事件比較。</div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+
+        is_valid, val_msg = validate_portfolio(port_dict)
+        if is_valid:
+            normalized_portfolio = normalize_portfolio_weights(port_dict)
+            st.session_state["portfolio_dict"] = normalized_portfolio
+            st.session_state["portfolio_editor_rows"] = portfolio_to_rows(normalized_portfolio)
+            port_dict = normalized_portfolio
+            st.success(val_msg)
+        else:
+            st.warning(val_msg)
+            port_dict = current_portfolio
+            st.session_state["portfolio_dict"] = current_portfolio
+
+        port_result = portfolio_stress_test(port_dict, sim_results)
+        st.session_state["portfolio_result"] = port_result
+
+        top_metrics = st.columns(5)
+        primary_metrics = [
+            ("期望報酬", port_result["expected_return"], "", True),
+            ("夏普值", port_result["sharpe_ratio"], "以 0 無風險利率計算", False),
+            ("Sortino", port_result["sortino_ratio"], "只看下行波動", False),
+            ("最大回撤", port_result["max_drawdown"], "模擬路徑中的最深跌幅", True),
+            ("風險分級", port_result["risk_grade"], f"基準 {port_result['benchmark_ticker']}", None),
+        ]
+        for col, (label, val, help_text, as_percent) in zip(top_metrics, primary_metrics):
+            with col:
+                if label == "風險分級":
+                    st.metric(label, str(val), help=help_text)
+                else:
+                    st.metric(label, f"{val:.2%}" if as_percent else f"{val:.2f}", help=help_text)
+
+        m1, m2, m3, m4, m5, m6, m7 = st.columns(7)
+        metrics = [
+            ("波動率", port_result["volatility"], "模擬報酬標準差"),
+            ("Calmar", port_result["calmar_ratio"], "報酬 / 最大回撤"),
+            ("Alpha", port_result["alpha"], f"相對 {port_result['benchmark_ticker']} 的超額報酬"),
+            ("Beta", port_result["beta"], f"相對 {port_result['benchmark_ticker']} 的敏感度"),
+            ("勝率", port_result["win_rate"], "模擬結果為正的比例"),
+            ("盈虧比", port_result["profit_loss_ratio"], "平均獲利 / 平均虧損"),
+            ("VaR (95%)", port_result["var_95"], "5%最壞情境"),
+        ]
+        for col, (label, val, help_text) in zip([m1, m2, m3, m4, m5, m6, m7], metrics):
+            with col:
+                st.metric(label, f"{val:.2f}" if label in {"Calmar", "Alpha", "Beta", "盈虧比"} else f"{val:.2%}", help=help_text)
+
+        st.plotly_chart(plot_portfolio_waterfall(port_result, port_dict), use_container_width=True)
+
+        port_paths = port_result.get("simulation_paths", np.array([0.0]))
+        fig_hist = go.Figure()
+        fig_hist.add_trace(go.Histogram(x=port_paths * 100, nbinsx=60, name="組合報酬模擬", marker_color="#5588bb", opacity=0.7))
+        fig_hist.add_vline(x=port_result["var_95"] * 100, line_dash="dash", line_color="#c48f87", annotation_text="  VaR 95%", annotation_font_color="#c48f87")
+        fig_hist.add_vline(x=port_result["expected_return"] * 100, line_dash="dash", line_color="#7f998f", annotation_text="  期望值", annotation_font_color="#7f998f")
+        fig_hist.update_layout(
+            plot_bgcolor="#f7f3ee", paper_bgcolor="#fffaf5", font=dict(color="#4f5a59"), height=280,
+            title=dict(text="投資組合報酬模擬分佈", font=dict(color="#677f78", size=14)),
+            xaxis_title="報酬 (%)", showlegend=False, margin=dict(l=40, r=20, t=50, b=40),
+        )
+        st.plotly_chart(fig_hist, use_container_width=True)
+
+        st.markdown('<div class="section-header" style="font-size:1rem;">📚 多投組比較</div>', unsafe_allow_html=True)
+        compare_portfolios_dict = {"目前投組": port_dict}
+        for name, portfolio in PORTFOLIO_PRESETS.items():
+            compare_portfolios_dict[f"預設｜{name}"] = portfolio
+        for name, portfolio in st.session_state.get("saved_portfolios", {}).items():
+            compare_portfolios_dict[f"自訂｜{name}"] = portfolio
+        portfolio_compare_df = compare_portfolios(compare_portfolios_dict, sim_results)
+        if not portfolio_compare_df.empty:
+            display_portfolio_compare_df = portfolio_compare_df.copy()
+            for col_name in ["期望報酬", "最大回撤", "勝率", "VaR 95%", "CVaR", "最佳情境"]:
+                display_portfolio_compare_df[col_name] = display_portfolio_compare_df[col_name].map(lambda x: f"{x:.2%}")
+            for col_name in ["夏普值", "Sortino", "Calmar", "盈虧比"]:
+                display_portfolio_compare_df[col_name] = display_portfolio_compare_df[col_name].map(lambda x: f"{float(x):.2f}")
+            st.dataframe(display_portfolio_compare_df, use_container_width=True, hide_index=True)
+
+        st.markdown('<div class="section-header" style="font-size:1rem;">🛡️ 對沖建議</div>', unsafe_allow_html=True)
+        hedges = get_hedge_suggestions(port_dict, sim_results, current_event["category"] if current_event else "")
+        for h in hedges:
+            asset_name = ASSET_UNIVERSE.get(h["asset"], {}).get("name_zh", h["asset"])
+            eff_pct = int(h["hedge_effectiveness"] * 100)
+            ret_color = "#00c853" if h["expected_return"] >= 0 else "#ff3d3d"
+            already = "（已持有）" if h.get("already_in_portfolio") else ""
+            st.markdown(
+                f"""
+                <div class="event-card" style="border-left-color:#00c853;">
+                  <h4>🛡️ {asset_name} ({h['asset']}) {already}</h4>
+                  <p>{h['reason_zh']}</p>
+                  <div style="margin-top:8px; font-size:0.85rem;">
+                    <span style="color:var(--text-muted);">預期報酬：</span>
+                    <span style="color:{ret_color}; font-weight:600;">{h['expected_return']:.2%}</span>
+                    &nbsp;&nbsp;
+                    <span style="color:var(--text-muted);">對沖有效性：</span>
+                    <span style="color:#00c853; font-weight:600;">{eff_pct}%</span>
+                  </div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+
+
+# ════════════════════════════════════════════════════════════════════════════
+# PAGE 6: 事件比較 / Event Comparison
+# ════════════════════════════════════════════════════════════════════════════
+
+elif page == "⚔️ 事件比較":
+    st.markdown('<div class="hero-title" style="font-size:2rem; text-align:left;">⚔️ 事件比較</div>', unsafe_allow_html=True)
+    st.markdown('<div class="hero-subtitle" style="text-align:left; margin-bottom:20px;">把雙事件對照獨立成一頁，專心比較哪個情境更傷、哪個資產差異最大</div>', unsafe_allow_html=True)
+
+    if not st.session_state.get("analysis_done") or st.session_state.get("simulation_results") is None:
+        st.markdown(
+            """
+            <div class="info-box" style="text-align:center; padding:30px;">
+              先在「🔬 事件分析」完成主事件模擬，這裡才會用它當基準去做雙事件比較。
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+        if st.button("前往事件分析", use_container_width=True, key="go_analysis_from_compare"):
+            queue_nav("🔬 事件分析")
+            st.rerun()
+    else:
+        current_event = st.session_state.get("selected_event")
+        sim_results = st.session_state["simulation_results"]
+        hist_cars = st.session_state.get("historical_cars")
+        port_result = st.session_state.get("portfolio_result")
+        selected_tickers = st.session_state.get("selected_tickers", list(DEFAULT_PORTFOLIO.keys()))
+
+        compare_candidates = [e for e in HISTORICAL_EVENTS if e["id"] != current_event.get("id")]
+        compare_options = {
+            f"{e['date']} · {e['category']} · {e['name_zh']}": e["id"]
+            for e in sorted(compare_candidates, key=lambda x: x["date"], reverse=True)
+        }
+        select_col1, select_col2 = st.columns([2, 1])
+        with select_col1:
+            compare_label = st.selectbox("選擇第二個事件做對照", list(compare_options.keys()), key="compare_page_event_select")
+        with select_col2:
+            compare_intensity = st.slider("比較事件強度", min_value=0.5, max_value=2.0, value=1.0, step=0.1, key="compare_page_event_intensity")
+        compare_event = get_event_by_id(compare_options[compare_label])
+
+        st.markdown(
+            f"""
+            <div class="summary-banner fade-up">
+              <div class="summary-banner-title">Base Event</div>
+              <div class="summary-banner-lead">目前主事件是 {current_event["name_zh"]}。在這頁你只要挑第二個事件，系統就會直接比較資產衝擊、尾端風險與投組差異。</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+        run_compare = st.button("生成事件比較", use_container_width=True, key="run_compare_page")
+        if run_compare and compare_event:
+            compare_hist = cached_historical_cars(compare_event["id"], tuple(selected_tickers))
+            compare_sim_results = cached_simulate(compare_event["id"], tuple(selected_tickers), compare_intensity)
+            compare_port = portfolio_stress_test(st.session_state["portfolio_dict"], compare_sim_results)
+            compare_summary = build_event_comparison_summary(current_event, sim_results, compare_event, compare_sim_results)
+
+            bullets_html = "".join(f"<li>{bullet}</li>" for bullet in compare_summary["bullets"])
+            st.markdown(
+                f"""
+                <div class="summary-banner fade-up">
+                  <div class="summary-banner-title">Compare Two Events</div>
+                  <div class="summary-banner-lead">{compare_summary["headline"]}</div>
+                  <ul style="margin:12px 0 4px 18px; line-height:1.75;">{bullets_html}</ul>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+
+            top_changes = compare_summary["top_changes"].copy()
+            if not top_changes.empty:
+                compare_delta_cols = st.columns(4)
+                compare_delta_metrics = [
+                    ("夏普差", port_result["sharpe_ratio"] - compare_port["sharpe_ratio"], False),
+                    ("Sortino 差", port_result["sortino_ratio"] - compare_port["sortino_ratio"], False),
+                    ("最大回撤差", port_result["max_drawdown"] - compare_port["max_drawdown"], True),
+                    ("勝率差", port_result["win_rate"] - compare_port["win_rate"], True),
+                ]
+                for col, (label, val, as_pct) in zip(compare_delta_cols, compare_delta_metrics):
+                    with col:
+                        st.metric(label, f"{val:+.2%}" if as_pct else f"{val:+.2f}")
+
+                card_col1, card_col2 = st.columns(2)
+                with card_col1:
+                    st.markdown(
+                        f"""
+                        <div class="glass-panel">
+                          <div class="mini-section-title">{current_event['name_zh']}</div>
+                          <div class="summary-tile-value" style="margin-top:0;">{port_result['var_95']:.2%}</div>
+                          <div class="summary-tile-note">投組 VaR 95%，期望報酬 {port_result['expected_return']:.2%}，夏普值 {port_result['sharpe_ratio']:.2f}，Sortino {port_result['sortino_ratio']:.2f}</div>
+                        </div>
+                        """,
+                        unsafe_allow_html=True,
+                    )
+                with card_col2:
+                    st.markdown(
+                        f"""
+                        <div class="glass-panel">
+                          <div class="mini-section-title">{compare_event['name_zh']}</div>
+                          <div class="summary-tile-value" style="margin-top:0;">{compare_port['var_95']:.2%}</div>
+                          <div class="summary-tile-note">投組 VaR 95%，期望報酬 {compare_port['expected_return']:.2%}，夏普值 {compare_port['sharpe_ratio']:.2f}，Sortino {compare_port['sortino_ratio']:.2f}</div>
+                        </div>
+                        """,
+                        unsafe_allow_html=True,
+                    )
+
+                compare_table = top_changes[["ticker", "mean_return_base", "mean_return_compare", "mean_gap", "p5_base", "p5_compare", "risk_gap"]].copy()
+                compare_table.insert(1, "名稱", compare_table["ticker"].apply(format_asset_label))
+                compare_table.columns = ["資產", "名稱", f"{current_event['name_zh']} 期望報酬", f"{compare_event['name_zh']} 期望報酬", "期望報酬差", f"{current_event['name_zh']} P5", f"{compare_event['name_zh']} P5", "下跌機率差"]
+                for col_name in compare_table.columns[2:]:
+                    compare_table[col_name] = compare_table[col_name].apply(lambda x: f"{float(x):+.2%}")
+                st.dataframe(compare_table, use_container_width=True, hide_index=True)
+
+                if compare_hist is not None and not compare_hist.empty:
+                    base_scenarios = generate_scenario_comparison(hist_cars) if hist_cars is not None and not hist_cars.empty else {}
+                    compare_scenarios = generate_scenario_comparison(compare_hist)
+                    scen_col1, scen_col2 = st.columns(2)
+                    for col, title, scen_data in [
+                        (scen_col1, current_event["name_zh"], base_scenarios),
+                        (scen_col2, compare_event["name_zh"], compare_scenarios),
+                    ]:
+                        with col:
+                            st.markdown(f'<div class="section-header" style="font-size:1rem;">{title} 情境帶</div>', unsafe_allow_html=True)
+                            for scen_key, scen_label in [("best", "樂觀"), ("base", "基準"), ("worst", "悲觀")]:
+                                vals = scen_data.get(scen_key, {})
+                                avg_val = np.mean(list(vals.values())) if vals else 0.0
+                                val_color = "#8fa8a1" if avg_val >= 0 else "#c48f87"
+                                st.markdown(
+                                    f"<div style='display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid rgba(171,164,155,0.18);'>"
+                                    f"<span style='color:var(--text-main); font-weight:700;'>{scen_label}</span>"
+                                    f"<span style='color:{val_color}; font-weight:700;'>{avg_val:+.2%}</span>"
+                                    f"</div>",
+                                    unsafe_allow_html=True,
+                                )
+
+
+# ════════════════════════════════════════════════════════════════════════════
+# PAGE 7: 事件資料庫 / Event Database
 # ════════════════════════════════════════════════════════════════════════════
 
 elif page == "📚 事件資料庫":
