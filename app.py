@@ -1022,6 +1022,7 @@ def svg_to_data_uri(svg: str) -> str:
 
 
 def build_scene_image(scene: str, accent: str = "#7f998f", secondary: str = "#c8a092") -> str:
+    return build_real_scene_image(scene)
     if scene == "market":
         svg = f"""
         <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 620'>
@@ -1273,12 +1274,27 @@ FEATURED_EVENT_IMAGE_URLS = {
     "argentina_default_2001": "https://commons.wikimedia.org/wiki/Special:FilePath/Trading%20Floor%20at%20the%20New%20York%20Stock%20Exchange.jpg",
 }
 
+REAL_SCENE_IMAGE_URLS = {
+    "market": "https://commons.wikimedia.org/wiki/Special:FilePath/Trading%20Floor%20at%20the%20New%20York%20Stock%20Exchange.jpg",
+    "semiconductor": "https://commons.wikimedia.org/wiki/Special:FilePath/Semiconductor%20Wafer%20of%20Microelectronics.jpg",
+    "rates": "https://commons.wikimedia.org/wiki/Special:FilePath/Federal%20reserve%20building%201160435.jpg",
+    "disaster": "https://commons.wikimedia.org/wiki/Special:FilePath/Tsunami%20Japan%202011.jpg",
+    "election": "https://commons.wikimedia.org/wiki/Special:FilePath/Kyiv%20skyline%20%2815688086793%29.jpg",
+    "banking": "https://commons.wikimedia.org/wiki/Special:FilePath/Federal%20Reserve%20Bank%20Building%20%2836344p%29.jpg",
+    "taiwan": "https://commons.wikimedia.org/wiki/Special:FilePath/Taipei%20Skyline%2020220708.jpg",
+    "network": "https://commons.wikimedia.org/wiki/Special:FilePath/London%20Skyline%20%2848053680396%29.jpg",
+}
+
 
 def build_remote_event_image(event_id: str) -> str:
     if event_id in FEATURED_EVENT_IMAGE_URLS:
         return FEATURED_EVENT_IMAGE_URLS[event_id]
     query = FEATURED_EVENT_IMAGE_QUERIES.get(event_id, "global finance market")
     return f"https://picsum.photos/seed/{quote(query + '-' + event_id)}/1200/800"
+
+
+def build_real_scene_image(scene: str) -> str:
+    return REAL_SCENE_IMAGE_URLS.get(scene, REAL_SCENE_IMAGE_URLS["market"])
 
 
 def build_event_marquee_html(events: list[dict]) -> str:
