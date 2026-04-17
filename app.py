@@ -2580,20 +2580,23 @@ elif page == "🔬 事件分析":
             top_gain = sim_results.sort_values("mean_return", ascending=False).iloc[0]
             top_loss = sim_results.sort_values("mean_return", ascending=True).iloc[0]
             most_uncertain = sim_results.sort_values("std_return", ascending=False).iloc[0]
-            t1c1, t1c2, t1c3 = st.columns(3)
+            best_sharpe = sim_results.sort_values("sharpe_ratio", ascending=False).iloc[0]
+            t1c1, t1c2, t1c3, t1c4 = st.columns(4)
             tab1_tiles = [
                 ("上行潛力最高", top_gain, "mean_return", "positive", f"P95 {float(top_gain['p95']):.2%}"),
                 ("下行壓力最大", top_loss, "mean_return", "negative", f"P5 {float(top_loss['p5']):.2%}"),
                 ("波動最大資產", most_uncertain, "std_return", "", f"下跌機率 {float(most_uncertain['prob_negative']):.1%}"),
+                ("夏普值最佳", best_sharpe, "sharpe_ratio", "positive" if float(best_sharpe["sharpe_ratio"]) >= 0 else "negative", f"風險調整後報酬最佳，期望報酬 {float(best_sharpe['mean_return']):.2%}"),
             ]
-            for col, (label, row, metric_key, value_class, note) in zip([t1c1, t1c2, t1c3], tab1_tiles):
+            for col, (label, row, metric_key, value_class, note) in zip([t1c1, t1c2, t1c3, t1c4], tab1_tiles):
                 with col:
+                    metric_value = f"{float(row[metric_key]):.2f}" if metric_key == "sharpe_ratio" else f"{float(row[metric_key]):.2%}"
                     st.markdown(
                         f"""
                         <div class="glass-panel fade-up fade-delay-2">
                           <div class="mini-section-title">{label}</div>
                           <div style="color:var(--text-main); font-weight:700;">{format_asset_label(str(row['ticker']))}</div>
-                          <div class="spotlight-value {value_class}" style="font-size:1.15rem;">{float(row[metric_key]):.2%}</div>
+                          <div class="spotlight-value {value_class}" style="font-size:1.15rem;">{metric_value}</div>
                           <div class="spotlight-note" style="margin-top:6px;">{note}</div>
                         </div>
                         """,
@@ -3178,7 +3181,7 @@ elif page == "🔬 事件分析":
                             <div class="glass-panel">
                               <div class="mini-section-title">{current_event['name_zh']}</div>
                               <div class="summary-tile-value" style="margin-top:0;">{port_result['var_95']:.2%}</div>
-                              <div class="summary-tile-note">投組 VaR 95%，期望報酬 {port_result['expected_return']:.2%}</div>
+                              <div class="summary-tile-note">投組 VaR 95%，期望報酬 {port_result['expected_return']:.2%}，夏普值 {port_result['sharpe_ratio']:.2f}</div>
                             </div>
                             """,
                             unsafe_allow_html=True,
@@ -3189,7 +3192,7 @@ elif page == "🔬 事件分析":
                             <div class="glass-panel">
                               <div class="mini-section-title">{compare_event['name_zh']}</div>
                               <div class="summary-tile-value" style="margin-top:0;">{compare_port['var_95']:.2%}</div>
-                              <div class="summary-tile-note">投組 VaR 95%，期望報酬 {compare_port['expected_return']:.2%}</div>
+                              <div class="summary-tile-note">投組 VaR 95%，期望報酬 {compare_port['expected_return']:.2%}，夏普值 {compare_port['sharpe_ratio']:.2f}</div>
                             </div>
                             """,
                             unsafe_allow_html=True,
