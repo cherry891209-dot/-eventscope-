@@ -1352,12 +1352,12 @@ FEATURED_EVENT_IMAGE_URLS = {
     "covid_crash_2020": "https://commons.wikimedia.org/wiki/Special:FilePath/Empty%20Eagle%20Street%20during%20the%20COVID-19%20pandemic%20in%20Brisbane,%20Australia%2005.jpg",
     "fed_hike_cycle_2022": "https://commons.wikimedia.org/wiki/Special:FilePath/Federal%20reserve%20building%201160435.jpg",
     "deepseek_shock_2025": "https://commons.wikimedia.org/wiki/Special:FilePath/Semiconductor%20Wafer%20of%20Microelectronics.jpg",
-    "russia_ukraine_2022": "https://commons.wikimedia.org/wiki/Special:FilePath/2022%20Russian%20invasion%20of%20Ukraine%20simplifed.svg",
-    "asian_financial_crisis_1997": "https://commons.wikimedia.org/wiki/Special:FilePath/Trading%20Floor%20at%20the%20New%20York%20Stock%20Exchange.jpg",
-    "uk_gilt_crisis_2022": "https://commons.wikimedia.org/wiki/Special:FilePath/Federal%20Reserve%20Bank%20Building%20%2836344p%29.jpg",
+    "russia_ukraine_2022": "https://commons.wikimedia.org/wiki/Special:FilePath/Bomb%20attack%20on%20Saltivske%20tram%20depot%20in%20Kharkiv.jpg",
+    "asian_financial_crisis_1997": "https://commons.wikimedia.org/wiki/Special:FilePath/Sathorn%20Unique%20Tower%20%28I%29.jpg",
+    "uk_gilt_crisis_2022": "https://commons.wikimedia.org/wiki/Special:FilePath/London%20financial%20district.jpg",
     "india_rice_ban_2023": "https://commons.wikimedia.org/wiki/Special:FilePath/Wheat%20Field%20in%20India.jpg",
     "japan_earthquake_2011": "https://commons.wikimedia.org/wiki/Special:FilePath/Tsunami%20Japan%202011.jpg",
-    "argentina_default_2001": "https://commons.wikimedia.org/wiki/Special:FilePath/Trading%20Floor%20at%20the%20New%20York%20Stock%20Exchange.jpg",
+    "argentina_default_2001": "https://commons.wikimedia.org/wiki/Special:FilePath/Cacerolazo%20Argentina%202001-2002.jpg",
 }
 
 REAL_SCENE_IMAGE_URLS = {
