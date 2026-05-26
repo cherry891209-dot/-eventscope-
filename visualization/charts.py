@@ -8,13 +8,13 @@ import plotly.express as px
 from plotly.subplots import make_subplots
 
 # ─── Color palette ──────────────────────────────────────────────────────────
-BG_COLOR = "#f7f3ee"
-PAPER_BG = "#fffaf5"
-GRID_COLOR = "#ddd3ca"
-TEXT_COLOR = "#3f4b4a"
-ACCENT = "#7f998f"
-POSITIVE_COLOR = "#8ea6a0"
-NEGATIVE_COLOR = "#c48f87"
+BG_COLOR = "#f6f7f9"
+PAPER_BG = "#ffffff"
+GRID_COLOR = "#d8e0e5"
+TEXT_COLOR = "#17212b"
+ACCENT = "#0f766e"
+POSITIVE_COLOR = "#2f8f68"
+NEGATIVE_COLOR = "#b4534a"
 
 _LAYOUT_BASE = dict(
     plot_bgcolor=BG_COLOR,
@@ -26,25 +26,25 @@ _LAYOUT_BASE = dict(
 )
 
 CATEGORY_COLORS = {
-    "美國股市": "#9bb2ba",
-    "台灣股市": "#d9925b",
-    "亞洲股市": "#c6a892",
-    "歐洲股市": "#9eb0b4",
-    "拉丁美洲": "#b69982",
-    "商品": "#9eb5ae",
-    "固定收益": "#b7c3ad",
-    "外匯": "#c9cfb8",
-    "加密貨幣": "#d2b29e",
-    "新興市場": "#a9b7c5",
+    "美國股市": "#3f7cac",
+    "台灣股市": "#d1843f",
+    "亞洲股市": "#8b6f47",
+    "歐洲股市": "#627d98",
+    "拉丁美洲": "#a16207",
+    "商品": "#0f766e",
+    "固定收益": "#6b8e5a",
+    "外匯": "#667085",
+    "加密貨幣": "#9a5b3f",
+    "新興市場": "#5b7fa4",
 }
 
 EVENT_CATEGORY_COLORS = {
-    "貨幣政策": "#8fa89d",
-    "地緣政治": "#b98b81",
-    "金融危機": "#a87068",
-    "商品衝擊": "#b59b74",
-    "科技產業": "#819daf",
-    "自然災害": "#9aa287",
+    "貨幣政策": "#0f766e",
+    "地緣政治": "#b4534a",
+    "金融危機": "#8f3f3a",
+    "商品衝擊": "#b7831f",
+    "科技產業": "#3f7cac",
+    "自然災害": "#6b8e5a",
 }
 
 
@@ -462,7 +462,7 @@ def plot_historical_comparison(
             y=row_labels,
             colorscale=[
                 [0.0, NEGATIVE_COLOR],
-                [0.5, "#1e3050"],
+                [0.5, "#f6f7f9"],
                 [1.0, POSITIVE_COLOR],
             ],
             zmid=0,
@@ -584,7 +584,7 @@ def plot_event_timeline(events: list) -> go.Figure:
         xaxis_title="日期",
         yaxis_title="事件影響程度 (1-5)",
         legend=dict(
-            bgcolor="rgba(13,31,60,0.8)",
+            bgcolor="rgba(255,255,255,0.86)",
             bordercolor=GRID_COLOR,
             font=dict(color=TEXT_COLOR),
         ),
@@ -638,7 +638,7 @@ def plot_propagation_cascade(
         color = "rgba(255,61,61,0.5)" if e.get("direction") != "positive" else "rgba(0,200,83,0.5)"
         link_colors.append(color)
 
-    node_colors = [ACCENT if n == source_asset else "#5588bb" for n in node_set]
+    node_colors = [ACCENT if n == source_asset else "#3f7cac" for n in node_set]
 
     fig = go.Figure(
         go.Sankey(

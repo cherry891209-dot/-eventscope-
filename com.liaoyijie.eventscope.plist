@@ -7,15 +7,9 @@
 
     <key>ProgramArguments</key>
     <array>
-        <string>/opt/miniconda3/bin/streamlit</string>
-        <string>run</string>
-        <string>/Users/liaoyijie/金融科技/app.py</string>
-        <string>--server.headless</string>
-        <string>true</string>
-        <string>--server.port</string>
-        <string>8505</string>
-        <string>--server.address</string>
-        <string>0.0.0.0</string>
+        <string>/bin/zsh</string>
+        <string>-lc</string>
+        <string>cd /Users/liaoyijie/金融科技 &amp;&amp; exec /opt/miniconda3/bin/streamlit run app.py --server.headless true --server.port 8505 --server.address 0.0.0.0</string>
     </array>
 
     <key>WorkingDirectory</key>
@@ -26,6 +20,9 @@
 
     <key>KeepAlive</key>
     <true/>
+
+    <key>ThrottleInterval</key>
+    <integer>10</integer>
 
     <key>StandardOutPath</key>
     <string>/Users/liaoyijie/金融科技/streamlit.log</string>
