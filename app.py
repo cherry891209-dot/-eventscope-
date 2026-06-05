@@ -6,6 +6,7 @@ import warnings
 warnings.filterwarnings("ignore")
 
 import json
+from xml.sax.saxutils import escape
 from io import BytesIO
 from pathlib import Path
 
@@ -459,7 +460,7 @@ def format_pct(value, digits: int = 2) -> str:
         return "n/a"
 
 
-def build_analysis_summary_docx(
+def build_analysis_summary_pdf(
     event: dict,
     sim_results: pd.DataFrame,
     network: dict,
@@ -467,30 +468,109 @@ def build_analysis_summary_docx(
     portfolio: dict,
     hedges: list[dict],
 ) -> bytes:
-    from docx import Document
+    from reportlab.lib import colors
+    from reportlab.lib.enums import TA_LEFT
+    from reportlab.lib.pagesizes import A4
+    from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
+    from reportlab.lib.units import mm
+    from reportlab.pdfbase.cidfonts import UnicodeCIDFont
+    from reportlab.pdfbase import pdfmetrics
+    from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
 
-    doc = Document()
-    doc.add_heading(f"EventScope 分析摘要：{event['name_zh']}", level=0)
+    output = BytesIO()
+    pdfmetrics.registerFont(UnicodeCIDFont("STSong-Light"))
+    doc = SimpleDocTemplate(
+        output,
+        pagesize=A4,
+        rightMargin=16 * mm,
+        leftMargin=16 * mm,
+        topMargin=16 * mm,
+        bottomMargin=16 * mm,
+        title=f"EventScope 分析摘要：{event['name_zh']}",
+    )
 
-    doc.add_heading("事件概覽", level=1)
-    for text in [
-        f"事件日期：{event['date']}",
-        f"事件類別：{event['category']}",
-        f"主要衝擊：{event['primary_shock']}",
-        f"嚴重程度：{event['magnitude']}/5",
-        f"事件說明：{event['description_zh']}",
-    ]:
-        doc.add_paragraph(text, style="List Bullet")
+    styles = getSampleStyleSheet()
+    title_style = ParagraphStyle(
+        "EventScopeTitle",
+        parent=styles["Title"],
+        fontName="STSong-Light",
+        fontSize=18,
+        leading=24,
+        textColor=colors.HexColor("#6F4329"),
+        alignment=TA_LEFT,
+        spaceAfter=12,
+    )
+    heading_style = ParagraphStyle(
+        "EventScopeHeading",
+        parent=styles["Heading2"],
+        fontName="STSong-Light",
+        fontSize=13,
+        leading=18,
+        textColor=colors.HexColor("#8A5A3B"),
+        spaceBefore=10,
+        spaceAfter=6,
+    )
+    body_style = ParagraphStyle(
+        "EventScopeBody",
+        parent=styles["BodyText"],
+        fontName="STSong-Light",
+        fontSize=10,
+        leading=15,
+        textColor=colors.HexColor("#2E2922"),
+    )
+    small_style = ParagraphStyle(
+        "EventScopeSmall",
+        parent=body_style,
+        fontSize=8.5,
+        leading=12,
+        textColor=colors.HexColor("#71665A"),
+    )
+
+    story = [Paragraph(f"EventScope 分析摘要：{escape(event['name_zh'])}", title_style)]
+
+    def add_heading(text: str) -> None:
+        story.append(Paragraph(escape(text), heading_style))
+
+    def add_bullets(items: list[str]) -> None:
+        for item in items:
+            story.append(Paragraph(f"• {escape(str(item))}", body_style))
+        story.append(Spacer(1, 5))
+
+    def cell(value: object, style=body_style) -> Paragraph:
+        return Paragraph(escape(str(value)), style)
 
     def add_table(headers: list[str], rows: list[list[str]]) -> None:
-        table = doc.add_table(rows=1, cols=len(headers))
-        table.style = "Table Grid"
-        for cell, header in zip(table.rows[0].cells, headers):
-            cell.text = header
-        for row_values in rows:
-            cells = table.add_row().cells
-            for cell, value in zip(cells, row_values):
-                cell.text = str(value)
+        data = [[cell(header, small_style) for header in headers]]
+        data.extend([[cell(value) for value in row_values] for row_values in rows])
+        table = Table(data, repeatRows=1, hAlign="LEFT")
+        table.setStyle(
+            TableStyle(
+                [
+                    ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#EAD9C6")),
+                    ("TEXTCOLOR", (0, 0), (-1, 0), colors.HexColor("#2E2922")),
+                    ("FONTNAME", (0, 0), (-1, -1), "STSong-Light"),
+                    ("GRID", (0, 0), (-1, -1), 0.35, colors.HexColor("#D9C8B3")),
+                    ("VALIGN", (0, 0), (-1, -1), "TOP"),
+                    ("LEFTPADDING", (0, 0), (-1, -1), 6),
+                    ("RIGHTPADDING", (0, 0), (-1, -1), 6),
+                    ("TOPPADDING", (0, 0), (-1, -1), 5),
+                    ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
+                ]
+            )
+        )
+        story.append(table)
+        story.append(Spacer(1, 7))
+
+    add_heading("事件概覽")
+    add_bullets(
+        [
+            f"事件日期：{event['date']}",
+            f"事件類別：{event['category']}",
+            f"主要衝擊：{event['primary_shock']}",
+            f"嚴重程度：{event['magnitude']}/5",
+            f"事件說明：{event['description_zh']}",
+        ]
+    )
 
     if sim_results is not None and not sim_results.empty:
         ranked = sim_results.copy()
@@ -500,8 +580,8 @@ def build_analysis_summary_docx(
         losses = ranked.sort_values("mean_return").head(5)
         gains = ranked.sort_values("mean_return", ascending=False).head(5)
 
-        doc.add_heading("主要衝擊預測", level=1)
-        doc.add_heading("預期承壓資產", level=2)
+        add_heading("主要衝擊預測")
+        story.append(Paragraph("預期承壓資產", body_style))
         add_table(
             ["資產", "名稱", "期望報酬", "下跌機率"],
             [
@@ -509,7 +589,7 @@ def build_analysis_summary_docx(
                 for _, row in losses.iterrows()
             ],
         )
-        doc.add_heading("預期受益資產", level=2)
+        story.append(Paragraph("預期受益資產", body_style))
         add_table(
             ["資產", "名稱", "期望報酬", "下跌機率"],
             [
@@ -519,7 +599,7 @@ def build_analysis_summary_docx(
         )
 
     if network and network.get("edges"):
-        doc.add_heading("主要傳導路徑", level=1)
+        add_heading("主要傳導路徑")
         top_edges = sorted(network["edges"], key=lambda item: item.get("weight", 0), reverse=True)[:8]
         add_table(
             ["來源", "目標", "傳導強度"],
@@ -534,7 +614,7 @@ def build_analysis_summary_docx(
         )
 
     if portfolio:
-        doc.add_heading("投資組合配置", level=1)
+        add_heading("投資組合配置")
         add_table(
             ["資產", "名稱", "權重"],
             [
@@ -544,18 +624,19 @@ def build_analysis_summary_docx(
         )
 
     if portfolio_result:
-        doc.add_heading("投組壓力測試", level=1)
-        for text in [
-            f"期望報酬：{format_pct(portfolio_result.get('expected_return'))}",
-            f"VaR 95%：{format_pct(portfolio_result.get('var_95'))}",
-            f"VaR 99%：{format_pct(portfolio_result.get('var_99'))}",
-            f"CVaR / Expected Shortfall：{format_pct(portfolio_result.get('expected_shortfall'))}",
-            f"最佳情境：{format_pct(portfolio_result.get('best_case'))}",
-        ]:
-            doc.add_paragraph(text, style="List Bullet")
+        add_heading("投組壓力測試")
+        add_bullets(
+            [
+                f"期望報酬：{format_pct(portfolio_result.get('expected_return'))}",
+                f"VaR 95%：{format_pct(portfolio_result.get('var_95'))}",
+                f"VaR 99%：{format_pct(portfolio_result.get('var_99'))}",
+                f"CVaR / Expected Shortfall：{format_pct(portfolio_result.get('expected_shortfall'))}",
+                f"最佳情境：{format_pct(portfolio_result.get('best_case'))}",
+            ]
+        )
 
     if hedges:
-        doc.add_heading("對沖建議", level=1)
+        add_heading("對沖建議")
         add_table(
             ["工具", "理由", "預期報酬", "有效性"],
             [
@@ -569,11 +650,13 @@ def build_analysis_summary_docx(
             ],
         )
 
-    doc.add_paragraph(
-        "備註：本摘要由 EventScope 依歷史事件、模擬報酬、傳導網路與投組壓力測試自動整理，僅供教學與情境分析使用。"
+    story.append(
+        Paragraph(
+            "備註：本摘要由 EventScope 依歷史事件、模擬報酬、傳導網路與投組壓力測試自動整理，僅供教學與情境分析使用。",
+            small_style,
+        )
     )
-    output = BytesIO()
-    doc.save(output)
+    doc.build(story)
     return output.getvalue()
 
 # ─── Session state init ───────────────────────────────────────────────────────
@@ -1224,7 +1307,7 @@ elif page == "🔬 事件分析":
         )
         summary_portfolio = st.session_state.get("portfolio_dict", DEFAULT_PORTFOLIO.copy())
         summary_hedges = get_hedge_suggestions(summary_portfolio, sim_results, current_event["category"])
-        summary_docx = build_analysis_summary_docx(
+        summary_pdf = build_analysis_summary_pdf(
             current_event,
             sim_results,
             net,
@@ -1232,14 +1315,14 @@ elif page == "🔬 事件分析":
             summary_portfolio,
             summary_hedges,
         )
-        summary_filename = f"{safe_filename(current_event['date'] + '_' + current_event['name_zh'])}_EventScope摘要.docx"
+        summary_filename = f"{safe_filename(current_event['date'] + '_' + current_event['name_zh'])}_EventScope摘要.pdf"
 
         st.markdown('<div class="section-header">Step 4 · 下載摘要</div>', unsafe_allow_html=True)
         st.markdown(
             """
             <div class="metric-card" style="margin-bottom:14px;">
               <div style="font-size:0.92rem; color:#71665A; line-height:1.7;">
-                產出 Word 摘要，包含事件背景、資產衝擊排序、傳導路徑、投組風險與對沖建議。
+                產出 PDF 摘要，包含事件背景、資產衝擊排序、傳導路徑、投組風險與對沖建議。
               </div>
             </div>
             """,
@@ -1248,24 +1331,24 @@ elif page == "🔬 事件分析":
         download_col, hint_col = st.columns([1.15, 2])
         with download_col:
             st.download_button(
-                "下載 Word 摘要",
-                data=summary_docx,
+                "下載 PDF 摘要",
+                data=summary_pdf,
                 file_name=summary_filename,
-                mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                mime="application/pdf",
                 type="primary",
                 use_container_width=True,
             )
         with hint_col:
-            st.caption("格式為 .docx，不是 Markdown。下載後可直接用 Word、Pages 或 Google Docs 開啟。")
+            st.caption("格式為 .pdf，不是 Markdown。下載後可直接開啟或上傳作業。")
 
         with st.sidebar:
             st.markdown("---")
             st.caption("分析摘要")
             st.download_button(
-                "下載 Word 摘要",
-                data=summary_docx,
+                "下載 PDF 摘要",
+                data=summary_pdf,
                 file_name=summary_filename,
-                mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                mime="application/pdf",
                 use_container_width=True,
                 key="sidebar_summary_download",
             )
