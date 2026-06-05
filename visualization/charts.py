@@ -68,7 +68,7 @@ def plot_impact_network(
         fig.update_layout(**_LAYOUT_BASE, title="無足夠資料建立網路圖")
         return fig
 
-    top_edges = sorted(edges, key=lambda e: e.get("weight", 0), reverse=True)[:14]
+    top_edges = sorted(edges, key=lambda e: e.get("weight", 0), reverse=True)[:10]
     max_weight = max([float(e.get("weight", 0)) for e in top_edges] + [1.0])
     row_count = len(top_edges)
 
@@ -92,7 +92,7 @@ def plot_impact_network(
 
         fig.add_trace(
             go.Scatter(
-                x=[0.23, 0.77],
+                x=[0.34, 0.66],
                 y=[y, y],
                 mode="lines",
                 line=dict(color=line_color, width=line_width),
@@ -107,9 +107,9 @@ def plot_impact_network(
             )
         )
         fig.add_annotation(
-            x=0.77,
+            x=0.66,
             y=y,
-            ax=0.70,
+            ax=0.58,
             ay=y,
             xref="x",
             yref="y",
@@ -123,49 +123,49 @@ def plot_impact_network(
         )
         fig.add_trace(
             go.Scatter(
-                x=[0.14],
+                x=[0.28],
                 y=[y],
-                mode="markers+text",
-                marker=dict(size=24, color=source_color, line=dict(width=2, color=PAPER_BG)),
-                text=[src],
-                textposition="middle center",
-                textfont=dict(size=9, color="#FFF9F0"),
+                mode="markers",
+                marker=dict(size=22, color=source_color, line=dict(width=2, color=PAPER_BG)),
                 hovertemplate=f"<b>{src_name}</b><br>{src_cat}<br>中心度：{centrality.get(src, 0):.2f}<extra></extra>",
                 showlegend=False,
             )
         )
         fig.add_trace(
             go.Scatter(
-                x=[0.86],
+                x=[0.72],
                 y=[y],
-                mode="markers+text",
-                marker=dict(size=24, color=target_color, line=dict(width=2, color=PAPER_BG)),
-                text=[tgt],
-                textposition="middle center",
-                textfont=dict(size=9, color="#FFF9F0"),
+                mode="markers",
+                marker=dict(size=22, color=target_color, line=dict(width=2, color=PAPER_BG)),
                 hovertemplate=f"<b>{tgt_name}</b><br>{tgt_cat}<br>中心度：{centrality.get(tgt, 0):.2f}<extra></extra>",
                 showlegend=False,
             )
         )
         fig.add_annotation(
-            x=0.02,
+            x=0.04,
             y=y,
-            text=f"<b>{src_name}</b><br><span style='font-size:11px;color:#71665A'>{src_cat}</span>",
+            text=(
+                f"<b>{src_name}</b><br>"
+                f"<span style='font-size:10px;color:#71665A'>{src_cat}｜{src}</span>"
+            ),
             xanchor="left",
             yanchor="middle",
             showarrow=False,
             align="left",
-            font=dict(size=12, color=TEXT_COLOR),
+            font=dict(size=11, color=TEXT_COLOR),
         )
         fig.add_annotation(
-            x=0.98,
+            x=0.96,
             y=y,
-            text=f"<b>{tgt_name}</b><br><span style='font-size:11px;color:#71665A'>{tgt_cat}</span>",
+            text=(
+                f"<b>{tgt_name}</b><br>"
+                f"<span style='font-size:10px;color:#71665A'>{tgt_cat}｜{tgt}</span>"
+            ),
             xanchor="right",
             yanchor="middle",
             showarrow=False,
             align="right",
-            font=dict(size=12, color=TEXT_COLOR),
+            font=dict(size=11, color=TEXT_COLOR),
         )
         fig.add_annotation(
             x=0.50,
@@ -179,7 +179,7 @@ def plot_impact_network(
         )
 
     fig.add_annotation(
-        x=0.02,
+        x=0.04,
         y=row_count + 0.95,
         text="<b>來源資產</b>",
         showarrow=False,
@@ -195,7 +195,7 @@ def plot_impact_network(
         font=dict(size=13, color=ACCENT),
     )
     fig.add_annotation(
-        x=0.98,
+        x=0.96,
         y=row_count + 0.95,
         text="<b>受影響資產</b>",
         showarrow=False,
@@ -206,11 +206,11 @@ def plot_impact_network(
     net_layout = dict(**_LAYOUT_BASE)
     net_layout["xaxis"] = dict(range=[0, 1], showgrid=False, zeroline=False, showticklabels=False, fixedrange=True)
     net_layout["yaxis"] = dict(range=[0.35, row_count + 1.35], showgrid=False, zeroline=False, showticklabels=False, fixedrange=True)
-    net_layout["margin"] = dict(l=24, r=24, t=74, b=28)
+    net_layout["margin"] = dict(l=28, r=28, t=74, b=28)
     fig.update_layout(
         **net_layout,
         title=dict(text=f"主要傳導路徑 — {event_name}", font=dict(color=ACCENT, size=16)),
-        height=max(520, 58 * row_count),
+        height=max(500, 62 * row_count),
     )
     return fig
 
