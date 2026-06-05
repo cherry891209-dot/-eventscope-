@@ -3,7 +3,6 @@
 
 import numpy as np
 import pandas as pd
-from scipy import stats
 
 
 def _safe_sharpe(mean_return: float, std_return: float, risk_free_rate: float = 0.0) -> float:

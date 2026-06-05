@@ -1936,8 +1936,8 @@ elif page == "📖 方法論說明":
             <ul style="margin:8px 0; padding-left:20px;">
               <li><b>前端框架</b>：Streamlit 1.32+</li>
               <li><b>視覺化</b>：Plotly 5.18+（互動式圖表、網路圖、桑基圖）</li>
-              <li><b>數值計算</b>：NumPy、SciPy</li>
-              <li><b>統計模型</b>：statsmodels（Granger 因果性）</li>
+              <li><b>數值計算</b>：NumPy</li>
+              <li><b>統計模型</b>：事件研究、Granger 近似檢定、傳導網路</li>
               <li><b>網路分析</b>：NetworkX（中心性計算、最短路徑）</li>
               <li><b>資料處理</b>：pandas</li>
             </ul>

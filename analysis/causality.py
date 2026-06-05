@@ -4,10 +4,18 @@
 import warnings
 warnings.filterwarnings("ignore")
 
+import math
 import numpy as np
 import pandas as pd
-from scipy import stats
 import networkx as nx
+
+
+def _f_test_p_value_approx(f_stat: float, df1: int, df2: int) -> float:
+    """Monotonic F-test p-value approximation that avoids SciPy on cloud hosts."""
+    if not np.isfinite(f_stat) or f_stat <= 0 or df1 <= 0 or df2 <= 0:
+        return 1.0
+    scaled = (df1 * f_stat) / max(df2, 1)
+    return float(max(0.0, min(1.0, math.exp(-0.5 * scaled * df2 / (df2 + df1)))))
 
 
 # ---------------------------------------------------------------------------
@@ -18,50 +26,40 @@ def _granger_test_pair(cause: np.ndarray, effect: np.ndarray, max_lag: int) -> f
     """
     Test whether `cause` Granger-causes `effect` up to `max_lag`.
     Returns minimum p-value across all tested lags.
-    Uses manual F-test implementation to avoid statsmodels dependency issues.
+    Uses a manual F-test approximation to keep cloud deployment lightweight.
     """
+    # Manual lagged regression fallback
     try:
-        from statsmodels.tsa.stattools import grangercausalitytests
-        data = np.column_stack([effect, cause])
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore")
-            res = grangercausalitytests(data, maxlag=max_lag, verbose=False)
-        p_values = [res[lag][0]["ssr_ftest"][1] for lag in range(1, max_lag + 1)]
-        return float(min(p_values))
-    except Exception:
-        # Manual lagged regression fallback
-        try:
-            n = len(effect)
-            lag = min(max_lag, max(1, n // 10))
+        n = len(effect)
+        lag = min(max_lag, max(1, n // 10))
 
-            # Restricted model: effect ~ lags of effect
-            Y = effect[lag:]
-            X_r = np.column_stack([effect[lag - k: n - k] for k in range(1, lag + 1)])
-            X_r = np.column_stack([np.ones(len(Y)), X_r])
+        # Restricted model: effect ~ lags of effect
+        Y = effect[lag:]
+        X_r = np.column_stack([effect[lag - k: n - k] for k in range(1, lag + 1)])
+        X_r = np.column_stack([np.ones(len(Y)), X_r])
 
-            # Unrestricted model: effect ~ lags of effect + lags of cause
-            X_c = np.column_stack([cause[lag - k: n - k] for k in range(1, lag + 1)])
-            X_u = np.column_stack([X_r, X_c])
+        # Unrestricted model: effect ~ lags of effect + lags of cause
+        X_c = np.column_stack([cause[lag - k: n - k] for k in range(1, lag + 1)])
+        X_u = np.column_stack([X_r, X_c])
 
-            def ssr(X, y):
-                beta, _, _, _ = np.linalg.lstsq(X, y, rcond=None)
-                resid = y - X @ beta
-                return float(np.sum(resid ** 2))
+        def ssr(X, y):
+            beta, _, _, _ = np.linalg.lstsq(X, y, rcond=None)
+            resid = y - X @ beta
+            return float(np.sum(resid ** 2))
 
-            ssr_r = ssr(X_r, Y)
-            ssr_u = ssr(X_u, Y)
+        ssr_r = ssr(X_r, Y)
+        ssr_u = ssr(X_u, Y)
 
-            T = len(Y)
-            k = lag  # number of restrictions
-            df1, df2 = k, T - X_u.shape[1]
-            if df2 <= 0 or ssr_u <= 0:
-                return 0.5
-
-            F = ((ssr_r - ssr_u) / k) / (ssr_u / df2)
-            p = float(1 - stats.f.cdf(F, df1, df2))
-            return p
-        except Exception:
+        T = len(Y)
+        k = lag  # number of restrictions
+        df1, df2 = k, T - X_u.shape[1]
+        if df2 <= 0 or ssr_u <= 0:
             return 0.5
+
+        F = ((ssr_r - ssr_u) / k) / (ssr_u / df2)
+        return _f_test_p_value_approx(F, df1, df2)
+    except Exception:
+        return 0.5
 
 
 def granger_causality_matrix(

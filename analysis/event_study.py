@@ -4,9 +4,14 @@
 import warnings
 warnings.filterwarnings("ignore")
 
+import math
 import numpy as np
 import pandas as pd
-from scipy import stats
+
+
+def _normal_two_sided_p_value(t_stat: float) -> float:
+    """Approximate two-sided p-value without SciPy for deployment stability."""
+    return float(math.erfc(abs(t_stat) / math.sqrt(2)))
 
 
 def estimate_market_model(
@@ -155,7 +160,7 @@ def run_event_study(
         se_car = residual_std * np.sqrt(n_event)
         t_stat = car / se_car if se_car > 0 else 0.0
         df_est = max(1, len(estimation_rets) - 2)
-        p_value = float(2 * (1 - stats.t.cdf(abs(t_stat), df=df_est)))
+        p_value = _normal_two_sided_p_value(t_stat)
 
         results.append(
             {
