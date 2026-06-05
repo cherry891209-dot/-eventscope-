@@ -478,7 +478,8 @@ def build_analysis_summary_pdf(
     from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
 
     output = BytesIO()
-    pdfmetrics.registerFont(UnicodeCIDFont("STSong-Light"))
+    pdf_font = "MSung-Light"
+    pdfmetrics.registerFont(UnicodeCIDFont(pdf_font))
     doc = SimpleDocTemplate(
         output,
         pagesize=A4,
@@ -493,7 +494,7 @@ def build_analysis_summary_pdf(
     title_style = ParagraphStyle(
         "EventScopeTitle",
         parent=styles["Title"],
-        fontName="STSong-Light",
+        fontName=pdf_font,
         fontSize=18,
         leading=24,
         textColor=colors.HexColor("#6F4329"),
@@ -503,7 +504,7 @@ def build_analysis_summary_pdf(
     heading_style = ParagraphStyle(
         "EventScopeHeading",
         parent=styles["Heading2"],
-        fontName="STSong-Light",
+        fontName=pdf_font,
         fontSize=13,
         leading=18,
         textColor=colors.HexColor("#8A5A3B"),
@@ -513,7 +514,7 @@ def build_analysis_summary_pdf(
     body_style = ParagraphStyle(
         "EventScopeBody",
         parent=styles["BodyText"],
-        fontName="STSong-Light",
+        fontName=pdf_font,
         fontSize=10,
         leading=15,
         textColor=colors.HexColor("#2E2922"),
@@ -542,13 +543,20 @@ def build_analysis_summary_pdf(
     def add_table(headers: list[str], rows: list[list[str]]) -> None:
         data = [[cell(header, small_style) for header in headers]]
         data.extend([[cell(value) for value in row_values] for row_values in rows])
-        table = Table(data, repeatRows=1, hAlign="LEFT")
+        usable_width = A4[0] - 32 * mm
+        if len(headers) == 4:
+            col_widths = [35 * mm, 62 * mm, 34 * mm, usable_width - 131 * mm]
+        elif len(headers) == 3:
+            col_widths = [72 * mm, 72 * mm, usable_width - 144 * mm]
+        else:
+            col_widths = [usable_width / len(headers)] * len(headers)
+        table = Table(data, colWidths=col_widths, repeatRows=1, hAlign="LEFT")
         table.setStyle(
             TableStyle(
                 [
                     ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#EAD9C6")),
                     ("TEXTCOLOR", (0, 0), (-1, 0), colors.HexColor("#2E2922")),
-                    ("FONTNAME", (0, 0), (-1, -1), "STSong-Light"),
+                    ("FONTNAME", (0, 0), (-1, -1), pdf_font),
                     ("GRID", (0, 0), (-1, -1), 0.35, colors.HexColor("#D9C8B3")),
                     ("VALIGN", (0, 0), (-1, -1), "TOP"),
                     ("LEFTPADDING", (0, 0), (-1, -1), 6),
