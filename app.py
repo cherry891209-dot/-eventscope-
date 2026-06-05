@@ -1232,16 +1232,42 @@ elif page == "🔬 事件分析":
             summary_portfolio,
             summary_hedges,
         )
-        summary_col1, summary_col2 = st.columns([2.4, 1])
-        with summary_col1:
-            st.caption("可下載一份包含事件、資產衝擊、傳導路徑、投組風險與對沖建議的中文摘要。")
-        with summary_col2:
+        summary_filename = f"{safe_filename(current_event['date'] + '_' + current_event['name_zh'])}_EventScope摘要.docx"
+
+        st.markdown('<div class="section-header">Step 4 · 下載摘要</div>', unsafe_allow_html=True)
+        st.markdown(
+            """
+            <div class="metric-card" style="margin-bottom:14px;">
+              <div style="font-size:0.92rem; color:#71665A; line-height:1.7;">
+                產出 Word 摘要，包含事件背景、資產衝擊排序、傳導路徑、投組風險與對沖建議。
+              </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+        download_col, hint_col = st.columns([1.15, 2])
+        with download_col:
             st.download_button(
                 "下載 Word 摘要",
                 data=summary_docx,
-                file_name=f"{safe_filename(current_event['date'] + '_' + current_event['name_zh'])}_EventScope摘要.docx",
+                file_name=summary_filename,
+                mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                type="primary",
+                use_container_width=True,
+            )
+        with hint_col:
+            st.caption("格式為 .docx，不是 Markdown。下載後可直接用 Word、Pages 或 Google Docs 開啟。")
+
+        with st.sidebar:
+            st.markdown("---")
+            st.caption("分析摘要")
+            st.download_button(
+                "下載 Word 摘要",
+                data=summary_docx,
+                file_name=summary_filename,
                 mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                 use_container_width=True,
+                key="sidebar_summary_download",
             )
 
         tab1, tab2, tab3, tab4 = st.tabs(
