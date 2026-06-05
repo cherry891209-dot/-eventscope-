@@ -1,0 +1,1645 @@
+[
+  {
+    "id": "9_11_2001",
+    "name_zh": "九一一恐怖攻擊",
+    "name_en": "9/11 Terrorist Attacks",
+    "date": "2001-09-11",
+    "category": "地緣政治",
+    "file": "assets/event_real_photos/9_11_2001.jpg",
+    "source_page": "https://commons.wikimedia.org/wiki/File:September_11_Attacks_on_the_World_Trade_Center.jpg",
+    "commons_title": "File:September 11 Attacks on the World Trade Center.jpg",
+    "license": "Creative Commons CC0 / public domain dedication per Wikimedia Commons file page",
+    "artist": "",
+    "credit": "Wikimedia Commons",
+    "description": "Smoke billows from the Twin Towers after the September 11 attacks.",
+    "query": "September 11 attacks World Trade Center",
+    "status": "existing",
+    "size": [
+      2740,
+      1830
+    ]
+  },
+  {
+    "id": "iraq_war_2003",
+    "name_zh": "伊拉克戰爭爆發",
+    "name_en": "Iraq War Start",
+    "date": "2003-03-20",
+    "category": "地緣政治",
+    "file": "assets/event_real_photos/iraq_war_2003.jpg",
+    "source_page": "https://commons.wikimedia.org/wiki/File:2003_Events_montage_16-grid_version.jpg",
+    "commons_title": "File:2003 Events montage 16-grid version.jpg",
+    "license": "CC BY 4.0",
+    "artist": "From a variety of images credited above.",
+    "credit": "This image includes elements  from this file:",
+    "description": "16 major events of 2003.  From top to bottom, left to right:\n<ul><li>Space Shuttle Columbia disaster</li>\n<li>SARS / 2002–2004 SARS outbreak</li>\n<li>Shenzhou 5</li>\n<li>The Station nightclub fire</li>\n<li>2003 Iran Ilyushin Il-76 crash</li>\n<li>Iraq War / 2003 invasion of Iraq / Firdos Square statue destruction / Battle of Baghdad (2003)</li>\n<li>Protests against the Iraq War</li>\n<li>2003 Bam earthquake</li>\n<li>MySpace</li>\n<li>Abu Ghraib torture and prisoner abuse</li>\n<li>War in Darfur</li>\n<li>2003 Boumerdès earthquake</li>\n<li>Daegu subway fire</li>\n<li>2003 European heatwave</li>\n<li>Mars Express</li>\n<li>Assassination of Zoran Đinđić</li></ul>",
+    "query": "2003 invasion of Iraq",
+    "status": "existing",
+    "size": [
+      4096,
+      3725
+    ]
+  },
+  {
+    "id": "brexit_2016",
+    "name_zh": "英國脫歐公投",
+    "name_en": "Brexit Referendum",
+    "date": "2016-06-23",
+    "category": "地緣政治",
+    "file": "assets/event_real_photos/brexit_2016.jpg",
+    "source_page": "https://commons.wikimedia.org/wiki/File:At_the_Brexit_referendum_count_%2827821251922%29.jpg",
+    "commons_title": "File:At the Brexit referendum count (27821251922).jpg",
+    "license": "CC BY 2.0",
+    "artist": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/people/37996585435@N01\">Steve  Bowbrick</a> from Radlett, United Kingdom",
+    "credit": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/photos/bowbrick/27821251922/\">At the Brexit referendum count</a>",
+    "description": "In Borehamwood.",
+    "query": "Brexit Referendum 2016 photograph",
+    "status": "existing",
+    "size": [
+      5814,
+      2936
+    ]
+  },
+  {
+    "id": "us_china_trade_war_2018",
+    "name_zh": "美中貿易戰開打",
+    "name_en": "US-China Trade War Escalation",
+    "date": "2018-03-22",
+    "category": "地緣政治",
+    "file": "assets/event_real_photos/us_china_trade_war_2018.jpg",
+    "source_page": "https://en.wikipedia.org/wiki/Donald_Trump",
+    "commons_title": "File:Official_Presidential_Portrait_of_President_Donald_J._Trump_(2025)_(cropped)(2).jpg",
+    "license": "Public domain",
+    "artist": "<bdi><a href=\"https://en.wikipedia.org/wiki/en:Daniel_Torok\" class=\"extiw\" title=\"w:en:Daniel Torok\"><span title=\"American photographer\">Daniel Torok</span></a></bdi>",
+    "credit": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.whitehouse.gov/administration/donald-j-trump/\">White House</a><br><a rel=\"nofollow\" class=\"external text\" href=\"https://www.facebook.com/photo/?fbid=122139627626724583&amp;set=pb.61571737507834.-2207520000\">Facebook</a><br>",
+    "description": "Official Presidential Portrait of President Donald J. Trump in his second term",
+    "query": "wikipedia:Donald Trump",
+    "status": "downloaded",
+    "size": [
+      1594,
+      2048
+    ]
+  },
+  {
+    "id": "russia_ukraine_2022",
+    "name_zh": "俄羅斯入侵烏克蘭",
+    "name_en": "Russia-Ukraine War",
+    "date": "2022-02-24",
+    "category": "地緣政治",
+    "file": "assets/event_real_photos/russia_ukraine_2022.jpg",
+    "status": "existing",
+    "size": [
+      4460,
+      3040
+    ]
+  },
+  {
+    "id": "israel_hamas_2023",
+    "name_zh": "以色列-哈馬斯衝突",
+    "name_en": "Israel-Hamas Conflict",
+    "date": "2023-10-07",
+    "category": "地緣政治",
+    "file": "assets/event_real_photos/israel_hamas_2023.jpg",
+    "status": "existing",
+    "size": [
+      4624,
+      3468
+    ]
+  },
+  {
+    "id": "argentina_default_2001",
+    "name_zh": "阿根廷主權違約危機",
+    "name_en": "Argentina Sovereign Default",
+    "date": "2001-12-23",
+    "category": "地緣政治",
+    "file": "assets/event_real_photos/argentina_default_2001.jpg",
+    "source_page": "https://en.wikipedia.org/wiki/1998-2002_Argentine_great_depression",
+    "commons_title": "File:Argentinienkrise.svg",
+    "license": "CC BY 4.0",
+    "artist": "Max Roser",
+    "credit": "Our World in Data: <a rel=\"nofollow\" class=\"external free\" href=\"https://ourworldindata.org/grapher/maddison-data-gdp-per-capita-in-2011us?tab=chart&amp;yScale=log&amp;time=1998..2005&amp;country=~ARG\">https://ourworldindata.org/grapher/maddison-data-gdp-per-capita-in-2011us?tab=chart&amp;yScale=log&amp;time=1998..2005&amp;country=~ARG</a>",
+    "description": "GDP per capita in Argentina from 1998 to 2005",
+    "query": "wikipedia:1998-2002 Argentine great depression",
+    "status": "downloaded",
+    "size": [
+      1920,
+      1356
+    ]
+  },
+  {
+    "id": "arab_spring_2011",
+    "name_zh": "阿拉伯之春動盪",
+    "name_en": "Arab Spring Unrest",
+    "date": "2011-02-11",
+    "category": "地緣政治",
+    "file": "assets/event_real_photos/arab_spring_2011.jpg",
+    "source_page": "https://commons.wikimedia.org/wiki/File:Arab_Spring_Protal.gif",
+    "commons_title": "File:Arab Spring Protal.gif",
+    "license": "CC BY-SA 3.0",
+    "artist": "<a href=\"//commons.wikimedia.org/wiki/User:Faris_knight\" class=\"mw-redirect\" title=\"User:Faris knight\">Faris knight</a>",
+    "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+    "description": "بوابة ثورات الربيع العربي",
+    "query": "Arab Spring protest",
+    "status": "downloaded",
+    "size": [
+      1654,
+      1064
+    ]
+  },
+  {
+    "id": "crimea_2014",
+    "name_zh": "克里米亞危機",
+    "name_en": "Crimea Crisis",
+    "date": "2014-03-18",
+    "category": "地緣政治",
+    "file": "assets/event_real_photos/crimea_2014.jpg",
+    "source_page": "https://commons.wikimedia.org/wiki/File:Putin_with_Vladimir_Konstantinov%2C_Sergey_Aksyonov_and_Alexey_Chaly_4.jpeg",
+    "commons_title": "File:Putin with Vladimir Konstantinov, Sergey Aksyonov and Alexey Chaly 4.jpeg",
+    "license": "CC BY 4.0",
+    "artist": "Kremlin.ru",
+    "credit": "<a rel=\"nofollow\" class=\"external free\" href=\"http://kremlin.ru/news/20604\">http://kremlin.ru/news/20604</a>",
+    "description": "Signing of the Treaty on the adoption of the Republic of Crimea and Sevastopol to Russia. Left to right: S. Aksyonov, V. Konstantinov, V. Putin and A. Chalyi.",
+    "query": "Annexation of Crimea 2014",
+    "status": "downloaded",
+    "size": [
+      1920,
+      1277
+    ]
+  },
+  {
+    "id": "suez_blockage_2021",
+    "name_zh": "蘇伊士運河堵塞",
+    "name_en": "Suez Canal Blockage",
+    "date": "2021-03-23",
+    "category": "地緣政治",
+    "file": "assets/event_real_photos/suez_blockage_2021.jpg",
+    "source_page": "https://commons.wikimedia.org/wiki/File:Container_Ship_%27Ever_Given%27_stuck_in_the_Suez_Canal%2C_Egypt_-_March_24th%2C_2021_%2851070311183%29.jpg",
+    "commons_title": "File:Container Ship 'Ever Given' stuck in the Suez Canal, Egypt - March 24th, 2021 (51070311183).jpg",
+    "license": "CC BY 2.0",
+    "artist": "Contains modified Copernicus Sentinel data [2021], processed by <a rel=\"nofollow\" class=\"external text\" href=\"https://twitter.com/Pierre_Markuse\">Pierre Markuse</a>",
+    "credit": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/photos/pierre_markuse/51070311183/\">Container Ship 'Ever Given' stuck in the Suez Canal, Egypt - March 24th, 2021</a>",
+    "description": "Container Ship 'Ever Given' stuck in the Suez Canal, Egypt - March 24th, 2021. Image is about 2.64 kilometers wide.",
+    "query": "Ever Given Suez Canal 2021",
+    "status": "downloaded",
+    "size": [
+      1920,
+      897
+    ]
+  },
+  {
+    "id": "red_sea_shipping_2024",
+    "name_zh": "紅海航運危機",
+    "name_en": "Red Sea Shipping Crisis",
+    "date": "2024-01-12",
+    "category": "地緣政治",
+    "file": "assets/event_real_photos/red_sea_shipping_2024.jpg",
+    "source_page": "https://en.wikipedia.org/wiki/Red_Sea_crisis",
+    "commons_title": "File:2023_Israel–Hamas_war_-_Bab-el-Mandeb.svg",
+    "license": "CC0",
+    "artist": "<a href=\"//commons.wikimedia.org/wiki/User:Ecrusized\" title=\"User:Ecrusized\">Ecrusized</a>",
+    "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>. Data derived from <a href=\"https://en.wikipedia.org/wiki/Timeline_of_the_Red_Sea_Theater_of_the_current_Israeli_invasion_of_Gaza\" class=\"extiw\" title=\"w:Timeline of the Red Sea Theater of the current Israeli invasion of Gaza\">Timeline of the Red Sea Theater of the current Israeli invasion of Gaza</a>. Control of Yemen citing <a rel=\"nofollow\" class=\"external text\" href=\"https://yemen.liveuamap.com\">yemen.liveuamap.com</a>. Made using OpenTopoMap data.",
+    "description": "A map of the Houthi engagements with commercial ships during the Gaza War, up to 4 December 2023",
+    "query": "wikipedia:Red Sea crisis",
+    "status": "downloaded",
+    "size": [
+      1920,
+      2347
+    ]
+  },
+  {
+    "id": "taiwan_strait_tension_2022",
+    "name_zh": "台海軍事緊張升溫",
+    "name_en": "Taiwan Strait Tensions",
+    "date": "2022-08-03",
+    "category": "地緣政治",
+    "file": "assets/event_real_photos/taiwan_strait_tension_2022.jpg",
+    "status": "existing",
+    "size": [
+      2485,
+      1945
+    ]
+  },
+  {
+    "id": "dotcom_crash_2000",
+    "name_zh": "網路泡沫崩潰",
+    "name_en": "Dot-com Bubble Burst",
+    "date": "2000-03-10",
+    "category": "金融危機",
+    "file": "assets/event_real_photos/dotcom_crash_2000.jpg",
+    "status": "existing",
+    "size": [
+      4096,
+      3704
+    ]
+  },
+  {
+    "id": "lehman_2008",
+    "name_zh": "雷曼兄弟倒閉",
+    "name_en": "Lehman Brothers Collapse",
+    "date": "2008-09-15",
+    "category": "金融危機",
+    "file": "assets/event_real_photos/lehman_2008.jpg",
+    "status": "existing",
+    "size": [
+      2448,
+      3264
+    ]
+  },
+  {
+    "id": "eurozone_crisis_2010",
+    "name_zh": "歐元區主權債務危機",
+    "name_en": "European Debt Crisis",
+    "date": "2010-04-27",
+    "category": "金融危機",
+    "file": "assets/event_real_photos/eurozone_crisis_2010.jpg",
+    "status": "existing",
+    "size": [
+      689,
+      681
+    ]
+  },
+  {
+    "id": "china_stock_crash_2015",
+    "name_zh": "中國股市崩盤",
+    "name_en": "China Stock Market Crash",
+    "date": "2015-06-12",
+    "category": "金融危機",
+    "file": "assets/event_real_photos/china_stock_crash_2015.jpg",
+    "status": "existing",
+    "size": [
+      1001,
+      470
+    ]
+  },
+  {
+    "id": "covid_crash_2020",
+    "name_zh": "新冠疫情金融崩盤",
+    "name_en": "COVID-19 Market Crash",
+    "date": "2020-02-20",
+    "category": "金融危機",
+    "file": "assets/event_real_photos/covid_crash_2020.jpg",
+    "source_page": "https://commons.wikimedia.org/wiki/File:Stock_Exchange_Hotel%2C_Edward_Street_during_the_COVID-19_pandemic_in_Brisbane%2C_Australia.jpg",
+    "commons_title": "File:Stock Exchange Hotel, Edward Street during the COVID-19 pandemic in Brisbane, Australia.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "<a href=\"//commons.wikimedia.org/wiki/User:Kgbo\" title=\"User:Kgbo\">Chris Olszewski</a>",
+    "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+    "description": "Stock Exchange Hotel, Edward Street during the COVID-19 pandemic in Brisbane, Australia",
+    "query": "COVID-19 pandemic empty street stock exchange",
+    "status": "downloaded",
+    "size": [
+      1920,
+      1417
+    ]
+  },
+  {
+    "id": "svb_collapse_2023",
+    "name_zh": "矽谷銀行倒閉",
+    "name_en": "Silicon Valley Bank Collapse",
+    "date": "2023-03-10",
+    "category": "金融危機",
+    "file": "assets/event_real_photos/svb_collapse_2023.jpg",
+    "source_page": "https://commons.wikimedia.org/wiki/File:3003_Tasman_Drive.jpg",
+    "commons_title": "File:3003 Tasman Drive.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "<a href=\"//commons.wikimedia.org/wiki/User:Coolcaesar\" title=\"User:Coolcaesar\">Coolcaesar</a>",
+    "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+    "description": "An office building at 3003 Tasman Drive in Santa Clara, California; at the time this photo was taken, it was home to the headquarters of Silicon Valley Bank.  Photographed by user Coolcaesar on September 4, 2022.",
+    "query": "Silicon Valley Bank collapse",
+    "status": "downloaded",
+    "size": [
+      1920,
+      1118
+    ]
+  },
+  {
+    "id": "flash_crash_2010",
+    "name_zh": "2010閃崩事件",
+    "name_en": "2010 Flash Crash",
+    "date": "2010-05-06",
+    "category": "金融危機",
+    "file": "assets/event_real_photos/flash_crash_2010.jpg",
+    "source_page": "https://en.wikipedia.org/wiki/2010_flash_crash",
+    "commons_title": "File:Flashcrash-2010.png",
+    "license": "Public domain",
+    "artist": "<a href=\"https://de.wikipedia.org/wiki/CNN\" class=\"extiw\" title=\"de:CNN\">CNN</a>, <a href=\"https://de.wikipedia.org/wiki/Benutzer:PM3\" class=\"extiw\" title=\"de:Benutzer:PM3\">PM3</a>",
+    "credit": "abgeleitet von <a rel=\"nofollow\" class=\"external autonumber\" href=\"http://money.cnn.com/2010/05/06/markets/markets_newyork/index.htm?hpt=T1\">[1]</a>",
+    "description": "The <a href=\"https://en.wikipedia.org/wiki/Dow_Jones_Industrial_Average\" class=\"extiw\" title=\"w:Dow Jones Industrial Average\">DJIA</a> on May 6th, 2010 (11:00 AM - 4:00 PM EST)",
+    "query": "wikipedia:2010 flash crash",
+    "status": "downloaded",
+    "size": [
+      397,
+      254
+    ]
+  },
+  {
+    "id": "asian_financial_crisis_1997",
+    "name_zh": "亞洲金融風暴",
+    "name_en": "Asian Financial Crisis",
+    "date": "1997-07-02",
+    "category": "金融危機",
+    "file": "assets/event_real_photos/asian_financial_crisis_1997.jpg",
+    "source_page": "https://en.wikipedia.org/wiki/1997_Asian_financial_crisis",
+    "commons_title": "File:Asienkrise.svg",
+    "license": "CC BY 4.0",
+    "artist": "Max Roser",
+    "credit": "Our World in Data: <a rel=\"nofollow\" class=\"external free\" href=\"https://ourworldindata.org/grapher/gdp-per-capita-growth?tab=chart&amp;time=1995..2000&amp;country=THA~KOR~PHL~MYS~SGP~IDN\">https://ourworldindata.org/grapher/gdp-per-capita-growth?tab=chart&amp;time=1995..2000&amp;country=THA~KOR~PHL~MYS~SGP~IDN</a>",
+    "description": "1997 Asian financial crisis",
+    "query": "wikipedia:1997 Asian financial crisis",
+    "status": "downloaded",
+    "size": [
+      1920,
+      1356
+    ]
+  },
+  {
+    "id": "russian_default_1998",
+    "name_zh": "俄羅斯違約與LTCM危機",
+    "name_en": "Russian Default and LTCM Crisis",
+    "date": "1998-08-17",
+    "category": "金融危機",
+    "file": "assets/event_real_photos/russian_default_1998.jpg",
+    "source_page": "https://en.wikipedia.org/wiki/1998_Russian_financial_crisis",
+    "commons_title": "File:USD-1998-2.jpg",
+    "license": "Public domain",
+    "artist": "The original uploader was <a href=\"https://en.wikipedia.org/wiki/ru:User:Sover.spb\" class=\"extiw\" title=\"w:ru:User:Sover.spb\">Sover.spb</a> at <a href=\"https://en.wikipedia.org/wiki/ru:\" class=\"extiw\" title=\"w:ru:\">Russian Wikipedia</a>.",
+    "credit": "<bdi lang=\"en\" dir=\"ltr\">Transferred from <span class=\"plainlinks\"><a class=\"external text\" data-mw-original-href=\"//ru.wikipedia.org\" href=\"https://ru.wikipedia.org\">ru.wikipedia</a></span> to Commons.</bdi>",
+    "description": "US dollar exchange rate chart for the second half of 1998.",
+    "query": "wikipedia:1998 Russian financial crisis",
+    "status": "downloaded",
+    "size": [
+      1134,
+      740
+    ]
+  },
+  {
+    "id": "turkey_lira_2018",
+    "name_zh": "土耳其里拉危機",
+    "name_en": "Turkey Lira Crisis",
+    "date": "2018-08-10",
+    "category": "金融危機",
+    "file": "assets/event_real_photos/turkey_lira_2018.jpg",
+    "source_page": "https://en.wikipedia.org/wiki/2018_Turkish_currency_and_debt_crisis",
+    "commons_title": "File:General_government_net_debt_as_percentage_of_GDP_-_European_countries.png",
+    "license": "CC BY-SA 4.0",
+    "artist": "<a href=\"//commons.wikimedia.org/wiki/User:Randam\" title=\"User:Randam\">Randam</a>.",
+    "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>. Data from IMF <a rel=\"nofollow\" class=\"external free\" href=\"https://www.imf.org/en/Publications/WEO/weo-database/2021/October/weo-report?c=132,134,136,184,186,112,&amp;s=GGXWDN_NGDP,&amp;sy=2015&amp;ey=2022&amp;ssm=0&amp;scsm=1&amp;scc=0&amp;ssd=1&amp;ssc=0&amp;sic=0&amp;sort=country&amp;ds=.&amp;br=1\">https://www.imf.org/en/Publications/WEO/weo-database/2021/October/weo-report?c=132,134,136,184,186,112,&amp;s=GGXWDN_NGDP,&amp;sy=2015&amp;ey=2022&amp;ssm=0&amp;scsm=1&amp;scc=0&amp;ssd=1&amp;ssc=0&amp;sic=0&amp;sort=country&amp;ds=.&amp;br=1</a>",
+    "description": "General government net debt as percentage of GDP for selected European countries.",
+    "query": "wikipedia:2018 Turkish currency and debt crisis",
+    "status": "downloaded",
+    "size": [
+      900,
+      714
+    ]
+  },
+  {
+    "id": "uk_gilt_crisis_2022",
+    "name_zh": "英國國債與退休金危機",
+    "name_en": "UK Gilt Crisis",
+    "date": "2022-09-28",
+    "category": "金融危機",
+    "file": "assets/event_real_photos/uk_gilt_crisis_2022.jpg",
+    "source_page": "https://en.wikipedia.org/wiki/September_2022_United_Kingdom_mini-budget",
+    "commons_title": "File:Coat_of_arms_of_the_United_Kingdom_(2024,_lesser_arms).svg",
+    "license": "CC BY-SA 4.0",
+    "artist": "<a href=\"//commons.wikimedia.org/wiki/User:Dgp4004\" title=\"User:Dgp4004\">Dgp4004</a>",
+    "credit": "Own work based on: <a href=\"//commons.wikimedia.org/wiki/File:2022_pattern_Tudor_Crown_(2D)_Sodacan_style.svg\" class=\"mw-redirect\" title=\"File:2022 pattern Tudor Crown (2D) Sodacan style.svg\">2022 pattern Tudor Crown (2D) Sodacan style.svg</a>: <span typeof=\"mw:File\"><a href=\"//commons.wikimedia.org/wiki/File:2022_pattern_Tudor_Crown_(Sodacan_style)_2D.svg\" class=\"mw-file-description\"><img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/2022_pattern_Tudor_Crown_%28Sodacan_style%29_2D.svg/60px-2022_pattern_Tudor_Crown_%28Sodacan_style%29_2D.svg.png\" decoding=\"async\" width=\"48\" height=\"47\" class=\"mw-file-element\" srcset=\"https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/2022_pattern_Tudor_Crown_%28Sodacan_style%29_2D.svg/120px-2022_pattern_Tudor_Crown_%28Sodacan_style%29_2D.svg.png 2x\" data-file-width=\"241\" data-file-height=\"238\"></a></span> <i>by</i> <a href=\"//commons.wikimedia.org/wiki/User:Sodacan\" title=\"User:Sodacan\">Sodacan</a>  and <a href=\"//commons.wikimedia.org/wiki/File:Royal_Coat_of_Arms_of_the_United_Kingdom_(variant_1,_1952-2022).svg\" class=\"mw-redirect\" title=\"File:Royal Coat of Arms of the United Kingdom (variant 1, 1952-2022).svg\">Royal Coat of Arms of the United Kingdom (variant 1, 1952-2022).svg</a>: <span typeof=\"mw:File\"><a href=\"//commons.wikimedia.org/wiki/File:Royal_coat_of_arms_of_the_United_Kingdom_(1952%E2%80%932022,_variant_1).svg\" class=\"mw-file-description\"><img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Royal_coat_of_arms_of_the_United_Kingdom_%281952%E2%80%932022%2C_variant_1%29.svg/60px-Royal_coat_of_arms_of_the_United_Kingdom_%281952%E2%80%932022%2C_variant_1%29.svg.png\" decoding=\"async\" width=\"48\" height=\"48\" class=\"mw-file-element\" srcset=\"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Royal_coat_of_arms_of_the_United_Kingdom_%281952%E2%80%932022%2C_variant_1%29.svg/120px-Royal_coat_of_arms_of_the_United_Kingdom_%281952%E2%80%932022%2C_variant_1%29.svg.png 2x\" data-file-width=\"1550\" data-file-height=\"1550\"></a></span> <i>by</i> <a href=\"//commons.wikimedia.org/wiki/User:Sodacan\" title=\"User:Sodacan\">Sodacan</a>",
+    "description": "<b>Royal Coat of Arms of the United Kingdom of Great Britain and Northern Ireland</b> in the style used by the Government of King Charles III from 2024 to the present (as used in all places except Scotland).\n<hr>\n<table class=\"cquote\" style=\"margin:auto; border-collapse: collapse; border: none; background-color: transparent; color: inherit; width: auto;\">\n<tbody><tr>\n<td width=\"20\" valign=\"top\" style=\"border:none; color:#B2B7F2;font-size:35px;font-family: 'Times New Roman', serif; font-weight: bold; text-align: left; padding: 10px 10px;\">“\n</td>\n<td valign=\"top\" style=\"border: none; padding: 4px 10px;\">Quarterly, First and Fourth Gules three lions passant guardant in pale Or armed and langued Azure (for England), Second quarter Or a lion rampant within a double tressure flory counter-flory Gules (for Scotland), Third quarter Azure a harp Or stringed Argent (for Ireland), the whole surrounded by the Garter; for a Crest, the imperial crown Proper; for Supporters, dexter a lion rampant guardant Or crowned as the Crest, sinister a unicorn Argent armed, crined and unguled Proper, gorged with a coronet Or composed of crosses patée and fleurs de lys a chain affixed thereto passing between the forelegs and reflexed over the back also Or; Motto 'Dieu et mon Droit’ ('God and my Right') below the shield.\n</td>\n<td width=\"20\" valign=\"bottom\" style=\"border: none; color: #B2B7F2; font-size: 35px; font-family: 'Times New Roman', serif; font-weight: bold; text-align: right; padding: 10px 10px;\">”\n</td></tr>\n<tr>\n<td colspan=\"3\" class=\"cquotecite\" style=\"border: none; padding-right: 4%\"><p style=\"font-size: smaller; text-align: right;\"><cite style=\"font-style: normal;\">—PINCHES, J.H &amp; R.V., The Royal Heraldry of England, 1974, Heraldry Today.</cite></p>\n</td></tr></tbody></table>",
+    "query": "wikipedia:September 2022 United Kingdom mini-budget",
+    "status": "downloaded",
+    "size": [
+      1920,
+      1675
+    ]
+  },
+  {
+    "id": "credit_suisse_2023",
+    "name_zh": "瑞信危機與被迫併購",
+    "name_en": "Credit Suisse Crisis",
+    "date": "2023-03-19",
+    "category": "金融危機",
+    "file": "assets/event_real_photos/credit_suisse_2023.jpg",
+    "source_page": "https://commons.wikimedia.org/wiki/File:Credit_Suisse_AG_headquarters_at_Paradeplatz%2C_Z%C3%BCrich%2C_Switzerland_%28Ank_Kumar%2C_Infosys_Limited%29_05.jpg",
+    "commons_title": "File:Credit Suisse AG headquarters at Paradeplatz, Zürich, Switzerland (Ank Kumar, Infosys Limited) 05.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "<a href=\"//commons.wikimedia.org/wiki/User:Ank_gsx\" title=\"User:Ank gsx\">Ank Kumar </a>",
+    "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+    "description": "Credit Suisse AG headquarters at Paradeplatz, Zürich, Switzerland (Ank Kumar, Infosys Limited)\nFounded in 1856 and headquartered in Zurich, Credit Suisse is the second largest Swiss bank providing a range of financial services like private banking, wealth management, investment banking and corporate banking.",
+    "query": "Credit Suisse headquarters Zurich",
+    "status": "downloaded",
+    "size": [
+      1920,
+      1541
+    ]
+  },
+  {
+    "id": "mexico_tequila_1994",
+    "name_zh": "墨西哥披索危機",
+    "name_en": "Mexican Peso Crisis",
+    "date": "1994-12-20",
+    "category": "金融危機",
+    "file": "assets/event_real_photos/mexico_tequila_1994.jpg",
+    "source_page": "https://commons.wikimedia.org/wiki/File:CADAL09002458_%E6%97%A5%E6%9C%AC%E8%BB%8D%E4%BA%BA%E7%9C%BC%E4%B8%AD%E4%B9%8B%E6%97%A5%E7%BE%8E%E5%8D%B1%E6%A9%9F.djvu",
+    "commons_title": "File:CADAL09002458 日本軍人眼中之日美危機.djvu",
+    "license": "Public domain",
+    "artist": "<div class=\"fn value\">\n（日） 匝瑳胤次（著 ）；杨敬慈</div>",
+    "credit": "<bdi><a href=\"https://en.wikipedia.org/wiki/en:Wuhan_University\" class=\"extiw\" title=\"w:en:Wuhan University\"><span title=\"university in Wuhan, China\">Wuhan University</span></a>\n</bdi>",
+    "description": "",
+    "query": "墨西哥披索危機",
+    "status": "downloaded",
+    "size": [
+      1920,
+      2853
+    ]
+  },
+  {
+    "id": "fed_qe1_2008",
+    "name_zh": "聯準會首輪量化寬鬆",
+    "name_en": "Fed QE1 Launch",
+    "date": "2008-11-25",
+    "category": "貨幣政策",
+    "file": "assets/event_real_photos/fed_qe1_2008.jpg",
+    "source_page": "https://commons.wikimedia.org/wiki/File:2025_construction_Eccles_Federal_Reserve_Building_Washington_DC_2025-02-10_12-05-42.jpg",
+    "commons_title": "File:2025 construction Eccles Federal Reserve Building Washington DC 2025-02-10 12-05-42.jpg",
+    "license": "CC BY 4.0",
+    "artist": "<a href=\"//commons.wikimedia.org/wiki/User:Lorax\" title=\"User:Lorax\">G. Edward Johnson</a>",
+    "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+    "description": "Ongoing construction at the Marriner S. Eccles Federal Reserve headquarters building. This 2.5 billion dollar renovation has been the subject of criticism by President Trump and other government officials. 2051 Constitution Avenue NW, Washington, DC 20418.",
+    "query": "Federal Reserve building Washington DC",
+    "status": "downloaded",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "id": "taper_tantrum_2013",
+    "name_zh": "縮減恐慌",
+    "name_en": "Taper Tantrum",
+    "date": "2013-05-22",
+    "category": "貨幣政策",
+    "file": "assets/event_real_photos/taper_tantrum_2013.jpg",
+    "source_page": "https://commons.wikimedia.org/wiki/File:011h_Epsom_Derby_Day_2015_-_Investec_Private_Banking_Stakes_-_Taper_Tantrum_and_Tom_Queally_going_to_post_%2817968988023%29.jpg",
+    "commons_title": "File:011h Epsom Derby Day 2015 - Investec Private Banking Stakes - Taper Tantrum and Tom Queally going to post (17968988023).jpg",
+    "license": "CC BY 2.0",
+    "artist": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/people/9887585@N08\">monkeywing</a> from London, UK",
+    "credit": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/photos/colinsite/17968988023/\">011h Epsom Derby Day 2015 - Investec Private Banking Stakes - Taper Tantrum and Tom Queally going to post</a>",
+    "description": "<p>011h Epsom Derby Day 2015 - Investec Private Banking Stakes - Taper Tantrum and Tom Queally going to post<br>\n</p>\nEpsom Derby",
+    "query": "Taper Tantrum",
+    "status": "downloaded",
+    "size": [
+      1920,
+      1280
+    ]
+  },
+  {
+    "id": "fed_hike_cycle_2022",
+    "name_zh": "聯準會激進升息週期",
+    "name_en": "Fed Aggressive Rate Hike Cycle",
+    "date": "2022-03-16",
+    "category": "貨幣政策",
+    "file": "assets/event_real_photos/fed_hike_cycle_2022.jpg",
+    "status": "existing",
+    "size": [
+      864,
+      1191
+    ]
+  },
+  {
+    "id": "fed_hike_jun_2022",
+    "name_zh": "聯準會單次升息3碼",
+    "name_en": "Fed 75bps Rate Hike",
+    "date": "2022-06-15",
+    "category": "貨幣政策",
+    "file": "assets/event_real_photos/fed_hike_jun_2022.jpg",
+    "status": "existing",
+    "size": [
+      3000,
+      2041
+    ]
+  },
+  {
+    "id": "ecb_negative_rates_2014",
+    "name_zh": "歐洲央行負利率政策",
+    "name_en": "ECB Negative Interest Rates",
+    "date": "2014-06-05",
+    "category": "貨幣政策",
+    "file": "assets/event_real_photos/ecb_negative_rates_2014.jpg",
+    "source_page": "https://commons.wikimedia.org/wiki/File:European_Central_Bank_-_building_under_construction_-_Frankfurt_-_Germany_-_13.jpg",
+    "commons_title": "File:European Central Bank - building under construction - Frankfurt - Germany - 13.jpg",
+    "license": "CC BY-SA 3.0",
+    "artist": "<a href=\"//commons.wikimedia.org/wiki/User:NorbertNagel\" title=\"User:NorbertNagel\">Norbert Nagel</a>",
+    "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+    "description": "New building of the European Central Bank in Frankfurt Main, Germany.",
+    "query": "European Central Bank Frankfurt",
+    "status": "downloaded",
+    "size": [
+      1920,
+      3181
+    ]
+  },
+  {
+    "id": "boj_ycc_abandon_2024",
+    "name_zh": "日本央行放棄殖利率曲線控制",
+    "name_en": "BOJ Ends YCC / Rate Hike",
+    "date": "2024-03-19",
+    "category": "貨幣政策",
+    "file": "assets/event_real_photos/boj_ycc_abandon_2024.jpg",
+    "source_page": "https://en.wikipedia.org/wiki/Bank_of_Japan",
+    "commons_title": "File:Bank_of_Japan_2010.jpg",
+    "license": "CC BY-SA 3.0",
+    "artist": "<a href=\"//commons.wikimedia.org/wiki/User:Wiiii\" title=\"User:Wiiii\">Wiiii</a>",
+    "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+    "description": "Bank of Japan, Chuo-ku Tokyo Japan, designed by Kingo Tatsuno in 1896.",
+    "query": "wikipedia:Bank of Japan",
+    "status": "downloaded",
+    "size": [
+      1920,
+      1401
+    ]
+  },
+  {
+    "id": "fed_pivot_2024",
+    "name_zh": "聯準會首次降息",
+    "name_en": "Fed First Rate Cut (2024)",
+    "date": "2024-09-18",
+    "category": "貨幣政策",
+    "file": "assets/event_real_photos/fed_pivot_2024.jpg",
+    "source_page": "https://commons.wikimedia.org/wiki/File:US_Federal_Reserve_Eccles_Building_1937.jpg",
+    "commons_title": "File:US Federal Reserve Eccles Building 1937.jpg",
+    "license": "Public domain",
+    "artist": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/people/92618257@N08\">Federalreserve</a>",
+    "credit": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/photos/federalreserve/11208619053/\">00491</a>",
+    "description": "Eccles Building 10/20/1937",
+    "query": "Federal Reserve Board building",
+    "status": "downloaded",
+    "size": [
+      1920,
+      1453
+    ]
+  },
+  {
+    "id": "snb_franc_shock_2015",
+    "name_zh": "瑞士央行取消匯率上限",
+    "name_en": "Swiss Franc Shock",
+    "date": "2015-01-15",
+    "category": "貨幣政策",
+    "file": "assets/event_real_photos/snb_franc_shock_2015.jpg",
+    "source_page": "https://commons.wikimedia.org/wiki/File:SNB_%28Swiss_National_Bank%29_headquarters_at_Bundesplatz%2C_Bern%2C_Switzerland_%28Ank_Kumar%2C_Infosys_Limited%29_06.jpg",
+    "commons_title": "File:SNB (Swiss National Bank) headquarters at Bundesplatz, Bern, Switzerland (Ank Kumar, Infosys Limited) 06.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "<a href=\"//commons.wikimedia.org/wiki/User:Ank_gsx\" title=\"User:Ank gsx\">Ank Kumar </a>",
+    "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+    "description": "Swiss National Bank Headquarters building at \n<p>Bundesplatz 1 P.O. Box CH-3003 Berne, Switzerland\n</p><p>German - Schweizerische Nationalbank\nFrench - Banque nationale suisse\nItalian - Banca nazionale svizzera\nRomansh - Banca naziunala svizra\n</p><p>Architect - Eduard Joos\nArchitectural Style - Neo Baroque \n</p><p>The Swiss National Bank conducts Switzerland's monetary policy as an independent central bank and the sole issuer of Swiss franc banknotes. It is obliged by the Swiss Constitution and by statute to act in accordance with the interests of Switzerland as a whole.\n</p>\nThe SNB has two head offices one in Berne and one in Zurich, as well as a branch office in Singapore. Moreover, it maintains six representative offices (in Basel, Geneva, Lausanne, Lugano, Lucerne and St Gallen)",
+    "query": "Swiss National Bank building",
+    "status": "downloaded",
+    "size": [
+      1920,
+      1091
+    ]
+  },
+  {
+    "id": "pboc_devaluation_2015",
+    "name_zh": "中國人民幣突發貶值",
+    "name_en": "PBOC Yuan Devaluation",
+    "date": "2015-08-11",
+    "category": "貨幣政策",
+    "file": "assets/event_real_photos/pboc_devaluation_2015.jpg",
+    "source_page": "https://en.wikipedia.org/wiki/Renminbi",
+    "commons_title": "File:Banknotes_YuanRPC.png",
+    "license": "CC0",
+    "artist": "<a href=\"//commons.wikimedia.org/w/index.php?title=User:Baderneiro&amp;action=edit&amp;redlink=1\" class=\"new\" title=\"User:Baderneiro (page does not exist)\">Baderneiro</a>",
+    "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+    "description": "Larger banknotes from the People's Republic of China",
+    "query": "wikipedia:Renminbi",
+    "status": "downloaded",
+    "size": [
+      1920,
+      1920
+    ]
+  },
+  {
+    "id": "rbi_covid_cuts_2020",
+    "name_zh": "印度央行疫情緊急降息",
+    "name_en": "RBI Emergency COVID Rate Cuts",
+    "date": "2020-03-27",
+    "category": "貨幣政策",
+    "file": "assets/event_real_photos/rbi_covid_cuts_2020.jpg",
+    "source_page": "https://en.wikipedia.org/wiki/Reserve_Bank_of_India",
+    "commons_title": "File:Seal_of_the_Reserve_Bank_of_India.svg",
+    "license": "Public domain",
+    "artist": "Government of India",
+    "credit": "<a rel=\"nofollow\" class=\"external free\" href=\"http://rbidocs.rbi.org.in/rdocs/AnnualReport/PDFs/0RBIAN240810_F.pdf\">http://rbidocs.rbi.org.in/rdocs/AnnualReport/PDFs/0RBIAN240810_F.pdf</a><br>Transferred from <a class=\"external text\" data-mw-original-href=\"http://en.wikipedia.org\" href=\"https://en.wikipedia.org\">en.wikipedia</a> to Commons by <a href=\"//commons.wikimedia.org/wiki/User:Fry1989\" title=\"User:Fry1989\">User:Fry1989</a> using <a rel=\"nofollow\" class=\"external text\" href=\"http://tools.wikimedia.de/~magnus/commonshelper.php\">CommonsHelper</a>.",
+    "description": "Seal of the <a href=\"https://en.wikipedia.org/wiki/Reserve_Bank_of_India\" class=\"extiw\" title=\"w:Reserve Bank of India\">Reserve Bank of India</a>",
+    "query": "wikipedia:Reserve Bank of India",
+    "status": "downloaded",
+    "size": [
+      1920,
+      1920
+    ]
+  },
+  {
+    "id": "boj_negative_rates_2016",
+    "name_zh": "日本央行實施負利率",
+    "name_en": "BOJ Negative Rates",
+    "date": "2016-01-29",
+    "category": "貨幣政策",
+    "file": "assets/event_real_photos/boj_negative_rates_2016.jpg",
+    "source_page": "https://en.wikipedia.org/wiki/Bank_of_Japan",
+    "commons_title": "File:Bank_of_Japan_2010.jpg",
+    "license": "CC BY-SA 3.0",
+    "artist": "<a href=\"//commons.wikimedia.org/wiki/User:Wiiii\" title=\"User:Wiiii\">Wiiii</a>",
+    "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+    "description": "Bank of Japan, Chuo-ku Tokyo Japan, designed by Kingo Tatsuno in 1896.",
+    "query": "wikipedia:Bank of Japan",
+    "status": "downloaded",
+    "size": [
+      1920,
+      1401
+    ]
+  },
+  {
+    "id": "boc_property_support_2023",
+    "name_zh": "中國房地產救市與寬鬆訊號",
+    "name_en": "China Property Support Easing",
+    "date": "2023-08-21",
+    "category": "貨幣政策",
+    "file": "assets/event_real_photos/boc_property_support_2023.jpg",
+    "source_page": "https://en.wikipedia.org/wiki/Chinese_property_sector_crisis_%282020-present%29",
+    "commons_title": "File:20210305_Residential_buildings_developed_by_Evergrande_in_Yuanyang.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "<a href=\"//commons.wikimedia.org/wiki/User:Windmemories\" title=\"User:Windmemories\">Windmemories</a>",
+    "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+    "description": "Residential buildings developed by Evergrande in Pingyuan New Area, Yuanyang",
+    "query": "wikipedia:Chinese property sector crisis (2020-present)",
+    "status": "downloaded",
+    "size": [
+      1800,
+      1200
+    ]
+  },
+  {
+    "id": "ecb_qe_2015",
+    "name_zh": "歐洲央行全面QE啟動",
+    "name_en": "ECB QE Launch",
+    "date": "2015-01-22",
+    "category": "貨幣政策",
+    "file": "assets/event_real_photos/ecb_qe_2015.jpg",
+    "source_page": "https://en.wikipedia.org/wiki/Quantitative_easing",
+    "commons_title": "File:Government-Vedder-Highsmith-detail-1.jpeg",
+    "license": "Public domain",
+    "artist": "Artist is Elihu Vedder (1836–1923). Photographed 2007 by Carol Highsmith (1946–), who explicitly <a rel=\"nofollow\" class=\"external text\" href=\"https://www.loc.gov/rr/print/res/482_high.html\">placed</a> the photograph in the public domain.",
+    "credit": "Library of Congress, Prints &amp; Photographs Division, LC-DIG-highsm-02036 (original digital file), <a rel=\"nofollow\" class=\"external text\" href=\"http://memory.loc.gov/master/pnp/highsm/02000/02036u.tif\">uncompressed archival TIFF version (76 MB)</a>, cropped and converted to JPEG with the GIMP 2.4.5, image quality 88.",
+    "description": "Detail from <i>Government</i>. Mural by Elihu Vedder. Lobby to Main Reading Room, Library of Congress Thomas Jefferson Building, Washington, D.C. Main figure is seated atop a pedestal saying \"GOVERNMENT\" and holding a tablet saying \"A GOVERNMENT / OF THE PEOPLE / BY THE PEOPLE / FOR THE PEOPLE\". Artist's signature is \"ELIHU VEDDER / ROMA–1896\".",
+    "query": "wikipedia:Quantitative easing",
+    "status": "downloaded",
+    "size": [
+      1920,
+      1217
+    ]
+  },
+  {
+    "id": "oil_crisis_2008",
+    "name_zh": "油價衝破147美元",
+    "name_en": "Oil Price Spike to $147",
+    "date": "2008-07-11",
+    "category": "商品衝擊",
+    "file": "assets/event_real_photos/oil_crisis_2008.jpg",
+    "source_page": "https://commons.wikimedia.org/wiki/File:Face._Horse_head_on_pumpjack._-_Flickr_-_Night_Photo.jpg",
+    "commons_title": "File:Face. Horse head on pumpjack. - Flickr - Night Photo.jpg",
+    "license": "CC BY 2.0",
+    "artist": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/people/187543158@N07\">Maxx@night</a> from Austin, Texas. USA",
+    "credit": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/photos/187543158@N07/53257238213/\">Face. Horse head on pumpjack.</a>",
+    "description": "I grew up in West Texas, which is rich in light sweet crude oil. As a child, I remember, seeing these pumpjjacks dotting the landscape. They always reminded me of a bucking horse. Do you see the horse head?",
+    "query": "oil pumpjack crude oil",
+    "status": "downloaded",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "id": "oil_negative_2020",
+    "name_zh": "油價首度跌入負值",
+    "name_en": "Oil Goes Negative",
+    "date": "2020-04-20",
+    "category": "商品衝擊",
+    "file": "assets/event_real_photos/oil_negative_2020.jpg",
+    "source_page": "https://commons.wikimedia.org/wiki/File:United_States_Strategic_Petroleum_Reserve_061.jpg",
+    "commons_title": "File:United States Strategic Petroleum Reserve 061.jpg",
+    "license": "Public domain",
+    "artist": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/people/37916456@N02\">ENERGY.GOV</a>",
+    "credit": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/photos/departmentofenergy/14593338527/\">228 072 001</a>",
+    "description": "<p>FRESH WATER TANKS AT WEST HACKBERRY.\n</p>\nSINCE 1976, THE DEPARTMENT OF ENERGY HAS BEEN INVOLVED IN A MAJOR FACILITIES DEVELOPMENT PROGRAM TO STOCKPILE CRUDE OIL. THE STRATEGIC PETROLEUM RESERVE FACILITY PROGRAM HAS FIVE UNDERGROUND CRUDE OIL STORAGE FACILITIES IN SALT DOMES ALONG THE GULF COASTS OF TEXAS AND LOUISIANA AND A GOVERNMENT- OWNED MARINE TERMINAL ON THE MISSISSIPPI RIVER AT ST. JAMES, LOUISIANA. THE FIVE STORAGE SITES AR BAYOU CHOCTAW, WEEKS ISLAND, WEST HACKBERRY IN LOUISIANA AND BRYAN MOUND AND BIG HILL IN TEXAS. THESE FIVE STORAGE SITES ARE ORGANIZED INTO THREE DISTRIBUTION SYSTEMS AND CONNECTED BY DOE PIPELINES TO COMMERCIAL CRUDE OIL PIPELINE NETWORKS AND MARINE TERMINAL FACILITIES FOR DRAW DOWN DISTRIBUTION. WEST HACKBERRY, THE SECOND LARGEST STORAGE SITES IN THE STRATEGIC PETROLEUM RESERVE IS LOCATED IN CAMERON PARISH, LOUISIANA, IN A SALT DOME THAT CONTAINS 15.1 CUBIC MILES OF SALT, WHEN MEASURED ABOVE THE 10,500 FOOT LEVEL. WEST HACKBERRY IS CONNECTED TO THE TEXOMA PIPELINE, WHICH RUNS NORTHWARD TO CUSHING, OKLAHOMA, AND ANOTHER EXISTING PIPELINE DISTRIBUTION NETWORK. WEST HACKBERRY HAS A TOTAL OF 22 STORAGE CAVERNS WITH A COMBINED CAPACITY TO STORE 219 MILLION BARRELS OF CRUDE OIL AND CAN BE DRAWN DOWN AT A DESIGN RATE OF 1.4",
+    "query": "Cushing Oklahoma oil storage tanks",
+    "status": "downloaded",
+    "size": [
+      1920,
+      1536
+    ]
+  },
+  {
+    "id": "opec_cut_2022",
+    "name_zh": "OPEC+大幅減產",
+    "name_en": "OPEC+ Production Cut 2022",
+    "date": "2022-10-05",
+    "category": "商品衝擊",
+    "file": "assets/event_real_photos/opec_cut_2022.jpg",
+    "source_page": "https://en.wikipedia.org/wiki/OPEC",
+    "commons_title": "File:Flag_of_OPEC.svg",
+    "license": "Public domain",
+    "artist": "<a href=\"https://en.wikipedia.org/wiki/User:Zscout370\" class=\"extiw\" title=\"en:User:Zscout370\">Zscout370</a>",
+    "credit": "English Wikipedia: <a href=\"https://en.wikipedia.org/wiki/Image:Flag_of_OPEC.svg\" class=\"extiw\" title=\"en:Image:Flag of OPEC.svg\">en:Image:Flag_of_OPEC.svg</a>",
+    "description": "Flag of the <a href=\"https://en.wikipedia.org/wiki/OPEC\" class=\"extiw\" title=\"en:OPEC\">Organization of Petroleum Exporting Countries</a>",
+    "query": "wikipedia:OPEC",
+    "status": "downloaded",
+    "size": [
+      1920,
+      1152
+    ]
+  },
+  {
+    "id": "gold_record_2020",
+    "name_zh": "黃金突破2000美元",
+    "name_en": "Gold Breaks $2000",
+    "date": "2020-08-04",
+    "category": "商品衝擊",
+    "file": "assets/event_real_photos/gold_record_2020.jpg",
+    "source_page": "https://en.wikipedia.org/wiki/Gold_bar",
+    "commons_title": "File:Gold_bullion_2.jpg",
+    "license": "Public domain",
+    "artist": "<a href=\"//commons.wikimedia.org/w/index.php?title=User:Szaaman&amp;action=edit&amp;redlink=1\" class=\"new\" title=\"User:Szaaman (page does not exist)\">Szaaman</a>",
+    "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+    "description": "A gold bullion weighing 12½ kg. Property of the Polish National Bank",
+    "query": "wikipedia:Gold bar",
+    "status": "downloaded",
+    "size": [
+      912,
+      684
+    ]
+  },
+  {
+    "id": "wheat_crisis_2022",
+    "name_zh": "俄烏衝突引發糧食危機",
+    "name_en": "Ukraine War Grain Crisis",
+    "date": "2022-03-07",
+    "category": "商品衝擊",
+    "file": "assets/event_real_photos/wheat_crisis_2022.jpg",
+    "source_page": "https://en.wikipedia.org/wiki/2022_food_crises",
+    "commons_title": "File:FFPI-2014-2024.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "<a href=\"//commons.wikimedia.org/w/index.php?title=User:DancingOwl&amp;action=edit&amp;redlink=1\" class=\"new\" title=\"User:DancingOwl (page does not exist)\">DancingOwl</a>",
+    "credit": "<p><span class=\"int-own-work\" lang=\"en\">Own work</span><br>\n</p>\nData source: <a rel=\"nofollow\" class=\"external free\" href=\"https://www.fao.org/worldfoodsituation/foodpricesindex/en/\">https://www.fao.org/worldfoodsituation/foodpricesindex/en/</a>",
+    "description": "A food price index published by the Food and Agriculture Organization (FAO) of the United Nations, for 2014–2024. The FAO Food Price Index (FFPI) is a measure of the international prices of a basket of food commodities, published monthly. It consists of the weighted average of five commodity group price indices. The commodity groups are Cereal, Vegetable Oil, Dairy, Meat, and Sugar. The price index is set to 100 for the average prices of the years 2014–2016. Data source: <a rel=\"nofollow\" class=\"external free\" href=\"https://www.fao.org/worldfoodsituation/foodpricesindex/en/\">https://www.fao.org/worldfoodsituation/foodpricesindex/en/</a>",
+    "query": "wikipedia:2022 food crises",
+    "status": "downloaded",
+    "size": [
+      1424,
+      690
+    ]
+  },
+  {
+    "id": "nickel_short_squeeze_2022",
+    "name_zh": "鎳價軋空與LME停市",
+    "name_en": "Nickel Short Squeeze",
+    "date": "2022-03-08",
+    "category": "商品衝擊",
+    "file": "assets/event_real_photos/nickel_short_squeeze_2022.jpg",
+    "source_page": "https://commons.wikimedia.org/wiki/File:Nickel_chunk.jpg",
+    "commons_title": "File:Nickel chunk.jpg",
+    "license": "CC BY-SA 3.0",
+    "artist": "<a href=\"https://en.wikipedia.org/wiki/User:Materialscientist\" class=\"extiw\" title=\"en:User:Materialscientist\">Materialscientist</a> (<a href=\"https://en.wikipedia.org/wiki/User_talk:Materialscientist\" class=\"extiw\" title=\"en:User talk:Materialscientist\">talk</a>)",
+    "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span> (<span lang=\"en\" dir=\"ltr\">Original text: <i><bdi lang=\"\">I created this work entirely by myself.</bdi></i></span>)",
+    "description": "A piece of Ni about 3 cm in size",
+    "query": "nickel metal LME",
+    "status": "downloaded",
+    "size": [
+      600,
+      632
+    ]
+  },
+  {
+    "id": "lng_europe_2022",
+    "name_zh": "歐洲天然氣價格危機",
+    "name_en": "European Natural Gas Crisis",
+    "date": "2022-08-26",
+    "category": "商品衝擊",
+    "file": "assets/event_real_photos/lng_europe_2022.jpg",
+    "source_page": "https://commons.wikimedia.org/wiki/File:Natural_gas_prices_in_Europe%2C_Asia%2C_and_the_United_States%2C_Jan_2020-February_2022.png",
+    "commons_title": "File:Natural gas prices in Europe, Asia, and the United States, Jan 2020-February 2022.png",
+    "license": "CC BY 4.0",
+    "artist": "International Energy Agency",
+    "credit": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.iea.org/reports/russian-supplies-to-global-energy-markets/gas-market-and-russian-supply-2\">Gas Market and Russian Supply, International Energy Agency</a> Made available exceptionally under a CC BY 4.0 license as a part of the IEA's \"Russia's War on Ukraine\" series. <a rel=\"nofollow\" class=\"external text\" href=\"https://iea.blob.core.windows.net/assets/af2ef37e-cbf5-49ce-b05a-ecb5725f9769/ListordescriptionofCC-licensedContent_20220406.pdf\">License statement</a>",
+    "description": "Natural gas prices in Europe, Asia, and the United States, January 2020-February 2022. European natural gas prices rose to all-time highs and remain extremely volatile following the invasion of Ukraine by Russia on 24 February 2022.",
+    "query": "European Natural Gas Crisis",
+    "status": "downloaded",
+    "size": [
+      1126,
+      809
+    ]
+  },
+  {
+    "id": "cocoa_record_2024",
+    "name_zh": "可可價格歷史飆升",
+    "name_en": "Cocoa Price Spike",
+    "date": "2024-03-26",
+    "category": "商品衝擊",
+    "file": "assets/event_real_photos/cocoa_record_2024.jpg",
+    "source_page": "https://commons.wikimedia.org/wiki/File:A_cocoa_farm_in_Ghana.jpg",
+    "commons_title": "File:A cocoa farm in Ghana.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "<a href=\"//commons.wikimedia.org/w/index.php?title=King_Bangaba&amp;action=edit&amp;redlink=1\" class=\"new\" title=\"King Bangaba (page does not exist)\">King Bangaba</a>",
+    "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+    "description": "Drying of the cocoa bean by a farmer at <a href=\"//commons.wikimedia.org/w/index.php?title=Nkyerepoaso&amp;action=edit&amp;redlink=1\" class=\"new\" title=\"Nkyerepoaso (page does not exist)\">Nkyerepoaso</a> in Juaben municipal of the Ashanti region of Ghana.",
+    "query": "cocoa beans Ghana",
+    "status": "downloaded",
+    "size": [
+      1920,
+      1440
+    ]
+  },
+  {
+    "id": "uranium_rally_2023",
+    "name_zh": "鈾價與核能供應鏈漲勢",
+    "name_en": "Uranium Rally",
+    "date": "2023-09-15",
+    "category": "商品衝擊",
+    "file": "assets/event_real_photos/uranium_rally_2023.jpg",
+    "source_page": "https://en.wikipedia.org/wiki/Uranium",
+    "commons_title": "File:HEUraniumC.jpg",
+    "license": "Public domain",
+    "artist": "Unspecified",
+    "credit": "<a rel=\"nofollow\" class=\"external free\" href=\"https://web.archive.org/web/20050829231403/http://web.em.doe.gov/takstock/phochp3a.html\">https://web.archive.org/web/20050829231403/http://web.em.doe.gov/takstock/phochp3a.html</a>",
+    "description": "A billet of highly enriched uranium that was recovered from scrap processed at the Y-12 National Security Complex Plant. Original and unrotated.",
+    "query": "wikipedia:Uranium",
+    "status": "downloaded",
+    "size": [
+      1920,
+      1536
+    ]
+  },
+  {
+    "id": "india_rice_ban_2023",
+    "name_zh": "印度限制白米出口",
+    "name_en": "India Rice Export Ban",
+    "date": "2023-07-20",
+    "category": "商品衝擊",
+    "file": "assets/event_real_photos/india_rice_ban_2023.jpg",
+    "source_page": "https://commons.wikimedia.org/wiki/File:India_-_Markets_-_chilies_and_rice_%285208315013%29.jpg",
+    "commons_title": "File:India - Markets - chilies and rice (5208315013).jpg",
+    "license": "CC BY 2.0",
+    "artist": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/people/56796376@N00\">McKay Savage</a> from London, UK",
+    "credit": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/photos/mckaysavage/5208315013/\">India - Markets - chilies and rice</a>",
+    "description": "India - Markets - chilies and rice",
+    "query": "rice market India",
+    "status": "downloaded",
+    "size": [
+      1920,
+      1440
+    ]
+  },
+  {
+    "id": "copper_rally_2021",
+    "name_zh": "銅價衝上十年新高",
+    "name_en": "Copper Price Rally",
+    "date": "2021-05-10",
+    "category": "商品衝擊",
+    "file": "assets/event_real_photos/copper_rally_2021.jpg",
+    "source_page": "https://en.wikipedia.org/wiki/Copper",
+    "commons_title": "File:NatCopper.jpg",
+    "license": "CC BY-SA 3.0",
+    "artist": "<ul><li><a href=\"//commons.wikimedia.org/wiki/File:Native_Copper_Macro_Digon3.jpg\" title=\"File:Native Copper Macro Digon3.jpg\">Native_Copper_Macro_Digon3.jpg</a>: “Jonathan Zander (<a href=\"//commons.wikimedia.org/wiki/User:Digon3\" title=\"User:Digon3\">Digon3</a>)\"</li>\n<li>derivative work: <a href=\"//commons.wikimedia.org/wiki/User:Materialscientist\" title=\"User:Materialscientist\">Materialscientist</a> (<a href=\"//commons.wikimedia.org/wiki/User_talk:Materialscientist\" title=\"User talk:Materialscientist\"><span class=\"signature-talk\">talk</span></a>)</li></ul>",
+    "credit": "<ul><li><a href=\"//commons.wikimedia.org/wiki/File:Native_Copper_Macro_Digon3.jpg\" title=\"File:Native Copper Macro Digon3.jpg\">Native_Copper_Macro_Digon3.jpg</a></li></ul>",
+    "description": "Macro of <a href=\"https://en.wikipedia.org/wiki/native_copper\" class=\"extiw\" title=\"en:native copper\">native copper</a> about 1 ½ inches (4 cm) in size.",
+    "query": "wikipedia:Copper",
+    "status": "downloaded",
+    "size": [
+      1534,
+      1452
+    ]
+  },
+  {
+    "id": "bitcoin_crash_2018",
+    "name_zh": "比特幣2018大崩盤",
+    "name_en": "Bitcoin 2018 Crash",
+    "date": "2018-01-17",
+    "category": "科技產業",
+    "file": "assets/event_real_photos/bitcoin_crash_2018.jpg",
+    "source_page": "https://en.wikipedia.org/wiki/Bitcoin",
+    "commons_title": "File:Bitcoin.svg",
+    "license": "Public domain",
+    "artist": "Grayliptrot",
+    "credit": "This file was derived from:  <a href=\"//commons.wikimedia.org/wiki/File:Bitcoin_logo.svg\" title=\"File:Bitcoin logo.svg\">Bitcoin logo.svg</a><br>",
+    "description": "Logo of <a href=\"https://en.wikipedia.org/wiki/Bitcoin\" class=\"extiw\" title=\"w:Bitcoin\">Bitcoin</a>",
+    "query": "wikipedia:Bitcoin",
+    "status": "downloaded",
+    "size": [
+      1920,
+      1920
+    ]
+  },
+  {
+    "id": "ftx_collapse_2022",
+    "name_zh": "FTX交易所崩潰",
+    "name_en": "FTX Collapse",
+    "date": "2022-11-08",
+    "category": "科技產業",
+    "file": "assets/event_real_photos/ftx_collapse_2022.jpg",
+    "source_page": "https://en.wikipedia.org/wiki/Sam_Bankman-Fried",
+    "commons_title": "File:Sam_Bankman-Fried_(cropped).png",
+    "license": "CC BY 3.0",
+    "artist": "Cointelegraph",
+    "credit": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.youtube.com/watch?v=EsmhjNtlT_Y\">\"Institutions are ‘DESPERATE’ for crypto! | Exclusive interview with Sam Bankman-Fried\"</a>",
+    "description": "<a href=\"https://en.wikipedia.org/wiki/Sam_Bankman-Fried\" class=\"extiw\" title=\"w:Sam Bankman-Fried\">Sam Bankman-Fried</a> in an interview during the Bitcoin 2021 conference",
+    "query": "wikipedia:Sam Bankman-Fried",
+    "status": "downloaded",
+    "size": [
+      1080,
+      1439
+    ]
+  },
+  {
+    "id": "chatgpt_launch_2022",
+    "name_zh": "ChatGPT發布引發AI熱潮",
+    "name_en": "ChatGPT Launch / AI Boom",
+    "date": "2022-11-30",
+    "category": "科技產業",
+    "file": "assets/event_real_photos/chatgpt_launch_2022.jpg",
+    "source_page": "https://en.wikipedia.org/wiki/ChatGPT",
+    "commons_title": "File:OpenAI_logo_2025_(symbol).svg",
+    "license": "Public domain",
+    "artist": "OpenAI",
+    "credit": "This file was derived from:  <a href=\"//commons.wikimedia.org/wiki/File:OpenAI_logo_2025.svg\" title=\"File:OpenAI logo 2025.svg\">OpenAI logo 2025.svg</a><br>",
+    "description": "<a href=\"https://en.wikipedia.org/wiki/OpenAI\" class=\"extiw\" title=\"w:OpenAI\">OpenAI</a>'s blossom logo, used since February 2025",
+    "query": "wikipedia:ChatGPT",
+    "status": "downloaded",
+    "size": [
+      1920,
+      1920
+    ]
+  },
+  {
+    "id": "nvidia_earnings_2023",
+    "name_zh": "輝達AI業績爆發",
+    "name_en": "Nvidia AI Earnings Surge",
+    "date": "2023-05-24",
+    "category": "科技產業",
+    "file": "assets/event_real_photos/nvidia_earnings_2023.jpg",
+    "source_page": "https://en.wikipedia.org/wiki/Nvidia",
+    "commons_title": "File:2788-2888_San_Tomas_Expwy.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "<a href=\"//commons.wikimedia.org/wiki/User:Coolcaesar\" title=\"User:Coolcaesar\">Coolcaesar</a>",
+    "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+    "description": "NVIDIA headquarters at 2788-2888 San Tomas Expressway in Santa Clara, California.",
+    "query": "wikipedia:Nvidia",
+    "status": "downloaded",
+    "size": [
+      1920,
+      1292
+    ]
+  },
+  {
+    "id": "deepseek_shock_2025",
+    "name_zh": "DeepSeek震撼AI市場",
+    "name_en": "DeepSeek AI Market Shock",
+    "date": "2025-01-27",
+    "category": "科技產業",
+    "file": "assets/event_real_photos/deepseek_shock_2025.jpg",
+    "status": "existing",
+    "size": [
+      2000,
+      2000
+    ]
+  },
+  {
+    "id": "google_deepmind_2016",
+    "name_zh": "AlphaGo擊敗李世石",
+    "name_en": "AlphaGo Breakthrough",
+    "date": "2016-03-09",
+    "category": "科技產業",
+    "file": "assets/event_real_photos/google_deepmind_2016.jpg",
+    "source_page": "https://en.wikipedia.org/wiki/Lee_Sedol",
+    "commons_title": "File:Lee_Se-Dol_-_2016_(cropped).jpg",
+    "license": "CC BY 2.0",
+    "artist": "LG Electronics",
+    "credit": "<a rel=\"nofollow\" class=\"external free\" href=\"https://www.flickr.com/photos/lge/26980691250/in/dateposted/\">https://www.flickr.com/photos/lge/26980691250/in/dateposted/</a>",
+    "description": "LG전자, 이세돌 9단과 함께 학생들의 꿈 그린다\n<p>■ 이세돌 9단, LG전자의 대국 후원비용 전액 기부 결정\n</p><p>■ 성민복지관에 ‘G5’와 ‘캠 플러스’ 및 복지시설 리모델링 지원\n</p><p><br>\n</p>\n※ Social LG전자 (social.lge.co.kr/newsroom) 에서 관련 보도자료를 확인하실 수 있습니다",
+    "query": "wikipedia:Lee Sedol",
+    "status": "downloaded",
+    "size": [
+      367,
+      550
+    ]
+  },
+  {
+    "id": "cambridge_analytica_2018",
+    "name_zh": "劍橋分析個資醜聞",
+    "name_en": "Cambridge Analytica Scandal",
+    "date": "2018-03-19",
+    "category": "科技產業",
+    "file": "assets/event_real_photos/cambridge_analytica_2018.jpg",
+    "source_page": "https://commons.wikimedia.org/wiki/File:Cambridge_Analytica_protest_Parliament_Square3.jpg",
+    "commons_title": "File:Cambridge Analytica protest Parliament Square3.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "<a href=\"//commons.wikimedia.org/wiki/User:Jwslubbock\" title=\"User:Jwslubbock\">Jwslubbock</a>",
+    "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+    "description": "A protest following the Cambridge Analytics and Facebook data scandal with Christopher Wylie and Shahmir Sanni.",
+    "query": "Cambridge Analytica Facebook",
+    "status": "downloaded",
+    "size": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "id": "tsmc_capex_boom_2021",
+    "name_zh": "全球晶片荒與台積電擴產",
+    "name_en": "Global Chip Shortage Boom",
+    "date": "2021-04-01",
+    "category": "科技產業",
+    "file": "assets/event_real_photos/tsmc_capex_boom_2021.jpg",
+    "source_page": "https://commons.wikimedia.org/wiki/File:TSMC_Fab_14B_May_2025_1.jpg",
+    "commons_title": "File:TSMC Fab 14B May 2025 1.jpg",
+    "license": "CC BY 4.0",
+    "artist": "<a href=\"//commons.wikimedia.org/wiki/User:4300streetcar\" title=\"User:4300streetcar\">4300streetcar</a>",
+    "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+    "description": "TSMC Fab 14B in Tainan (Southern Taiwan Science Park)",
+    "query": "TSMC Fab",
+    "status": "downloaded",
+    "size": [
+      1920,
+      1280
+    ]
+  },
+  {
+    "id": "meta_crash_2022",
+    "name_zh": "Meta財報崩跌與科技重估",
+    "name_en": "Meta Earnings Collapse",
+    "date": "2022-02-03",
+    "category": "科技產業",
+    "file": "assets/event_real_photos/meta_crash_2022.jpg",
+    "source_page": "https://commons.wikimedia.org/wiki/File:Meta_Headquarters_Sign.jpg",
+    "commons_title": "File:Meta Headquarters Sign.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "<a href=\"//commons.wikimedia.org/wiki/User:Nokia621\" title=\"User:Nokia621\">Nokia621</a>",
+    "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+    "description": "Entrance sign at Meta's headquarters complex in Menlo Park, California",
+    "query": "Meta headquarters Menlo Park",
+    "status": "downloaded",
+    "size": [
+      1080,
+      810
+    ]
+  },
+  {
+    "id": "eu_ai_act_2024",
+    "name_zh": "歐盟AI法案通過",
+    "name_en": "EU AI Act Passage",
+    "date": "2024-03-13",
+    "category": "科技產業",
+    "file": "assets/event_real_photos/eu_ai_act_2024.jpg",
+    "source_page": "https://en.wikipedia.org/wiki/Artificial_Intelligence_Act",
+    "commons_title": "File:Flag_of_Europe.svg",
+    "license": "Public domain",
+    "artist": "<a href=\"//commons.wikimedia.org/wiki/User:Verdy_p\" title=\"User:Verdy p\">User:Verdy p</a>, <a href=\"//commons.wikimedia.org/wiki/User:-xfi-\" title=\"User:-xfi-\">User:-xfi-</a>, <a href=\"//commons.wikimedia.org/wiki/User:Paddu\" title=\"User:Paddu\">User:Paddu</a>, <a href=\"//commons.wikimedia.org/wiki/User:Nightstallion\" title=\"User:Nightstallion\">User:Nightstallion</a>, <a href=\"//commons.wikimedia.org/w/index.php?title=User:Funakoshi&amp;action=edit&amp;redlink=1\" class=\"new\" title=\"User:Funakoshi (page does not exist)\">User:Funakoshi</a>, <a href=\"//commons.wikimedia.org/w/index.php?title=User:Jeltz&amp;action=edit&amp;redlink=1\" class=\"new\" title=\"User:Jeltz (page does not exist)\">User:Jeltz</a>, <a href=\"//commons.wikimedia.org/wiki/User:Dbenbenn\" title=\"User:Dbenbenn\">User:Dbenbenn</a>, <a href=\"//commons.wikimedia.org/wiki/User:Zscout370\" title=\"User:Zscout370\">User:Zscout370</a>",
+    "credit": "<ul><li>File created by various Wikimedia users (see \"Author\").</li>\n<li>File based on the specification given at <a rel=\"nofollow\" class=\"external autonumber\" href=\"http://europa.eu/abc/symbols/emblem/graphics1_en.htm\">[1]</a>.</li></ul>",
+    "description": "The <a href=\"https://en.wikipedia.org/wiki/Flag_of_Europe\" class=\"extiw\" title=\"en:Flag of Europe\">Flag of Europe</a> is the flag and emblem of the <a href=\"//commons.wikimedia.org/wiki/European_Union\" title=\"European Union\">European Union</a> (EU) and <a href=\"//commons.wikimedia.org/wiki/Council_of_Europe\" class=\"mw-redirect\" title=\"Council of Europe\">Council of Europe</a> (CoE). It consists of a circle of 12 <a href=\"//commons.wikimedia.org/wiki/Gold\" title=\"Gold\">golden</a> (<a href=\"//commons.wikimedia.org/wiki/Yellow\" class=\"mw-redirect\" title=\"Yellow\">yellow</a>) stars on a <a href=\"//commons.wikimedia.org/wiki/Blue\" title=\"Blue\">blue</a> background. It was created in 1955 by the CoE and adopted by the EU, then the European Communities, in the 1980s.\n<p>The CoE and EU are distinct in membership and nature. The CoE is an international organisation with 46 members, dealing with human rights and rule of law, while the EU is a quasi-federal union of 27 states, focused on economic integration and political cooperation. Today, the flag is mostly associated with the latter.\n</p>\nIt was the intention of the CoE that the flag should come to represent <a href=\"//commons.wikimedia.org/wiki/Europe\" title=\"Europe\">Europe</a> as a whole, and since its adoption the membership of the CoE covers nearly the entire Europe by the number of states involved, although only a little over half of the European continent by territory. This is why the EU adopted the same flag. The flag has been used to represent Europe in sporting events and as a pro-democracy banner outside the European Union.",
+    "query": "wikipedia:Artificial Intelligence Act",
+    "status": "downloaded",
+    "size": [
+      1920,
+      1280
+    ]
+  },
+  {
+    "id": "crowdstrike_outage_2024",
+    "name_zh": "CrowdStrike全球系統中斷",
+    "name_en": "CrowdStrike Global Outage",
+    "date": "2024-07-19",
+    "category": "科技產業",
+    "file": "assets/event_real_photos/crowdstrike_outage_2024.jpg",
+    "source_page": "https://en.wikipedia.org/wiki/2024_CrowdStrike-related_IT_outages",
+    "commons_title": "File:CrowdStrike_BSOD_at_LGA.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "<a href=\"//commons.wikimedia.org/w/index.php?title=User:Smishra1&amp;action=edit&amp;redlink=1\" class=\"new\" title=\"User:Smishra1 (page does not exist)\">Smishra1</a>",
+    "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+    "description": "Blue screens of death at LGA airport from the CrowdStrike 2024 July outage.",
+    "query": "wikipedia:2024 CrowdStrike-related IT outages",
+    "status": "downloaded",
+    "size": [
+      1920,
+      1440
+    ]
+  },
+  {
+    "id": "japan_earthquake_2011",
+    "name_zh": "日本311大地震海嘯",
+    "name_en": "Japan 3/11 Earthquake & Tsunami",
+    "date": "2011-03-11",
+    "category": "自然災害",
+    "file": "assets/event_real_photos/japan_earthquake_2011.jpg",
+    "source_page": "https://commons.wikimedia.org/wiki/File:2011_T%C5%8Dhoku_earthquake_and_tsunami_damage_Iwaki%2C_Fukushima_1.JPG",
+    "commons_title": "File:2011 Tōhoku earthquake and tsunami damage Iwaki, Fukushima 1.JPG",
+    "license": "CC BY-SA 3.0",
+    "artist": "<a href=\"//commons.wikimedia.org/w/index.php?title=User:Cp9asngf&amp;action=edit&amp;redlink=1\" class=\"new\" title=\"User:Cp9asngf (page does not exist)\">Cp9asngf</a>",
+    "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+    "description": "2011年6月25日に撮影された、福島県いわき市久之浜地区の被災状況。",
+    "query": "Japan 3/11 Earthquake & Tsunami",
+    "status": "downloaded",
+    "size": [
+      1920,
+      2560
+    ]
+  },
+  {
+    "id": "hurricane_katrina_2005",
+    "name_zh": "卡崔娜颶風",
+    "name_en": "Hurricane Katrina",
+    "date": "2005-08-29",
+    "category": "自然災害",
+    "file": "assets/event_real_photos/hurricane_katrina_2005.jpg",
+    "source_page": "https://commons.wikimedia.org/wiki/File:House_flooded_from_Lake_Pontchartrain_waters_in_Hurricane_Katrina%2C_New_Orleans%2C_September_2005.jpg",
+    "commons_title": "File:House flooded from Lake Pontchartrain waters in Hurricane Katrina, New Orleans, September 2005.jpg",
+    "license": "Public domain",
+    "artist": "Photographer not credited",
+    "credit": "US Geological Survey photo via <a rel=\"nofollow\" class=\"external free\" href=\"https://www.sciencebase.gov/catalog/item/51dc3d48e4b0f81004b7aaf7\">https://www.sciencebase.gov/catalog/item/51dc3d48e4b0f81004b7aaf7</a>",
+    "description": "Original caption: Bacteria in Lake Pontchartrain. Flooded house showing the multiple high-water marks that mark thousands of New Orleans houses and are locally called the \"bathtub ring.\" U.S. Geological Survey \"Bacteria in Lake Pontchartrain\" photographs document work specifically related to the Louisiana Science Center and surveying fecal-indicator bacteria for the Louisiana Department of Environmental Quality, September 13-29, 2005, with much help from the Ohio Science Center. For sampling results, refer to U.S. Geological Survey Data Series 143 at: <a rel=\"nofollow\" class=\"external free\" data-mw-original-href=\"http://pubs.usgs.gov/ds/2005/143\" href=\"https://pubs.usgs.gov/ds/2005/143\">http://pubs.usgs.gov/ds/2005/143</a>",
+    "query": "Hurricane Katrina New Orleans flooding",
+    "status": "downloaded",
+    "size": [
+      1920,
+      1440
+    ]
+  },
+  {
+    "id": "covid_who_pandemic_2020",
+    "name_zh": "WHO宣布新冠疫情大流行",
+    "name_en": "WHO COVID-19 Pandemic Declaration",
+    "date": "2020-03-11",
+    "category": "自然災害",
+    "file": "assets/event_real_photos/covid_who_pandemic_2020.jpg",
+    "source_page": "https://commons.wikimedia.org/wiki/File:Mandarin_Oriental_Taipei_main_entrance_locked_20201228.jpg",
+    "commons_title": "File:Mandarin Oriental Taipei main entrance locked 20201228.jpg",
+    "license": "CC0",
+    "artist": "<a href=\"//commons.wikimedia.org/wiki/User:%E7%8E%84%E5%8F%B2%E7%94%9F\" title=\"User:玄史生\">玄史生</a>",
+    "credit": "<a rel=\"nofollow\" class=\"external free\" href=\"https://www.flickr.com/photos/137596559@N07/50769472642/\">https://www.flickr.com/photos/137596559@N07/50769472642/</a>",
+    "description": "​2020年5月27日，台北文華東方酒店因新冠肺炎大流行，境外旅客銳減，宣布關閉客房部門並資遣員工，只保留餐飲與精品部門，正門深鎖，改由後苑進出。至2020年12月28日攝影時已逾七個月以上，國際新冠肺炎疫情持續惡化，復業遙遙無期。",
+    "query": "WHO宣布新冠疫情大流行",
+    "status": "downloaded",
+    "size": [
+      1920,
+      2560
+    ]
+  },
+  {
+    "id": "taiwan_earthquake_2024",
+    "name_zh": "台灣花蓮大地震",
+    "name_en": "Taiwan Hualien Earthquake",
+    "date": "2024-04-03",
+    "category": "自然災害",
+    "file": "assets/event_real_photos/taiwan_earthquake_2024.jpg",
+    "source_page": "https://en.wikipedia.org/wiki/2024_Hualien_earthquake",
+    "commons_title": "File:Rescue_workers_near_the_semi-collapsed_ten-story_Uranus_Building_on_Xuanyuan_Road_after_the_2024_Hualien_earthquake.jpg",
+    "license": "CC BY 2.0",
+    "artist": "<p>總統府 / Official Photo by Shufu Liu / Office of the President\n</p>\n<small>Perspective correction made by <a href=\"//commons.wikimedia.org/wiki/User:Basile_Morin\" title=\"User:Basile Morin\">Basile Morin</a> from the <a href=\"//commons.wikimedia.org/wiki/File:04.03_%E5%89%AF%E7%B8%BD%E7%B5%B1%E5%89%8D%E5%BE%80%E8%8A%B1%E8%93%AE%E7%9E%AD%E8%A7%A3%E7%81%BD%E5%AE%B3%E6%83%85%E5%BD%A2%E5%8F%8A%E6%95%91%E6%8F%B4%E9%80%B2%E5%BA%A6_-_53629407644.jpg\" title=\"File:04.03 副總統前往花蓮瞭解災害情形及救援進度 - 53629407644.jpg\">original version</a>.</small>",
+    "credit": "<p><a href=\"//commons.wikimedia.org/wiki/File:04.03_%E5%89%AF%E7%B8%BD%E7%B5%B1%E5%89%8D%E5%BE%80%E8%8A%B1%E8%93%AE%E7%9E%AD%E8%A7%A3%E7%81%BD%E5%AE%B3%E6%83%85%E5%BD%A2%E5%8F%8A%E6%95%91%E6%8F%B4%E9%80%B2%E5%BA%A6_-_53629407644.jpg\" title=\"File:04.03 副總統前往花蓮瞭解災害情形及救援進度 - 53629407644.jpg\">File:04.03 副總統前往花蓮瞭解災害情形及救援進度 - 53629407644.jpg</a>\n</p>\n(from <a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/photos/presidentialoffice/53629407644/\">Flickr</a>)",
+    "description": "Rescue workers near the semi-collapsed ten-story <a href=\"https://en.wikipedia.org/wiki/Uranus_Building\" class=\"extiw\" title=\"en:Uranus Building\">Uranus Building</a> on Xuanyuan Road after the <a href=\"https://en.wikipedia.org/wiki/2024_Hualien_earthquake\" class=\"extiw\" title=\"en:2024 Hualien earthquake\">2024 Hualien earthquake</a>.",
+    "query": "wikipedia:2024 Hualien earthquake",
+    "status": "downloaded",
+    "size": [
+      1920,
+      1451
+    ]
+  },
+  {
+    "id": "indian_ocean_tsunami_2004",
+    "name_zh": "印度洋海嘯",
+    "name_en": "Indian Ocean Tsunami",
+    "date": "2004-12-26",
+    "category": "自然災害",
+    "file": "assets/event_real_photos/indian_ocean_tsunami_2004.jpg",
+    "source_page": "https://en.wikipedia.org/wiki/2004_Indian_Ocean_earthquake_and_tsunami",
+    "commons_title": "File:US_Navy_050102-N-9593M-040_A_village_near_the_coast_of_Sumatra_lays_in_ruin_after_the_Tsunami_that_struck_South_East_Asia.jpg",
+    "license": "Public domain",
+    "artist": "U.S. Navy photo by Photographer's Mate 2nd Class Philip A. McDaniel",
+    "credit": "<table class=\"layouttemplate sourcetemplate\" style=\"width:100%; clear:both; text-align:center; margin:0.5em auto; box-sizing: border-box; padding: 0; border-spacing: 8px; background-color: var(--background-color-neutral-subtle, #f6f7f5); color: var(--color-base, #202122); border: var(--border-subtle, 1px solid #555555);\" dir=\"ltr\" lang=\"en\">\n\n<tbody><tr>\n<td><span typeof=\"mw:File\"><span><img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Seal_of_the_United_States_Department_of_the_Navy.svg/120px-Seal_of_the_United_States_Department_of_the_Navy.svg.png?utm_source=commons.wikimedia.org&amp;utm_campaign=parser&amp;utm_content=thumbnail\" decoding=\"async\" width=\"80\" height=\"80\" class=\"mw-file-element\" srcset=\"https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Seal_of_the_United_States_Department_of_the_Navy.svg/250px-Seal_of_the_United_States_Department_of_the_Navy.svg.png?utm_source=commons.wikimedia.org&amp;utm_campaign=parser&amp;utm_content=thumbnail 2x\" data-file-width=\"889\" data-file-height=\"889\"></span></span>\n</td>\n<td align=\"center\">\n<p><span class=\"layouttemplateargs\" style=\"display:none;speak:none;\" title=\"template=ID-USMil 1%3D050102-N-9593M-040 2%3DNavy url%3Dhttp%3A%2F%2Fwww.navy.mil%2Fview_image.asp%3Fid%3D19968\"> </span>\nThis image was released by the United States Navy with the <a href=\"//commons.wikimedia.org/wiki/Commons:VIRIN\" title=\"Commons:VIRIN\">ID</a> <a rel=\"nofollow\" class=\"external text\" href=\"http://www.navy.mil/view_image.asp?id=19968\">050102-N-9593M-040</a> <a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/w/index.php?title=Category:Files_created_by_the_United_States_Navy_with_known_IDs&amp;filefrom=050102-N-9593M-040#mw-category-media\" href=\"https://commons.wikimedia.org/w/index.php?title=Category:Files_created_by_the_United_States_Navy_with_known_IDs&amp;filefrom=050102-N-9593M-040#mw-category-media\"><small>(next)</small></a>.<br>\n<small>This tag does not indicate the copyright status of the attached work. <span style=\"white-space:nowrap\">A normal <a href=\"//commons.wikimedia.org/wiki/Special:MyLanguage/Commons:Copyright_tags\" title=\"Special:MyLanguage/Commons:Copyright tags\">copyright tag</a> is still required.</span> <span style=\"white-space:nowrap\">See <a href=\"//commons.wikimedia.org/wiki/Special:MyLanguage/Commons:Licensing\" title=\"Special:MyLanguage/Commons:Licensing\">Commons:Licensing</a>.</span></small>\n</p>\n<hr>\n<p><span style=\"font-size:small;line-height:1.4\" class=\"plainlinks noprint\"><a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/ar\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/ar\"><bdi class=\"language lang-ar\" lang=\"ar\">العربية</bdi></a> <b>∙</b> <a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/bn\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/bn\"><bdi class=\"language lang-bn\" lang=\"bn\">বাংলা</bdi></a> <b>∙</b> \n<a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/jax\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/jax\"><bdi class=\"language lang-jax\" lang=\"jax\">Bahaso Jambi</bdi></a> <b>∙</b> \n<a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/de\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/de\"><bdi class=\"language lang-de\" lang=\"de\">Deutsch</bdi></a> <b>∙</b> <a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/de-formal\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/de-formal\"><bdi class=\"language lang-de-formal\" lang=\"de-formal\">Deutsch (Sie-Form)</bdi></a> <b>∙</b> <a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/en\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/en\"><bdi class=\"language lang-en\" lang=\"en\">English</bdi></a> <b>∙</b> <a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/es\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/es\"><bdi class=\"language lang-es\" lang=\"es\">español</bdi></a> <b>∙</b> <a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/eu\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/eu\"><bdi class=\"language lang-eu\" lang=\"eu\">euskara</bdi></a> <b>∙</b> <a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/fa\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/fa\"><bdi class=\"language lang-fa\" lang=\"fa\">فارسی</bdi></a> <b>∙</b> <a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/fr\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/fr\"><bdi class=\"language lang-fr\" lang=\"fr\">français</bdi></a> <b>∙</b> <a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/it\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/it\"><bdi class=\"language lang-it\" lang=\"it\">italiano</bdi></a> <b>∙</b> <a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/ja\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/ja\"><bdi class=\"language lang-ja\" lang=\"ja\">日本語</bdi></a> <b>∙</b> <a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/ko\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/ko\"><bdi class=\"language lang-ko\" lang=\"ko\">한국어</bdi></a> <b>∙</b> <a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/mk\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/mk\"><bdi class=\"language lang-mk\" lang=\"mk\">македонски</bdi></a> <b>∙</b> <a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/ml\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/ml\"><bdi class=\"language lang-ml\" lang=\"ml\">മലയാളം</bdi></a> <b>∙</b> <a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/nds\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/nds\"><bdi class=\"language lang-nds\" lang=\"nds\">Plattdüütsch</bdi></a> <b>∙</b> <a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/nl\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/nl\"><bdi class=\"language lang-nl\" lang=\"nl\">Nederlands</bdi></a> <b>∙</b> <a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/pl\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/pl\"><bdi class=\"language lang-pl\" lang=\"pl\">polski</bdi></a> <b>∙</b> <a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/ps\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/ps\"><bdi class=\"language lang-ps\" lang=\"ps\">پښتو</bdi></a> <b>∙</b> <a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/pt\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/pt\"><bdi class=\"language lang-pt\" lang=\"pt\">português</bdi></a> <b>∙</b> <a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/ru\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/ru\"><bdi class=\"language lang-ru\" lang=\"ru\">русский</bdi></a> <b>∙</b> <a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/sl\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/sl\"><bdi class=\"language lang-sl\" lang=\"sl\">slovenščina</bdi></a> <b>∙</b> <a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/sv\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/sv\"><bdi class=\"language lang-sv\" lang=\"sv\">svenska</bdi></a> <b>∙</b> <a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/tr\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/tr\"><bdi class=\"language lang-tr\" lang=\"tr\">Türkçe</bdi></a> <b>∙</b> <a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/uk\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/uk\"><bdi class=\"language lang-uk\" lang=\"uk\">українська</bdi></a> <b>∙</b> <a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/zh-hans\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/zh-hans\"><bdi class=\"language lang-zh-hans\" lang=\"zh-hans\">简体中文</bdi></a> <b>∙</b> <a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/zh-hant\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/zh-hant\"><bdi class=\"language lang-zh-hant\" lang=\"zh-hant\">繁體中文</bdi></a> <b>∙</b> <small class=\"plainlinks\"><a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/w/index.php?title=Template:ID-USMil/lang&amp;action=edit\" href=\"https://commons.wikimedia.org/w/index.php?title=Template:ID-USMil/lang&amp;action=edit\">+/−</a></small></span>\n</p>\n</td>\n<td><span class=\"mw-image-border\" typeof=\"mw:File\"><span><img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Flag_of_the_United_States.svg/120px-Flag_of_the_United_States.svg.png?utm_source=commons.wikimedia.org&amp;utm_campaign=parser&amp;utm_content=thumbnail\" decoding=\"async\" width=\"90\" height=\"47\" class=\"mw-file-element\" srcset=\"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Flag_of_the_United_States.svg/250px-Flag_of_the_United_States.svg.png?utm_source=commons.wikimedia.org&amp;utm_campaign=parser&amp;utm_content=thumbnail 2x\" data-file-width=\"1235\" data-file-height=\"650\"></span></span>\n</td></tr></tbody></table>",
+    "description": "Indian Ocean (Jan. 2, 2005) – A village near the coast of Sumatra lies in ruins after the Tsunami that struck South East Asia. Helicopters assigned to Carrier Air Wing Two (CVW-2) and Sailors from USS Abraham Lincoln (CVN 72) are conducting humanitarian operations in the wake of the Tsunami that struck South East Asia. The Abraham Lincoln Carrier Strike Group is currently operating in the Indian Ocean off the waters of Indonesia and Thailand. (South-West suburb of Banda Aceh, Indonesia. Village of Lampisang is visible in the upper-right corner) U.S. Navy photo by Photographer's Mate 2nd Class Philip A. McDaniel (RELEASED)",
+    "query": "wikipedia:2004 Indian Ocean earthquake and tsunami",
+    "status": "downloaded",
+    "size": [
+      1920,
+      1371
+    ]
+  },
+  {
+    "id": "iceland_ash_2010",
+    "name_zh": "冰島火山灰雲事件",
+    "name_en": "Iceland Volcano Ash Disruption",
+    "date": "2010-04-15",
+    "category": "自然災害",
+    "file": "assets/event_real_photos/iceland_ash_2010.jpg",
+    "source_page": "https://en.wikipedia.org/wiki/2010_eruptions_of_Eyjafjallajokull",
+    "commons_title": "File:Eyjafjallajokull-April-17.JPG",
+    "license": "CC BY-SA 3.0",
+    "artist": "<a href=\"//commons.wikimedia.org/w/index.php?title=User:%C3%81rni_Fri%C3%B0riksson&amp;action=edit&amp;redlink=1\" class=\"new\" title=\"User:Árni Friðriksson (page does not exist)\">Árni Friðriksson</a>",
+    "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+    "description": "Eruption at <a href=\"//commons.wikimedia.org/wiki/Eyjafjallaj%C3%B6kull\" title=\"Eyjafjallajökull\">Eyjafjallajökull</a> April 17, 2010.",
+    "query": "wikipedia:2010 eruptions of Eyjafjallajokull",
+    "status": "downloaded",
+    "size": [
+      1920,
+      1440
+    ]
+  },
+  {
+    "id": "thailand_floods_2011",
+    "name_zh": "泰國大洪水與硬碟供應鏈中斷",
+    "name_en": "Thailand Floods Supply Shock",
+    "date": "2011-10-17",
+    "category": "自然災害",
+    "file": "assets/event_real_photos/thailand_floods_2011.jpg",
+    "source_page": "https://en.wikipedia.org/wiki/2011_Thailand_floods",
+    "commons_title": "File:US_Navy_111022-N-WW409-445_An_SH-60F_Sea_Hawk_helicopter_assigned_to_Helicopter_Anti-Submarine_Squadron_(HS)_14,_flies_around_the_Bangkok_area_with.jpg",
+    "license": "Public domain",
+    "artist": "U.S. Navy photo by Mass Communication Specialist 1st Class Jennifer A. Villalovos",
+    "credit": "<table class=\"layouttemplate sourcetemplate\" style=\"width:100%; clear:both; text-align:center; margin:0.5em auto; box-sizing: border-box; padding: 0; border-spacing: 8px; background-color: var(--background-color-neutral-subtle, #f6f7f5); color: var(--color-base, #202122); border: var(--border-subtle, 1px solid #555555);\" dir=\"ltr\" lang=\"en\">\n\n<tbody><tr>\n<td><span typeof=\"mw:File\"><span><img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Seal_of_the_United_States_Department_of_the_Navy.svg/120px-Seal_of_the_United_States_Department_of_the_Navy.svg.png\" decoding=\"async\" width=\"80\" height=\"80\" class=\"mw-file-element\" srcset=\"https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Seal_of_the_United_States_Department_of_the_Navy.svg/250px-Seal_of_the_United_States_Department_of_the_Navy.svg.png 2x\" data-file-width=\"889\" data-file-height=\"889\"></span></span>\n</td>\n<td align=\"center\">\n<p><span class=\"layouttemplateargs\" style=\"display:none;speak:none;\" title=\"template=ID-USMil 1%3D111022-N-WW409-445 2%3DNavy url%3Dhttp%3A%2F%2Fwww.navy.mil%2Fview_image.asp%3Fid%3D109251\"> </span>\nThis image was released by the United States Navy with the <a href=\"//commons.wikimedia.org/wiki/Commons:VIRIN\" title=\"Commons:VIRIN\">ID</a> <a rel=\"nofollow\" class=\"external text\" href=\"http://www.navy.mil/view_image.asp?id=109251\">111022-N-WW409-445</a> <a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/w/index.php?title=Category:Files_created_by_the_United_States_Navy_with_known_IDs&amp;filefrom=111022-N-WW409-445#mw-category-media\" href=\"https://commons.wikimedia.org/w/index.php?title=Category:Files_created_by_the_United_States_Navy_with_known_IDs&amp;filefrom=111022-N-WW409-445#mw-category-media\"><small>(next)</small></a>.<br>\n<small>This tag does not indicate the copyright status of the attached work. <span style=\"white-space:nowrap\">A normal <a href=\"//commons.wikimedia.org/wiki/Special:MyLanguage/Commons:Copyright_tags\" title=\"Special:MyLanguage/Commons:Copyright tags\">copyright tag</a> is still required.</span> <span style=\"white-space:nowrap\">See <a href=\"//commons.wikimedia.org/wiki/Special:MyLanguage/Commons:Licensing\" title=\"Special:MyLanguage/Commons:Licensing\">Commons:Licensing</a>.</span></small>\n</p>\n<hr>\n<p><span style=\"font-size:small;line-height:1.4\" class=\"plainlinks noprint\"><a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/ar\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/ar\"><bdi class=\"language lang-ar\" lang=\"ar\">العربية</bdi></a> <b>∙</b> <a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/bn\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/bn\"><bdi class=\"language lang-bn\" lang=\"bn\">বাংলা</bdi></a> <b>∙</b> \n<a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/jax\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/jax\"><bdi class=\"language lang-jax\" lang=\"jax\">Bahaso Jambi</bdi></a> <b>∙</b> \n<a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/de\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/de\"><bdi class=\"language lang-de\" lang=\"de\">Deutsch</bdi></a> <b>∙</b> <a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/de-formal\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/de-formal\"><bdi class=\"language lang-de-formal\" lang=\"de-formal\">Deutsch (Sie-Form)</bdi></a> <b>∙</b> <a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/en\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/en\"><bdi class=\"language lang-en\" lang=\"en\">English</bdi></a> <b>∙</b> <a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/es\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/es\"><bdi class=\"language lang-es\" lang=\"es\">español</bdi></a> <b>∙</b> <a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/eu\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/eu\"><bdi class=\"language lang-eu\" lang=\"eu\">euskara</bdi></a> <b>∙</b> <a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/fa\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/fa\"><bdi class=\"language lang-fa\" lang=\"fa\">فارسی</bdi></a> <b>∙</b> <a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/fr\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/fr\"><bdi class=\"language lang-fr\" lang=\"fr\">français</bdi></a> <b>∙</b> <a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/it\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/it\"><bdi class=\"language lang-it\" lang=\"it\">italiano</bdi></a> <b>∙</b> <a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/ja\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/ja\"><bdi class=\"language lang-ja\" lang=\"ja\">日本語</bdi></a> <b>∙</b> <a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/ko\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/ko\"><bdi class=\"language lang-ko\" lang=\"ko\">한국어</bdi></a> <b>∙</b> <a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/mk\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/mk\"><bdi class=\"language lang-mk\" lang=\"mk\">македонски</bdi></a> <b>∙</b> <a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/ml\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/ml\"><bdi class=\"language lang-ml\" lang=\"ml\">മലയാളം</bdi></a> <b>∙</b> <a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/nds\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/nds\"><bdi class=\"language lang-nds\" lang=\"nds\">Plattdüütsch</bdi></a> <b>∙</b> <a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/nl\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/nl\"><bdi class=\"language lang-nl\" lang=\"nl\">Nederlands</bdi></a> <b>∙</b> <a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/pl\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/pl\"><bdi class=\"language lang-pl\" lang=\"pl\">polski</bdi></a> <b>∙</b> <a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/ps\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/ps\"><bdi class=\"language lang-ps\" lang=\"ps\">پښتو</bdi></a> <b>∙</b> <a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/pt\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/pt\"><bdi class=\"language lang-pt\" lang=\"pt\">português</bdi></a> <b>∙</b> <a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/ru\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/ru\"><bdi class=\"language lang-ru\" lang=\"ru\">русский</bdi></a> <b>∙</b> <a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/sl\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/sl\"><bdi class=\"language lang-sl\" lang=\"sl\">slovenščina</bdi></a> <b>∙</b> <a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/sv\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/sv\"><bdi class=\"language lang-sv\" lang=\"sv\">svenska</bdi></a> <b>∙</b> <a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/tr\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/tr\"><bdi class=\"language lang-tr\" lang=\"tr\">Türkçe</bdi></a> <b>∙</b> <a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/uk\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/uk\"><bdi class=\"language lang-uk\" lang=\"uk\">українська</bdi></a> <b>∙</b> <a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/zh-hans\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/zh-hans\"><bdi class=\"language lang-zh-hans\" lang=\"zh-hans\">简体中文</bdi></a> <b>∙</b> <a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/wiki/Template:ID-USMil/zh-hant\" href=\"https://commons.wikimedia.org/wiki/Template:ID-USMil/zh-hant\"><bdi class=\"language lang-zh-hant\" lang=\"zh-hant\">繁體中文</bdi></a> <b>∙</b> <small class=\"plainlinks\"><a class=\"external text\" data-mw-original-href=\"//commons.wikimedia.org/w/index.php?title=Template:ID-USMil/lang&amp;action=edit\" href=\"https://commons.wikimedia.org/w/index.php?title=Template:ID-USMil/lang&amp;action=edit\">+/−</a></small></span>\n</p>\n</td>\n<td><span class=\"mw-image-border\" typeof=\"mw:File\"><span><img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Flag_of_the_United_States.svg/120px-Flag_of_the_United_States.svg.png\" decoding=\"async\" width=\"90\" height=\"47\" class=\"mw-file-element\" srcset=\"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Flag_of_the_United_States.svg/250px-Flag_of_the_United_States.svg.png 2x\" data-file-width=\"1235\" data-file-height=\"650\"></span></span>\n</td></tr></tbody></table>",
+    "description": "BANGKOK (Oct. 22, 2011) An SH-60F Sea Hawk helicopter assigned to Helicopter Anti-Submarine Squadron (HS) 14, flies around the Bangkok area with members of the humanitarian assessment survey team and the Royal Thai Armed Forces to assess the damage caused by flooding. (U.S. Navy photo by Mass Communication Specialist 1st Class Jennifer A. Villalovos/Released)",
+    "query": "wikipedia:2011 Thailand floods",
+    "status": "downloaded",
+    "size": [
+      1920,
+      1285
+    ]
+  },
+  {
+    "id": "turkey_syria_quake_2023",
+    "name_zh": "土耳其敘利亞強震",
+    "name_en": "Turkey-Syria Earthquake",
+    "date": "2023-02-06",
+    "category": "自然災害",
+    "file": "assets/event_real_photos/turkey_syria_quake_2023.jpg",
+    "source_page": "https://commons.wikimedia.org/wiki/File:Autonomous_countries_that_issued_a_message_of_support_for_the_2023_Turkey-Syria_earthquakes.png",
+    "commons_title": "File:Autonomous countries that issued a message of support for the 2023 Turkey-Syria earthquakes.png",
+    "license": "CC BY-SA 4.0",
+    "artist": "<a href=\"//commons.wikimedia.org/wiki/User:SahinBasaran\" title=\"User:SahinBasaran\">SahinBasaran</a>",
+    "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+    "description": "Autonomous countries that issued a message of support for the 2023 Turkey-Syria earthquakes",
+    "query": "2023 Turkey Syria earthquake",
+    "status": "downloaded",
+    "size": [
+      1920,
+      925
+    ]
+  },
+  {
+    "id": "panama_drought_2023",
+    "name_zh": "巴拿馬運河乾旱限航",
+    "name_en": "Panama Canal Drought Restrictions",
+    "date": "2023-10-30",
+    "category": "自然災害",
+    "file": "assets/event_real_photos/panama_drought_2023.jpg",
+    "source_page": "https://en.wikipedia.org/wiki/Panama_Canal",
+    "commons_title": "File:Panama_Canal_Map_EN.svg",
+    "license": "CC BY-SA 2.0",
+    "artist": "<a href=\"//commons.wikimedia.org/wiki/User:Thoroe\" title=\"User:Thoroe\">Thoroe</a>",
+    "credit": "<p><span class=\"int-own-work\" lang=\"en\">Own work</span>\n</p><p>Map created using:\n</p>\n<ul><li><a rel=\"nofollow\" class=\"external text\" href=\"http://gmt.soest.hawaii.edu\">Generic Mapping Tools (GMT)</a> with <a rel=\"nofollow\" class=\"external text\" data-mw-original-href=\"http://www2.jpl.nasa.gov/srtm/\" href=\"https://www2.jpl.nasa.gov/srtm/\">SRTM3 V2 data</a></li>\n<li><a rel=\"nofollow\" class=\"external text\" href=\"http://www.openstreetmap.org\">OpenStreetMap</a> data</li>\n<li><a href=\"//commons.wikimedia.org/wiki/File:CanalZone.gif\" class=\"mw-redirect\" title=\"File:CanalZone.gif\">File:CanalZone.gif</a></li>\n<li><a href=\"//commons.wikimedia.org/wiki/File:Panama_Canal_Rough_Diagram-non_annotated.png\" title=\"File:Panama Canal Rough Diagram-non annotated.png\">File:Panama Canal Rough Diagram-non annotated.png</a></li>\n<li><a rel=\"nofollow\" class=\"external text\" href=\"http://ufdc.ufl.edu/AA00010750/00001\">Proposal for the expansion of the Panama Canal</a></li>\n<li><a rel=\"nofollow\" class=\"external text\" href=\"http://www.czbrats.com/CuPA/bfall/ProfilePC.htm\">Panama Canal Profile Map</a></li></ul>",
+    "description": "Map of the <a href=\"https://en.wikipedia.org/wiki/Panama_Canal\" class=\"extiw\" title=\"en:Panama Canal\">Panama Canal</a> (English version)",
+    "query": "wikipedia:Panama Canal",
+    "status": "downloaded",
+    "size": [
+      1920,
+      1983
+    ]
+  },
+  {
+    "id": "australia_bushfires_2020",
+    "name_zh": "澳洲野火危機",
+    "name_en": "Australia Bushfires",
+    "date": "2020-01-06",
+    "category": "自然災害",
+    "file": "assets/event_real_photos/australia_bushfires_2020.jpg",
+    "source_page": "https://commons.wikimedia.org/wiki/File:2019-20_Australia_Bushfires_season_montage.png",
+    "commons_title": "File:2019-20 Australia Bushfires season montage.png",
+    "license": "CC BY-SA 4.0",
+    "artist": "Montage created by <a href=\"//commons.wikimedia.org/w/index.php?title=User:Patrickgom0&amp;action=edit&amp;redlink=1\" class=\"new\" title=\"User:Patrickgom0 (page does not exist)\">Patrickgom0</a>",
+    "credit": "<ul><li><a href=\"//commons.wikimedia.org/wiki/File:Sydney_bushfire_smoke_on_George_St_(49197319478).jpg\" title=\"File:Sydney bushfire smoke on George St (49197319478).jpg\">File:Sydney bushfire smoke on George St (49197319478).jpg</a> - <a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/people/7281432@N05\">VirtualWolf</a> (<a rel=\"nofollow\" class=\"external text\" href=\"https://creativecommons.org/licenses/by-sa/2.0/deed.en\">CC-BY-SA 2.0</a>)</li>\n<li><a href=\"//commons.wikimedia.org/wiki/File:Orroral_Valley_Fire_viewed_from_Tuggeranong_January_2020.jpg\" title=\"File:Orroral Valley Fire viewed from Tuggeranong January 2020.jpg\">File:Orroral Valley Fire viewed from Tuggeranong January 2020.jpg</a> - <a href=\"//commons.wikimedia.org/wiki/User:Nick-D\" title=\"User:Nick-D\">Nick-D</a> (<a rel=\"nofollow\" class=\"external text\" href=\"https://creativecommons.org/licenses/by-sa/4.0/deed.en\">CC-BY-SA 4.0</a>)</li>\n<li><a href=\"//commons.wikimedia.org/wiki/File:Werombi_Bushfire.jpg\" title=\"File:Werombi Bushfire.jpg\">File:Werombi Bushfire.jpg</a> - <a href=\"//commons.wikimedia.org/w/index.php?title=User:Helitak430&amp;action=edit&amp;redlink=1\" class=\"new\" title=\"User:Helitak430 (page does not exist)\">Helitak430</a> (<a rel=\"nofollow\" class=\"external text\" href=\"https://creativecommons.org/licenses/by-sa/4.0/deed.en\">CC-BY-SA 4.0</a>)</li>\n<li><a href=\"//commons.wikimedia.org/wiki/File:Bells_Line_of_Road_Bushfire_Damage_JAN2020.jpg\" title=\"File:Bells Line of Road Bushfire Damage JAN2020.jpg\">File:Bells Line of Road Bushfire Damage JAN2020.jpg</a> - <a href=\"//commons.wikimedia.org/w/index.php?title=User:Classy_Melissa&amp;action=edit&amp;redlink=1\" class=\"new\" title=\"User:Classy Melissa (page does not exist)\">Classy Melissa</a> (<a rel=\"nofollow\" class=\"external text\" href=\"https://creativecommons.org/publicdomain/zero/1.0/deed.en\">CC0</a>)</li>\n<li><a href=\"//commons.wikimedia.org/wiki/File:Australian_bushfires_as_viewed_from_the_ISS.jpg\" title=\"File:Australian bushfires as viewed from the ISS.jpg\">File:Australian bushfires as viewed from the ISS.jpg</a> - <a href=\"https://en.wikipedia.org/wiki/NASA\" class=\"extiw\" title=\"en:NASA\">NASA ISS</a> (<a href=\"https://en.wikipedia.org/wiki/Publish_domain\" class=\"extiw\" title=\"en:Publish domain\">Public Domain</a>)</li>\n<li><a href=\"//commons.wikimedia.org/wiki/File:Gospers_Mountain_Fire.jpg\" title=\"File:Gospers Mountain Fire.jpg\">File:Gospers Mountain Fire.jpg</a> - <a href=\"//commons.wikimedia.org/wiki/User:Meganesia\" title=\"User:Meganesia\">Meganesia</a> (<a rel=\"nofollow\" class=\"external text\" href=\"https://creativecommons.org/licenses/by-sa/4.0/deed.en\">CC-BY-SA 4.0</a>)</li></ul>",
+    "description": "Montage of images related to the 2019-20 Bushfire season in Australia",
+    "query": "Australia Bushfires",
+    "status": "downloaded",
+    "size": [
+      746,
+      825
+    ]
+  },
+  {
+    "id": "taiwan_921_quake_1999",
+    "name_zh": "台灣921大地震",
+    "name_en": "Taiwan 9/21 Earthquake",
+    "date": "1999-09-21",
+    "category": "自然災害",
+    "file": "assets/event_real_photos/taiwan_921_quake_1999.jpg",
+    "source_page": "https://commons.wikimedia.org/wiki/File:921_Earthquake_Museum_of_Taiwan%2C_Feb_2025_%281%29.jpg",
+    "commons_title": "File:921 Earthquake Museum of Taiwan, Feb 2025 (1).jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "<a href=\"//commons.wikimedia.org/wiki/User:Ralffralff\" title=\"User:Ralffralff\">Ralff Nestor Nacor</a>",
+    "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+    "description": "921 Earthquake Museum of Taiwan, Feb 2025 (1)",
+    "query": "1999 Jiji earthquake Taiwan",
+    "status": "downloaded",
+    "size": [
+      1920,
+      1601
+    ]
+  },
+  {
+    "id": "taiwan_sars_2003",
+    "name_zh": "台灣SARS疫情衝擊",
+    "name_en": "Taiwan SARS Outbreak",
+    "date": "2003-04-24",
+    "category": "自然災害",
+    "file": "assets/event_real_photos/taiwan_sars_2003.jpg",
+    "source_page": "https://commons.wikimedia.org/wiki/File:SARS_epidemic_prevention_sheet_in_NTU_Sports_Center_1F_20171210.jpg",
+    "commons_title": "File:SARS epidemic prevention sheet in NTU Sports Center 1F 20171210.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "<a href=\"//commons.wikimedia.org/wiki/User:Solomon203\" title=\"User:Solomon203\">Solomon203</a>",
+    "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+    "description": "​國立臺灣大學綜合體育館1樓走廊釘掛之SARS疫情防疫作法公告牌，最下方印行政院衛生署署徽與臺大綜合體育館標誌。2023年拆除。",
+    "query": "Taiwan SARS Outbreak",
+    "status": "downloaded",
+    "size": [
+      1920,
+      2560
+    ]
+  },
+  {
+    "id": "morakot_2009",
+    "name_zh": "莫拉克風災",
+    "name_en": "Typhoon Morakot",
+    "date": "2009-08-08",
+    "category": "自然災害",
+    "file": "assets/event_real_photos/morakot_2009.jpg",
+    "source_page": "https://commons.wikimedia.org/wiki/File:US_Navy_photo_090819-N-WJ771-275_Typhoon_Morakot_response_.jpg",
+    "commons_title": "File:US Navy photo 090819-N-WJ771-275 Typhoon Morakot response .jpg",
+    "license": "Public domain",
+    "artist": "U.S. Navy photo by Mass Communication Specialist 3rd Class Casey H. Kyhl",
+    "credit": "<a rel=\"nofollow\" class=\"external text\" href=\"https://archive.is/VqsjK\">Typhoon Morakot response (Image 31 of 50)</a>. Defense Video Imagery Distribution System (DVIDS) (<span class=\"mw-formatted-date\" title=\"2009-08-19\">2009-08-19</span>). Archived from <a rel=\"nofollow\" class=\"external text\" href=\"https://www.dvidshub.net/image/1573256/typhoon-morakot-response\">the original</a> on <span class=\"mw-formatted-date\" title=\"2017-09-17\">2017-09-17</span>.",
+    "description": "Marines remove a harness from an earthmover recently airlifted to a temporary landing zone in Min Chuan, Taiwan, by a Navy MH-53E Sea Dragon Aug. 19, 2009. The MH-53E and other Navy helicopters embarked aboard USS Denver (LPD 9) are currently conducting humanitarian operations in Taiwan to provide assistance to those suffering in the wake of typhoon Morakot.",
+    "query": "Typhoon Morakot Taiwan",
+    "status": "downloaded",
+    "size": [
+      1920,
+      1372
+    ]
+  },
+  {
+    "id": "sunflower_movement_2014",
+    "name_zh": "太陽花學運",
+    "name_en": "Sunflower Movement",
+    "date": "2014-03-18",
+    "category": "地緣政治",
+    "file": "assets/event_real_photos/sunflower_movement_2014.jpg",
+    "source_page": "https://commons.wikimedia.org/wiki/File:Taiwanese_student_movement_supporters_in_Los_Angeles_2.jpg",
+    "commons_title": "File:Taiwanese student movement supporters in Los Angeles 2.jpg",
+    "license": "CC BY-SA 2.0",
+    "artist": "<a href=\"//www.flickr.com/people/42757699@N04\" class=\"extiw\" title=\"flickruser:42757699@N04\">Neon Tommy</a>",
+    "credit": "<a href=\"//commons.wikimedia.org/wiki/Flickr\" class=\"mw-redirect\" title=\"Flickr\">Flickr</a>: <a rel=\"nofollow\" class=\"external autonumber\" href=\"https://www.flickr.com/photos/42757699@N04/13549955255\">[1]</a>",
+    "description": "(Benjamin Dunn/Neon Tommy)",
+    "query": "Sunflower Movement 2014 photograph",
+    "status": "existing",
+    "size": [
+      4766,
+      3157
+    ]
+  },
+  {
+    "id": "taiwan_chip_drought_2021",
+    "name_zh": "台灣乾旱與晶圓供水壓力",
+    "name_en": "Taiwan Drought and Chip Water Stress",
+    "date": "2021-04-06",
+    "category": "商品衝擊",
+    "file": "assets/event_real_photos/taiwan_chip_drought_2021.jpg",
+    "source_page": "https://en.wikipedia.org/wiki/Sun_Moon_Lake",
+    "commons_title": "File:Sun_Moon_Lake_Sentinel-2B_MSI_2024-04-04.jpg",
+    "license": "Attribution",
+    "artist": "<ul><li>Original data: ESA Copernicus Sentinel-2</li>\n<li>Processed by <a href=\"https://zh.wikipedia.org/wiki/User:Tiouraren\" class=\"extiw\" title=\"zh-tw:User:Tiouraren\">Tiouraren</a> (Y.-C. Tsai)</li></ul>",
+    "credit": "<a rel=\"nofollow\" class=\"external text\" href=\"https://browser.dataspace.copernicus.eu/\">Copernicus Browser</a>",
+    "description": "Satellite image of Sun Moon Lake in Nantou, Taiwan, taken by the MultiSpectral Instrument (MSI) aboard ESA's Sentinel-2B satellite on April 4, 2024 (UTC).",
+    "query": "wikipedia:Sun Moon Lake",
+    "status": "downloaded",
+    "size": [
+      1920,
+      2305
+    ]
+  },
+  {
+    "id": "taiwan_cb_hike_2022",
+    "name_zh": "台灣央行啟動升息循環",
+    "name_en": "Taiwan Central Bank Rate Hike Cycle",
+    "date": "2022-03-17",
+    "category": "貨幣政策",
+    "file": "assets/event_real_photos/taiwan_cb_hike_2022.jpg",
+    "source_page": "https://en.wikipedia.org/wiki/Central_Bank_of_the_Republic_of_China_%28Taiwan%29",
+    "commons_title": "File:ROC_Central_Bank_Seal.svg",
+    "license": "Public domain",
+    "artist": "<a href=\"https://zh.wikipedia.org/wiki/%E4%B8%AD%E8%8F%AF%E6%B0%91%E5%9C%8B%E4%B8%AD%E5%A4%AE%E9%8A%80%E8%A1%8C\" class=\"extiw\" title=\"zh:中華民國中央銀行\">中華民國中央銀行, Central Bank of the Republic of China (Taiwan)</a>／Draw by <a href=\"https://zh.wikipedia.org/wiki/User_talk:Happy60907\" class=\"extiw\" title=\"zh:User talk:Happy60907\"><span style=\"font-variant:small-caps; color:red\"><b>Bangardi</b></span></a><div style=\"display:table;width:;vertical-align:middle;direction:ltr;float:left;line-height:22px;height:24px;font-size:.96em;margin:0px;padding:2px 4px 2px 6px;color:var(--color-base,#000);background:var(--background-color-neutral-subtle,#F8F9FA);border:1px solid #BAB;border-collapse:separate;border-spacing:0px;background:#FEE;border:1px solid #600;\"><span typeof=\"mw:File\"><a href=\"//commons.wikimedia.org/wiki/File:Inkscape-ws.svg\" class=\"mw-file-description\"><img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Inkscape-ws.svg/40px-Inkscape-ws.svg.png?utm_source=commons.wikimedia.org&amp;utm_campaign=parser&amp;utm_content=thumbnail\" decoding=\"async\" width=\"22\" height=\"22\" class=\"mw-file-element\" srcset=\"https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Inkscape-ws.svg/60px-Inkscape-ws.svg.png?utm_source=commons.wikimedia.org&amp;utm_campaign=parser&amp;utm_content=thumbnail 2x\" data-file-width=\"390\" data-file-height=\"390\"></a></span> This <i>W3C-unspecified</i> <a href=\"https://en.wikipedia.org/wiki/Vector_images\" class=\"extiw\" title=\"w:Vector images\">vector image</a> was created with <a href=\"https://en.wikipedia.org/wiki/Inkscape\" class=\"extiw\" title=\"w:Inkscape\">Inkscape</a> .</div>",
+    "credit": "<a href=\"https://zh.wikipedia.org/wiki/%E4%B8%AD%E8%8F%AF%E6%B0%91%E5%9C%8B%E4%B8%AD%E5%A4%AE%E9%8A%80%E8%A1%8C\" class=\"extiw\" title=\"zh:中華民國中央銀行\">中華民國中央銀行, Central Bank of the Republic of China (Taiwan)</a><a rel=\"nofollow\" class=\"external autonumber\" href=\"https://www.cbc.gov.tw/\">[1]</a>",
+    "description": "Seal of the Central Bank of the Republic of China (Taiwan)",
+    "query": "wikipedia:Central Bank of the Republic of China (Taiwan)",
+    "status": "downloaded",
+    "size": [
+      1920,
+      1920
+    ]
+  },
+  {
+    "id": "taiwan_power_grid_2022",
+    "name_zh": "台灣電網事故與供電風險",
+    "name_en": "Taiwan Power Grid Disruption",
+    "date": "2022-03-03",
+    "category": "自然災害",
+    "file": "assets/event_real_photos/taiwan_power_grid_2022.jpg",
+    "source_page": "https://en.wikipedia.org/wiki/Taichung_Power_Plant",
+    "commons_title": "File:Taichung_Thermal_Power_Plant.JPG",
+    "license": "CC BY-SA 3.0",
+    "artist": "<a href=\"//commons.wikimedia.org/wiki/User:Chongkian\" title=\"User:Chongkian\">Chongkian</a>",
+    "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+    "description": "Taichung Power Plant, Longjing District, Taichung City, Taiwan",
+    "query": "wikipedia:Taichung Power Plant",
+    "status": "downloaded",
+    "size": [
+      1564,
+      1173
+    ]
+  },
+  {
+    "id": "taiwan_election_2024",
+    "name_zh": "2024台灣總統大選",
+    "name_en": "Taiwan Presidential Election 2024",
+    "date": "2024-01-13",
+    "category": "地緣政治",
+    "file": "assets/event_real_photos/taiwan_election_2024.jpg",
+    "source_page": "https://en.wikipedia.org/wiki/2024_Taiwanese_presidential_election",
+    "commons_title": "File:ROC_2024_Presidential_Election_County_level.svg",
+    "license": "CC BY-SA 4.0",
+    "artist": "沁水湾",
+    "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+    "description": "Election result by county-level divisions.",
+    "query": "wikipedia:2024 Taiwanese presidential election",
+    "status": "downloaded",
+    "size": [
+      1920,
+      2550
+    ]
+  },
+  {
+    "id": "tsmc_arizona_delay_2023",
+    "name_zh": "台積電亞利桑那廠延後量產",
+    "name_en": "TSMC Arizona Delay",
+    "date": "2023-07-20",
+    "category": "科技產業",
+    "file": "assets/event_real_photos/tsmc_arizona_delay_2023.jpg",
+    "source_page": "https://en.wikipedia.org/wiki/TSMC",
+    "commons_title": "File:TSMC_Global_R＆D_Center_at_night.jpg",
+    "license": "CC BY 2.0",
+    "artist": "曾 成訓",
+    "credit": "<a rel=\"nofollow\" class=\"external free\" href=\"https://www.flickr.com/photos/tsengphotos/53114942112/\">https://www.flickr.com/photos/tsengphotos/53114942112/</a>",
+    "description": "​夜間的台積電全球研發中心",
+    "query": "wikipedia:TSMC",
+    "status": "downloaded",
+    "size": [
+      1920,
+      1281
+    ]
+  },
+  {
+    "id": "taiwan_property_credit_2023",
+    "name_zh": "台灣房市信用管制延續",
+    "name_en": "Taiwan Property Credit Curbs",
+    "date": "2023-06-15",
+    "category": "貨幣政策",
+    "file": "assets/event_real_photos/taiwan_property_credit_2023.jpg",
+    "source_page": "https://commons.wikimedia.org/wiki/File:Residential_buildings_in_Tamsui%2C_New_Taipei_20221231.jpg",
+    "commons_title": "File:Residential buildings in Tamsui, New Taipei 20221231.jpg",
+    "license": "CC BY-SA 2.0",
+    "artist": "迷惘的人生",
+    "credit": "<a rel=\"nofollow\" class=\"external free\" href=\"https://www.flickr.com/photos/27689876@N03/52597609781/\">https://www.flickr.com/photos/27689876@N03/52597609781/</a>",
+    "description": "Residential buildings in Tamsui, New Taipei 20221231",
+    "query": "Taipei residential buildings",
+    "status": "downloaded",
+    "size": [
+      1920,
+      1281
+    ]
+  },
+  {
+    "id": "taiwan_election_2016",
+    "name_zh": "2016台灣政黨輪替",
+    "name_en": "Taiwan Election 2016",
+    "date": "2016-01-16",
+    "category": "地緣政治",
+    "file": "assets/event_real_photos/taiwan_election_2016.jpg",
+    "status": "existing",
+    "size": [
+      564,
+      676
+    ]
+  },
+  {
+    "id": "china_tour_ban_2019",
+    "name_zh": "中國暫停自由行來台",
+    "name_en": "China Suspends Individual Travel to Taiwan",
+    "date": "2019-08-01",
+    "category": "地緣政治",
+    "file": "assets/event_real_photos/china_tour_ban_2019.jpg",
+    "source_page": "https://commons.wikimedia.org/wiki/File:Chinese_Tourists_in_Taiwan_%280153%29.JPG",
+    "commons_title": "File:Chinese Tourists in Taiwan (0153).JPG",
+    "license": "Public domain",
+    "artist": "<a href=\"//commons.wikimedia.org/wiki/User:Jiang\" title=\"User:Jiang\">Jiang</a>",
+    "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+    "description": "Mainland Chinese tourists visit the National Palace Museum in Taipei.",
+    "query": "Chinese tourists Taiwan",
+    "status": "downloaded",
+    "size": [
+      1920,
+      1440
+    ]
+  },
+  {
+    "id": "taiwan_covid_wave_2021",
+    "name_zh": "台灣本土疫情升三級警戒",
+    "name_en": "Taiwan COVID Level 3 Alert",
+    "date": "2021-05-19",
+    "category": "自然災害",
+    "file": "assets/event_real_photos/taiwan_covid_wave_2021.jpg",
+    "source_page": "https://en.wikipedia.org/wiki/COVID-19_pandemic",
+    "commons_title": "File:Covid-19_SP_-_UTI_V._Nova_Cachoeirinha.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "Gustavo Basso",
+    "credit": "<a rel=\"nofollow\" class=\"external free\" href=\"https://www.flickr.com/photos/gustavocb/49913440386\">https://www.flickr.com/photos/gustavocb/49913440386</a>",
+    "description": "A team of doctors, nurses and physiotherapists care for critically ill COVID-19 patients in the ICU of the Vila Nova Cachoeirinha hospital, in the north of São Paulo.",
+    "query": "wikipedia:COVID-19 pandemic",
+    "status": "downloaded",
+    "size": [
+      1920,
+      1282
+    ]
+  },
+  {
+    "id": "auto_chip_shortage_2021",
+    "name_zh": "車用晶片荒與台灣供應鏈吃緊",
+    "name_en": "Auto Chip Shortage and Taiwan Supply Strain",
+    "date": "2021-01-13",
+    "category": "科技產業",
+    "file": "assets/event_real_photos/auto_chip_shortage_2021.jpg",
+    "source_page": "https://en.wikipedia.org/wiki/Automotive_industry",
+    "commons_title": "File:002_Production_line_-_car_assembly_line_in_General_Motors_Manufacturing_Poland_-_Gliwice,_Poland.jpg",
+    "license": "CC BY 3.0",
+    "artist": "Marek Ślusarczyk (<a href=\"//commons.wikimedia.org/wiki/User:Tupungato\" title=\"User:Tupungato\">Tupungato</a>) <a rel=\"nofollow\" class=\"external text\" href=\"https://www.pond5.com/artist/citylife#1/2176\">Photo portfolio</a>",
+    "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+    "description": "Car factory production line. Opel Astra J manufactured in General Motors Manufacturing Poland plant in Gliwice.",
+    "query": "wikipedia:Automotive industry",
+    "status": "downloaded",
+    "size": [
+      1920,
+      1280
+    ]
+  },
+  {
+    "id": "pelosi_taiwan_visit_2022",
+    "name_zh": "裴洛西訪台與軍演衝擊",
+    "name_en": "Pelosi Taiwan Visit and Military Drills",
+    "date": "2022-08-02",
+    "category": "地緣政治",
+    "file": "assets/event_real_photos/pelosi_taiwan_visit_2022.jpg",
+    "source_page": "https://en.wikipedia.org/wiki/2022_visit_by_Nancy_Pelosi_to_Taiwan",
+    "commons_title": "File:08.03_總統與美國聯邦眾議院議長裴洛西媒體互動會_(52259967861).jpg",
+    "license": "CC BY 2.0",
+    "artist": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/people/40092099@N04\">總統府</a>",
+    "credit": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/photos/presidentialoffice/52259967861/\">08.03 總統與美國聯邦眾議院議長裴洛西媒體互動會</a>",
+    "description": "Official Photo by Chien Chih-Hung / Office of the President",
+    "query": "wikipedia:2022 visit by Nancy Pelosi to Taiwan",
+    "status": "downloaded",
+    "size": [
+      1920,
+      1281
+    ]
+  },
+  {
+    "id": "taiwan_ai_server_boom_2024",
+    "name_zh": "AI伺服器爆單與台灣供應鏈擴產",
+    "name_en": "Taiwan AI Server Supply Boom",
+    "date": "2024-06-18",
+    "category": "科技產業",
+    "file": "assets/event_real_photos/taiwan_ai_server_boom_2024.jpg",
+    "source_page": "https://en.wikipedia.org/wiki/Data_center",
+    "commons_title": "File:Utah_Data_Center_Panorama_(cropped).jpg",
+    "license": "CC BY-SA 3.0",
+    "artist": "<a href=\"//commons.wikimedia.org/w/index.php?title=User:Swilsonmc&amp;action=edit&amp;redlink=1\" class=\"new\" title=\"User:Swilsonmc (page does not exist)\">Swilsonmc</a>",
+    "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+    "description": "The Utah Data Center located in Bluffdale, Utah.",
+    "query": "wikipedia:Data center",
+    "status": "downloaded",
+    "size": [
+      1920,
+      843
+    ]
+  }
+]

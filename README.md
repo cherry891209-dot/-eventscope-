@@ -24,7 +24,7 @@ streamlit run app.py --server.port 8505
 然後打開：
 
 ```text
-http://localhost:8505
+http://127.0.0.1:8505
 ```
 
 ## 背景常駐啟動
@@ -60,7 +60,7 @@ http://localhost:8505
 安裝後，EventScope 會由 macOS `launchd` 自動維持在背景執行，預設網址是：
 
 ```text
-http://localhost:8505
+http://127.0.0.1:8505
 ```
 
 ## 分享給別人

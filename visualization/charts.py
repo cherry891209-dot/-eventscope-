@@ -7,14 +7,15 @@ import plotly.graph_objects as go
 import plotly.express as px
 from plotly.subplots import make_subplots
 
-# ─── Color palette ──────────────────────────────────────────────────────────
-BG_COLOR = "#f6f7f9"
-PAPER_BG = "#ffffff"
-GRID_COLOR = "#d8e0e5"
-TEXT_COLOR = "#17212b"
-ACCENT = "#0f766e"
-POSITIVE_COLOR = "#2f8f68"
-NEGATIVE_COLOR = "#b4534a"
+# ─── Earth-tone color palette ───────────────────────────────────────────────
+BG_COLOR = "#F5EFE6"
+PAPER_BG = "#FFF9F0"
+GRID_COLOR = "#D9C8B3"
+TEXT_COLOR = "#2E2922"
+ACCENT = "#8A5A3B"
+POSITIVE_COLOR = "#6F7F4F"
+NEGATIVE_COLOR = "#A45F45"
+OCHRE_COLOR = "#B88A45"
 
 _LAYOUT_BASE = dict(
     plot_bgcolor=BG_COLOR,
@@ -26,25 +27,25 @@ _LAYOUT_BASE = dict(
 )
 
 CATEGORY_COLORS = {
-    "美國股市": "#3f7cac",
-    "台灣股市": "#d1843f",
-    "亞洲股市": "#8b6f47",
-    "歐洲股市": "#627d98",
-    "拉丁美洲": "#a16207",
-    "商品": "#0f766e",
-    "固定收益": "#6b8e5a",
-    "外匯": "#667085",
-    "加密貨幣": "#9a5b3f",
-    "新興市場": "#5b7fa4",
+    "美國股市": "#8A5A3B",
+    "台灣股市": "#B88A45",
+    "亞洲股市": "#9D7652",
+    "歐洲股市": "#7A6D5F",
+    "拉丁美洲": "#A45F45",
+    "商品": "#7A845D",
+    "固定收益": "#8F9A76",
+    "外匯": "#71665A",
+    "加密貨幣": "#9A694E",
+    "新興市場": "#9B8061",
 }
 
 EVENT_CATEGORY_COLORS = {
-    "貨幣政策": "#0f766e",
-    "地緣政治": "#b4534a",
-    "金融危機": "#8f3f3a",
-    "商品衝擊": "#b7831f",
-    "科技產業": "#3f7cac",
-    "自然災害": "#6b8e5a",
+    "貨幣政策": "#7A845D",
+    "地緣政治": "#A45F45",
+    "金融危機": "#8A5A3B",
+    "商品衝擊": "#B88A45",
+    "科技產業": "#9B8061",
+    "自然災害": "#8F9A76",
 }
 
 
@@ -56,94 +57,160 @@ def plot_impact_network(
     asset_info: dict,
 ) -> go.Figure:
     """
-    Interactive directed network graph showing contagion paths.
+    Readable directed route map showing the strongest contagion paths.
     """
-    import math
-
     nodes = network.get("nodes", [])
     edges = network.get("edges", [])
     centrality = network.get("centrality", {})
 
-    if not nodes:
+    if not nodes or not edges:
         fig = go.Figure()
         fig.update_layout(**_LAYOUT_BASE, title="無足夠資料建立網路圖")
         return fig
 
-    # Position nodes in a circle
-    n = len(nodes)
-    positions = {}
-    for i, node in enumerate(nodes):
-        angle = 2 * math.pi * i / n
-        positions[node] = (math.cos(angle), math.sin(angle))
+    top_edges = sorted(edges, key=lambda e: e.get("weight", 0), reverse=True)[:14]
+    max_weight = max([float(e.get("weight", 0)) for e in top_edges] + [1.0])
+    row_count = len(top_edges)
 
-    # Draw edges
-    edge_traces = []
-    for edge in edges:
+    fig = go.Figure()
+    y_values = list(range(row_count, 0, -1))
+
+    for y, edge in zip(y_values, top_edges):
         src = edge["source"]
         tgt = edge["target"]
-        if src not in positions or tgt not in positions:
-            continue
-        x0, y0 = positions[src]
-        x1, y1 = positions[tgt]
-        color = POSITIVE_COLOR if edge.get("direction") == "positive" else NEGATIVE_COLOR
-        width = max(1, min(6, edge.get("weight", 0.5) * 8))
+        weight = float(edge.get("weight", 0))
+        src_info = asset_info.get(src, {})
+        tgt_info = asset_info.get(tgt, {})
+        src_name = src_info.get("name_zh", src)
+        tgt_name = tgt_info.get("name_zh", tgt)
+        src_cat = src_info.get("category", "其他")
+        tgt_cat = tgt_info.get("category", "其他")
+        source_color = CATEGORY_COLORS.get(src_cat, "#9B8061")
+        target_color = CATEGORY_COLORS.get(tgt_cat, "#9B8061")
+        line_color = OCHRE_COLOR if weight >= 0.55 else ACCENT
+        line_width = 2.5 + 7.5 * (weight / max_weight)
 
-        edge_traces.append(
+        fig.add_trace(
             go.Scatter(
-                x=[x0, x1, None],
-                y=[y0, y1, None],
+                x=[0.23, 0.77],
+                y=[y, y],
                 mode="lines",
-                line=dict(width=width, color=color),
-                hoverinfo="none",
+                line=dict(color=line_color, width=line_width),
+                hovertemplate=(
+                    f"<b>{src_name} → {tgt_name}</b><br>"
+                    f"來源：{src}｜{src_cat}<br>"
+                    f"目標：{tgt}｜{tgt_cat}<br>"
+                    f"傳導強度：{weight:.2f}"
+                    "<extra></extra>"
+                ),
                 showlegend=False,
             )
         )
+        fig.add_annotation(
+            x=0.77,
+            y=y,
+            ax=0.70,
+            ay=y,
+            xref="x",
+            yref="y",
+            axref="x",
+            ayref="y",
+            showarrow=True,
+            arrowhead=3,
+            arrowsize=1.1,
+            arrowwidth=max(1.4, line_width * 0.55),
+            arrowcolor=line_color,
+        )
+        fig.add_trace(
+            go.Scatter(
+                x=[0.14],
+                y=[y],
+                mode="markers+text",
+                marker=dict(size=24, color=source_color, line=dict(width=2, color=PAPER_BG)),
+                text=[src],
+                textposition="middle center",
+                textfont=dict(size=9, color="#FFF9F0"),
+                hovertemplate=f"<b>{src_name}</b><br>{src_cat}<br>中心度：{centrality.get(src, 0):.2f}<extra></extra>",
+                showlegend=False,
+            )
+        )
+        fig.add_trace(
+            go.Scatter(
+                x=[0.86],
+                y=[y],
+                mode="markers+text",
+                marker=dict(size=24, color=target_color, line=dict(width=2, color=PAPER_BG)),
+                text=[tgt],
+                textposition="middle center",
+                textfont=dict(size=9, color="#FFF9F0"),
+                hovertemplate=f"<b>{tgt_name}</b><br>{tgt_cat}<br>中心度：{centrality.get(tgt, 0):.2f}<extra></extra>",
+                showlegend=False,
+            )
+        )
+        fig.add_annotation(
+            x=0.02,
+            y=y,
+            text=f"<b>{src_name}</b><br><span style='font-size:11px;color:#71665A'>{src_cat}</span>",
+            xanchor="left",
+            yanchor="middle",
+            showarrow=False,
+            align="left",
+            font=dict(size=12, color=TEXT_COLOR),
+        )
+        fig.add_annotation(
+            x=0.98,
+            y=y,
+            text=f"<b>{tgt_name}</b><br><span style='font-size:11px;color:#71665A'>{tgt_cat}</span>",
+            xanchor="right",
+            yanchor="middle",
+            showarrow=False,
+            align="right",
+            font=dict(size=12, color=TEXT_COLOR),
+        )
+        fig.add_annotation(
+            x=0.50,
+            y=y + 0.23,
+            text=f"{weight:.2f}",
+            showarrow=False,
+            font=dict(size=11, color=TEXT_COLOR),
+            bgcolor="#FFF4E6",
+            bordercolor=GRID_COLOR,
+            borderpad=3,
+        )
 
-    # Draw nodes
-    node_x, node_y, node_text, node_size, node_color, hover_text = [], [], [], [], [], []
-    for node in nodes:
-        x, y = positions[node]
-        node_x.append(x)
-        node_y.append(y)
-        node_text.append(node)
-
-        # Size by centrality
-        c = centrality.get(node, 0.1)
-        node_size.append(max(15, int(c * 80) + 20))
-
-        # Color by asset category
-        info = asset_info.get(node, {})
-        cat = info.get("category", "其他")
-        node_color.append(CATEGORY_COLORS.get(cat, "#aaaaaa"))
-
-        name_zh = info.get("name_zh", node)
-        hover_text.append(f"{name_zh}<br>中心度: {c:.3f}")
-
-    node_trace = go.Scatter(
-        x=node_x,
-        y=node_y,
-        mode="markers+text",
-        marker=dict(
-            size=node_size,
-            color=node_color,
-            line=dict(width=2, color=TEXT_COLOR),
-        ),
-        text=node_text,
-        textposition="top center",
-        textfont=dict(size=10, color=TEXT_COLOR),
-        hovertext=hover_text,
-        hoverinfo="text",
-        showlegend=False,
+    fig.add_annotation(
+        x=0.02,
+        y=row_count + 0.95,
+        text="<b>來源資產</b>",
+        showarrow=False,
+        xanchor="left",
+        font=dict(size=13, color=ACCENT),
+    )
+    fig.add_annotation(
+        x=0.50,
+        y=row_count + 0.95,
+        text="<b>傳導強度</b><br><span style='font-size:11px;color:#71665A'>線越粗，模型推估的傳導越強</span>",
+        showarrow=False,
+        xanchor="center",
+        font=dict(size=13, color=ACCENT),
+    )
+    fig.add_annotation(
+        x=0.98,
+        y=row_count + 0.95,
+        text="<b>受影響資產</b>",
+        showarrow=False,
+        xanchor="right",
+        font=dict(size=13, color=ACCENT),
     )
 
-    fig = go.Figure(data=edge_traces + [node_trace])
     net_layout = dict(**_LAYOUT_BASE)
-    net_layout["xaxis"] = dict(showgrid=False, zeroline=False, showticklabels=False)
-    net_layout["yaxis"] = dict(showgrid=False, zeroline=False, showticklabels=False)
+    net_layout["xaxis"] = dict(range=[0, 1], showgrid=False, zeroline=False, showticklabels=False, fixedrange=True)
+    net_layout["yaxis"] = dict(range=[0.35, row_count + 1.35], showgrid=False, zeroline=False, showticklabels=False, fixedrange=True)
+    net_layout["margin"] = dict(l=24, r=24, t=74, b=28)
     fig.update_layout(
         **net_layout,
-        title=dict(text=f"衝擊傳導網路 — {event_name}", font=dict(color=ACCENT, size=16)),
-        height=500,
+        title=dict(text=f"主要傳導路徑 — {event_name}", font=dict(color=ACCENT, size=16)),
+        height=max(520, 58 * row_count),
     )
     return fig
 
@@ -184,7 +251,7 @@ def plot_car_distribution(
     )
     for val, label, color in [
         (p5, "VaR 95%", NEGATIVE_COLOR),
-        (mean, "期望值", "#00bfff"),
+        (mean, "期望值", ACCENT),
         (p95, "P95", POSITIVE_COLOR),
     ]:
         fig.add_vline(
@@ -291,7 +358,7 @@ def plot_risk_adjusted_rankings(
             x=df["sortino_ratio"],
             orientation="h",
             name="Sortino",
-            marker_color="#d4a479",
+            marker_color=OCHRE_COLOR,
             hovertemplate="<b>%{y}</b><br>Sortino: %{x:.2f}<extra></extra>",
         )
     )
@@ -319,7 +386,7 @@ def plot_taiwan_indicator_panel(indicators: dict) -> go.Figure:
         indicators.get("policy_risk_share", 0.0) * 100,
         indicators.get("avg_magnitude", 0.0) * 20,
     ]
-    colors = ["#d9925b", "#9a8fbe", "#c48f87", "#8fa89d"]
+    colors = ["#B88A45", "#8F9A76", "#A45F45", "#9B8061"]
 
     fig = go.Figure(
         go.Bar(
@@ -398,7 +465,7 @@ def plot_world_event_map(events_df: pd.DataFrame) -> go.Figure:
                 marker=dict(
                     size=(grp["magnitude"] * 5 + 8).tolist(),
                     color=EVENT_CATEGORY_COLORS.get(category, ACCENT),
-                    line=dict(color=PAPER_BG, width=1),
+            line=dict(color=PAPER_BG, width=1),
                     opacity=0.85,
                 ),
                 hovertemplate=(
@@ -462,7 +529,7 @@ def plot_historical_comparison(
             y=row_labels,
             colorscale=[
                 [0.0, NEGATIVE_COLOR],
-                [0.5, "#f6f7f9"],
+                [0.5, BG_COLOR],
                 [1.0, POSITIVE_COLOR],
             ],
             zmid=0,
@@ -543,17 +610,17 @@ def plot_event_timeline(events: list) -> go.Figure:
         return go.Figure()
 
     cat_color_map = {
-        "貨幣政策": "#8fa89d",
-        "地緣政治": "#b98b81",
-        "金融危機": "#a87068",
-        "商品衝擊": "#b59b74",
-        "科技產業": "#819daf",
-        "自然災害": "#9aa287",
+        "貨幣政策": "#7A845D",
+        "地緣政治": "#A45F45",
+        "金融危機": "#8A5A3B",
+        "商品衝擊": "#B88A45",
+        "科技產業": "#9B8061",
+        "自然災害": "#8F9A76",
     }
 
     df = pd.DataFrame(events)
     df["date"] = pd.to_datetime(df["date"])
-    df["color"] = df["category"].map(cat_color_map).fillna("#aaaaaa")
+    df["color"] = df["category"].map(cat_color_map).fillna("#9B8061")
     df["size"] = df["magnitude"] * 8
 
     fig = go.Figure()
@@ -567,7 +634,7 @@ def plot_event_timeline(events: list) -> go.Figure:
                 name=cat,
                 marker=dict(
                     size=grp["size"].tolist(),
-                    color=cat_color_map.get(cat, "#aaaaaa"),
+                    color=cat_color_map.get(cat, "#9B8061"),
                     line=dict(width=1, color=TEXT_COLOR),
                     opacity=0.85,
                 ),
@@ -599,16 +666,24 @@ def plot_propagation_cascade(
     network: dict,
     source_asset: str,
     simulation_results: pd.DataFrame,
+    asset_info: dict | None = None,
 ) -> go.Figure:
     """Sankey diagram showing how impact flows from source to other assets."""
+    asset_info = asset_info or {}
     edges = network.get("edges", [])
     if not edges:
         return go.Figure(layout=dict(**_LAYOUT_BASE, title="無傳導路徑資料"))
 
-    # Filter edges originating from source_asset or passing through
-    relevant_edges = [e for e in edges if e["source"] == source_asset]
+    sorted_edges = sorted(edges, key=lambda e: e.get("weight", 0), reverse=True)
+    direct_edges = [e for e in sorted_edges if e["source"] == source_asset][:6]
+    direct_targets = {e["target"] for e in direct_edges}
+    second_hop_edges = [
+        e for e in sorted_edges
+        if e["source"] in direct_targets and e["target"] != source_asset
+    ][:6]
+    relevant_edges = direct_edges + second_hop_edges
     if not relevant_edges:
-        relevant_edges = edges[:10]  # Fallback: show top edges
+        relevant_edges = sorted_edges[:10]
 
     # Build node list
     node_set = []
@@ -619,50 +694,122 @@ def plot_propagation_cascade(
                 node_map[n] = len(node_set)
                 node_set.append(n)
 
-    # Build link values from simulation expected returns
-    sim_indexed = {}
+    sim_indexed: dict[str, float] = {}
     if not simulation_results.empty:
         for _, row in simulation_results.iterrows():
-            sim_indexed[row["ticker"]] = abs(float(row.get("mean_return", 0.02))) * 100
+            sim_indexed[row["ticker"]] = float(row.get("mean_return", 0.0))
 
-    link_sources, link_targets, link_values, link_colors = [], [], [], []
+    def asset_label(ticker: str) -> str:
+        info = asset_info.get(ticker, {})
+        name = info.get("name_zh", ticker)
+        category = info.get("category", "其他")
+        impact = sim_indexed.get(ticker)
+        impact_text = "來源" if ticker == source_asset else ("n/a" if impact is None else f"{impact:+.2%}")
+        return f"{name}<br><span style='font-size:11px;color:#71665A'>{category}｜{ticker}｜{impact_text}</span>"
+
+    def node_color(ticker: str) -> str:
+        if ticker == source_asset:
+            return ACCENT
+        category = asset_info.get(ticker, {}).get("category", "其他")
+        return CATEGORY_COLORS.get(category, "#9B8061")
+
+    def link_color(target: str) -> str:
+        impact = sim_indexed.get(target, 0.0)
+        if impact > 0.0005:
+            return "rgba(111,127,79,0.55)"
+        if impact < -0.0005:
+            return "rgba(164,95,69,0.55)"
+        return "rgba(155,128,97,0.42)"
+
+    def node_layer(ticker: str) -> float:
+        if ticker == source_asset:
+            return 0.02
+        if ticker in direct_targets:
+            return 0.48
+        return 0.86
+
+    link_sources, link_targets, link_values, link_colors, link_labels = [], [], [], [], []
     for e in relevant_edges:
         s_idx = node_map.get(e["source"])
         t_idx = node_map.get(e["target"])
         if s_idx is None or t_idx is None:
             continue
-        val = sim_indexed.get(e["target"], abs(e.get("weight", 0.5)) * 5)
+        weight = abs(float(e.get("weight", 0.5)))
+        target_impact = abs(sim_indexed.get(e["target"], 0.0)) * 100
+        val = max(0.2, weight * 4 + target_impact)
         link_sources.append(s_idx)
         link_targets.append(t_idx)
         link_values.append(max(0.1, val))
-        color = "rgba(255,61,61,0.5)" if e.get("direction") != "positive" else "rgba(0,200,83,0.5)"
-        link_colors.append(color)
+        link_colors.append(link_color(e["target"]))
+        link_labels.append(
+            f"{asset_info.get(e['source'], {}).get('name_zh', e['source'])} → "
+            f"{asset_info.get(e['target'], {}).get('name_zh', e['target'])}<br>"
+            f"傳導強度：{weight:.2f}<br>"
+            f"目標預期報酬：{sim_indexed.get(e['target'], 0.0):+.2%}"
+        )
 
-    node_colors = [ACCENT if n == source_asset else "#3f7cac" for n in node_set]
+    node_colors = [node_color(n) for n in node_set]
+    node_labels = [asset_label(n) for n in node_set]
+
+    layer_buckets: dict[float, list[str]] = {}
+    for ticker in node_set:
+        layer_buckets.setdefault(node_layer(ticker), []).append(ticker)
+    node_x, node_y = [], []
+    for ticker in node_set:
+        layer = node_layer(ticker)
+        bucket = layer_buckets[layer]
+        index = bucket.index(ticker)
+        if len(bucket) == 1:
+            y = 0.5
+        else:
+            y = 0.08 + index * (0.84 / (len(bucket) - 1))
+        node_x.append(layer)
+        node_y.append(y)
 
     fig = go.Figure(
         go.Sankey(
+            arrangement="fixed",
             node=dict(
-                pad=15,
-                thickness=20,
-                label=node_set,
+                pad=20,
+                thickness=18,
+                label=node_labels,
                 color=node_colors,
                 line=dict(color=TEXT_COLOR, width=0.5),
+                x=node_x,
+                y=node_y,
+                hovertemplate="%{label}<extra></extra>",
             ),
             link=dict(
                 source=link_sources,
                 target=link_targets,
                 value=link_values,
                 color=link_colors,
+                customdata=link_labels,
+                hovertemplate="%{customdata}<extra></extra>",
             ),
         )
     )
+    fig.add_annotation(
+        x=0.0,
+        y=1.08,
+        xref="paper",
+        yref="paper",
+        text=(
+            "<b>讀法：</b>左邊是事件衝擊來源，中間是直接受影響資產，右邊是二次傳導。"
+            "線越粗代表傳導越強；綠線偏正向、紅線偏負向、棕線接近中性。"
+        ),
+        showarrow=False,
+        align="left",
+        font=dict(size=12, color="#71665A"),
+    )
+    sankey_layout = dict(**_LAYOUT_BASE)
+    sankey_layout["margin"] = dict(l=20, r=20, t=100, b=30)
     fig.update_layout(
-        **_LAYOUT_BASE,
+        **sankey_layout,
         title=dict(
-            text=f"衝擊傳導桑基圖 — 從 {source_asset} 擴散",
+            text=f"衝擊傳導桑基圖 — 從 {asset_info.get(source_asset, {}).get('name_zh', source_asset)} 擴散",
             font=dict(color=ACCENT, size=15),
         ),
-        height=420,
+        height=520,
     )
     return fig

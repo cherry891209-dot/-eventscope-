@@ -15,7 +15,17 @@ from data.events_db import ASSET_UNIVERSE
 
 DEFAULT_TICKERS = list(ASSET_UNIVERSE.keys())
 _YFINANCE_DISABLED = False
+_YFINANCE_LAST_FAILURE: datetime | None = None
+_YFINANCE_RETRY_COOLDOWN_SECONDS = 180
 _COINGECKO_DISABLED = False
+
+
+def _yfinance_temporarily_disabled() -> bool:
+    """Avoid repeated slow API calls after a failure, but retry later."""
+    if not _YFINANCE_DISABLED or _YFINANCE_LAST_FAILURE is None:
+        return False
+    elapsed = (datetime.now() - _YFINANCE_LAST_FAILURE).total_seconds()
+    return elapsed < _YFINANCE_RETRY_COOLDOWN_SECONDS
 
 # ---------------------------------------------------------------------------
 # Synthetic data helpers (fallback when APIs are unavailable)
@@ -128,6 +138,21 @@ def _generate_synthetic_prices(
     return df
 
 
+def _generate_synthetic_ohlcv(ticker: str, start: str, end: str, event_date: str | None = None) -> pd.DataFrame:
+    dates = pd.bdate_range(start=start, end=end)
+    rng = np.random.default_rng(42)
+    prices = _generate_synthetic_prices([ticker], start, end, event_date=event_date)
+    close = prices[ticker].values if ticker in prices.columns else prices.iloc[:, 0].values
+    high = close * (1 + rng.uniform(0, 0.01, len(close)))
+    low = close * (1 - rng.uniform(0, 0.01, len(close)))
+    open_ = close * (1 + rng.normal(0, 0.005, len(close)))
+    vol = rng.integers(1_000_000, 10_000_000, len(close)).astype(float)
+    return pd.DataFrame(
+        {"Open": open_, "High": high, "Low": low, "Close": close, "Volume": vol},
+        index=dates,
+    )
+
+
 # ---------------------------------------------------------------------------
 # Public API
 # ---------------------------------------------------------------------------
@@ -137,9 +162,9 @@ def fetch_price_data(tickers: list, start: str, end: str) -> pd.DataFrame:
     Fetch daily adjusted close prices for multiple tickers using yfinance.
     Falls back to synthetic data if yfinance is unavailable or fails.
     """
-    global _YFINANCE_DISABLED
+    global _YFINANCE_DISABLED, _YFINANCE_LAST_FAILURE
 
-    if _YFINANCE_DISABLED:
+    if _yfinance_temporarily_disabled():
         return _generate_synthetic_prices(tickers, start, end)
 
     try:
@@ -168,10 +193,13 @@ def fetch_price_data(tickers: list, start: str, end: str) -> pd.DataFrame:
         close = close.dropna(how="all")
         if close.empty:
             raise ValueError("All tickers returned NaN")
+        _YFINANCE_DISABLED = False
+        _YFINANCE_LAST_FAILURE = None
         return close
 
     except Exception:
         _YFINANCE_DISABLED = True
+        _YFINANCE_LAST_FAILURE = datetime.now()
         return _generate_synthetic_prices(tickers, start, end)
 
 
@@ -193,10 +221,10 @@ def fetch_event_window_data(
     start = (ed - timedelta(days=int(pre_days * 1.5))).strftime("%Y-%m-%d")
     end = (ed + timedelta(days=int(post_days * 1.5))).strftime("%Y-%m-%d")
 
-    global _YFINANCE_DISABLED
+    global _YFINANCE_DISABLED, _YFINANCE_LAST_FAILURE
 
-    if _YFINANCE_DISABLED:
-        raise RuntimeError("yfinance disabled for current session")
+    if _yfinance_temporarily_disabled():
+        return _generate_synthetic_ohlcv(ticker, start, end, event_date=event_date)
 
     try:
         import yfinance as yf
@@ -206,22 +234,13 @@ def fetch_event_window_data(
             raise ValueError("Empty yfinance response")
         if isinstance(df.columns, pd.MultiIndex):
             df.columns = df.columns.get_level_values(0)
+        _YFINANCE_DISABLED = False
+        _YFINANCE_LAST_FAILURE = None
         return df
     except Exception:
         _YFINANCE_DISABLED = True
-        # Synthetic OHLCV
-        dates = pd.bdate_range(start=start, end=end)
-        rng = np.random.default_rng(42)
-        prices = _generate_synthetic_prices([ticker], start, end, event_date=event_date)
-        close = prices[ticker].values if ticker in prices.columns else prices.iloc[:, 0].values
-        high = close * (1 + rng.uniform(0, 0.01, len(close)))
-        low = close * (1 - rng.uniform(0, 0.01, len(close)))
-        open_ = close * (1 + rng.normal(0, 0.005, len(close)))
-        vol = rng.integers(1_000_000, 10_000_000, len(close)).astype(float)
-        return pd.DataFrame(
-            {"Open": open_, "High": high, "Low": low, "Close": close, "Volume": vol},
-            index=dates,
-        )
+        _YFINANCE_LAST_FAILURE = datetime.now()
+        return _generate_synthetic_ohlcv(ticker, start, end, event_date=event_date)
 
 
 def fetch_macro_data_fred(series_ids: list) -> pd.DataFrame:

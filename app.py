@@ -5,6 +5,10 @@
 import warnings
 warnings.filterwarnings("ignore")
 
+import json
+from io import BytesIO
+from pathlib import Path
+
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -23,19 +27,19 @@ st.markdown(
     """
     <style>
     :root {
-        --bg-main: #f6f7f9;
-        --surface: #ffffff;
-        --surface-soft: #eef3f5;
-        --border: #d8e0e5;
-        --border-strong: #becbd3;
-        --text-main: #17212b;
-        --text-muted: #61717d;
-        --accent: #0f766e;
-        --accent-strong: #115e59;
-        --accent-soft: #dff3ef;
-        --danger: #b4534a;
-        --warning: #b7831f;
-        --shadow: 0 10px 28px rgba(31, 41, 55, 0.08);
+        --bg-main: #F5EFE6;
+        --surface: #FFF9F0;
+        --surface-soft: #EFE3D3;
+        --border: #D9C8B3;
+        --border-strong: #BFA98F;
+        --text-main: #2E2922;
+        --text-muted: #71665A;
+        --accent: #8A5A3B;
+        --accent-strong: #6F4329;
+        --accent-soft: #EAD9C6;
+        --danger: #A45F45;
+        --warning: #B88A45;
+        --shadow: 0 10px 28px rgba(77, 55, 35, 0.10);
     }
     html, body, [data-testid="stApp"] {
         background: var(--bg-main);
@@ -49,11 +53,11 @@ st.markdown(
         padding-bottom: 4rem;
     }
     [data-testid="stSidebar"] {
-        background: #ffffff;
-        border-right: 1px solid var(--border);
-        box-shadow: 12px 0 32px rgba(31, 41, 55, 0.04);
+        background: linear-gradient(180deg, #3A3027 0%, #4B392B 100%);
+        border-right: 1px solid rgba(255, 249, 240, 0.16);
+        box-shadow: 12px 0 32px rgba(77, 55, 35, 0.14);
     }
-    [data-testid="stSidebar"] * { color: var(--text-main); }
+    [data-testid="stSidebar"] * { color: #FFF4E6 !important; }
     [data-testid="stSidebar"] .stRadio [role="radiogroup"] {
         gap: 6px;
     }
@@ -63,9 +67,9 @@ st.markdown(
         border: 1px solid transparent;
     }
     [data-testid="stSidebar"] label[data-baseweb="radio"]:has(input:checked) {
-        background: var(--accent-soft);
-        border-color: #afd8d2;
-        color: var(--accent-strong);
+        background: rgba(255, 249, 240, 0.16);
+        border-color: rgba(255, 249, 240, 0.28);
+        color: #FFF9F0;
     }
     h1, h2, h3, h4, h5, h6 { color: var(--text-main); letter-spacing: 0; }
 
@@ -89,16 +93,16 @@ st.markdown(
         border-radius: 8px;
         padding: 0.52rem 1.2rem;
         transition: all 0.2s;
-        box-shadow: 0 6px 14px rgba(15, 118, 110, 0.16);
+        box-shadow: 0 6px 14px rgba(138, 90, 59, 0.18);
     }
     .stButton > button:hover {
         background: var(--accent-strong);
         border-color: var(--accent-strong);
-        box-shadow: 0 8px 18px rgba(15, 118, 110, 0.22);
+        box-shadow: 0 8px 18px rgba(138, 90, 59, 0.24);
         transform: translateY(-1px);
     }
     .stButton > button[kind="secondary"] {
-        background: #ffffff;
+        background: #FFF9F0;
         color: var(--text-main);
         border-color: var(--border-strong);
         box-shadow: none;
@@ -110,7 +114,7 @@ st.markdown(
     .stTextInput > div > div,
     .stTextArea textarea,
     [data-testid="stDataEditor"] {
-        background-color: #ffffff;
+        background-color: #FFF9F0;
         border: 1px solid var(--border);
         color: var(--text-main);
         border-radius: 8px;
@@ -118,7 +122,7 @@ st.markdown(
     div[data-baseweb="select"] > div,
     div[data-baseweb="input"] > div,
     textarea {
-        background: #ffffff !important;
+        background: #FFF9F0 !important;
         border-color: var(--border) !important;
     }
     .stSlider [data-baseweb="slider"] { padding-top: 0.5rem; }
@@ -137,7 +141,7 @@ st.markdown(
         border-radius: 8px 8px 0 0;
     }
     .stTabs [aria-selected="true"] {
-        background: #ffffff !important;
+        background: #FFF9F0 !important;
         color: var(--accent-strong) !important;
         border-bottom: 2px solid var(--accent);
     }
@@ -153,7 +157,7 @@ st.markdown(
         transition: all 0.2s;
         box-shadow: var(--shadow);
     }
-    .event-card:hover { box-shadow: 0 14px 34px rgba(31, 41, 55, 0.12); transform: translateY(-1px); }
+    .event-card:hover { box-shadow: 0 14px 34px rgba(77, 55, 35, 0.14); transform: translateY(-1px); }
     .event-card h4 { color: var(--text-main) !important; margin: 0 0 6px 0; font-size: 1rem; }
     .event-card p { color: var(--text-muted) !important; margin: 0; font-size: 0.85rem; line-height: 1.55; }
     .badge {
@@ -169,7 +173,7 @@ st.markdown(
     .hero-section {
         position: relative;
         overflow: hidden;
-        background: #ffffff;
+        background: #FFF9F0;
         border: 1px solid var(--border);
         border-radius: 8px;
         padding: 34px 34px 30px;
@@ -184,8 +188,8 @@ st.markdown(
         width: min(34%, 360px);
         height: calc(100% - 56px);
         background:
-            linear-gradient(90deg, rgba(15,118,110,0.16) 1px, transparent 1px),
-            linear-gradient(180deg, rgba(15,118,110,0.12) 1px, transparent 1px);
+            linear-gradient(90deg, rgba(138,90,59,0.16) 1px, transparent 1px),
+            linear-gradient(180deg, rgba(122,132,93,0.14) 1px, transparent 1px);
         background-size: 22px 22px;
         mask-image: linear-gradient(90deg, transparent, #000 26%, #000);
         opacity: 0.72;
@@ -215,7 +219,7 @@ st.markdown(
         margin-bottom: 14px;
         padding: 5px 10px;
         border-radius: 999px;
-        border: 1px solid #bfe3de;
+        border: 1px solid #D7BEA2;
         background: var(--accent-soft);
         color: var(--accent-strong);
         font-size: 0.8rem;
@@ -235,12 +239,12 @@ st.markdown(
 
     /* Info box */
     .info-box {
-        background: #f0f7f6;
-        border: 1px solid #cce6e1;
+        background: #FFF4E6;
+        border: 1px solid #DEC8AD;
         border-radius: 8px;
         padding: 14px 18px;
         margin: 10px 0;
-        color: #315b57;
+        color: #2E2922;
         font-size: 0.9rem;
         line-height: 1.6;
     }
@@ -284,10 +288,10 @@ st.markdown(
     /* Streamlit overrides */
     .stAlert { border-radius: 8px; }
     div[data-testid="stExpander"] {
-        background: #ffffff;
+        background: #FFF9F0;
         border: 1px solid var(--border);
         border-radius: 8px;
-        box-shadow: 0 8px 20px rgba(31, 41, 55, 0.05);
+        box-shadow: 0 8px 20px rgba(77, 55, 35, 0.08);
     }
     div[data-testid="stDataFrame"] {
         border: 1px solid var(--border);
@@ -295,18 +299,18 @@ st.markdown(
         overflow: hidden;
     }
     code {
-        background: #eef3f5 !important;
-        color: #0f5f68 !important;
+        background: #EFE3D3 !important;
+        color: #6F4329 !important;
         border-radius: 5px;
         padding: 2px 5px;
     }
-    [style*="color:#f0b90b"], [style*="color: #f0b90b"] { color: var(--accent-strong) !important; }
-    [style*="color:#6688aa"], [style*="color: #6688aa"],
-    [style*="color:#8ca0b8"], [style*="color: #8ca0b8"],
-    [style*="color:#b0c4d8"], [style*="color: #b0c4d8"] { color: var(--text-muted) !important; }
-    [style*="background:#0d1f3c"], [style*="background: #0d1f3c"],
-    [style*="background:#1e3050"], [style*="background: #1e3050"],
-    [style*="background:#081423"], [style*="background: #081423"] {
+    [style*="color:#B88A45"], [style*="color: #B88A45"] { color: var(--accent-strong) !important; }
+    [style*="color:#71665A"], [style*="color: #71665A"],
+    [style*="color:#71665A"], [style*="color: #71665A"],
+    [style*="color:#71665A"], [style*="color: #71665A"] { color: var(--text-muted) !important; }
+    [style*="background:#FFF4E6"], [style*="background: #FFF4E6"],
+    [style*="background:#EFE3D3"], [style*="background: #EFE3D3"],
+    [style*="background:#F5EFE6"], [style*="background: #F5EFE6"] {
         background: var(--surface-soft) !important;
         border-color: var(--border) !important;
     }
@@ -360,13 +364,16 @@ from portfolio.stress_test import (
 
 # ─── Category colour map ──────────────────────────────────────────────────────
 CAT_COLORS = {
-    "貨幣政策": "#a1aaeb",
-    "地緣政治": "#eb9393",
-    "金融危機": "#ffb53d",
-    "商品衝擊": "#f0d069",
-    "科技產業": "#94f1fb",
-    "自然災害": "#99bd67",
+    "貨幣政策": "#7A845D",
+    "地緣政治": "#A45F45",
+    "金融危機": "#8A5A3B",
+    "商品衝擊": "#B88A45",
+    "科技產業": "#9B8061",
+    "自然災害": "#8F9A76",
 }
+
+EVENT_PHOTO_DIR = Path(__file__).resolve().parent / "assets" / "event_real_photos"
+EVENT_PHOTO_MANIFEST = EVENT_PHOTO_DIR / "manifest.json"
 
 PORTFOLIO_PRESETS = {
     "課堂示範": DEFAULT_PORTFOLIO.copy(),
@@ -399,6 +406,31 @@ def portfolio_to_rows(portfolio: dict) -> list[dict]:
     return rows
 
 
+@st.cache_data(show_spinner=False)
+def load_event_photo_manifest() -> dict:
+    if not EVENT_PHOTO_MANIFEST.exists():
+        return {}
+    try:
+        items = json.loads(EVENT_PHOTO_MANIFEST.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    photos = {}
+    app_root = Path(__file__).resolve().parent
+    for item in items:
+        if not item.get("id") or not item.get("file"):
+            continue
+        image_path = app_root / item["file"]
+        if image_path.exists():
+            item = dict(item)
+            item["abs_file"] = str(image_path)
+            photos[item["id"]] = item
+    return photos
+
+
+def get_event_photo(event_id: str) -> dict | None:
+    return load_event_photo_manifest().get(event_id)
+
+
 def rows_to_portfolio(rows: list[dict]) -> dict:
     portfolio = {}
     for row in rows:
@@ -413,6 +445,136 @@ def rows_to_portfolio(rows: list[dict]) -> dict:
             continue
         portfolio[ticker] = weight_pct / 100.0
     return portfolio
+
+
+def safe_filename(text: str) -> str:
+    cleaned = "".join(ch if ch.isalnum() or ch in "-_" else "_" for ch in text.strip())
+    return cleaned.strip("_") or "eventscope_summary"
+
+
+def format_pct(value, digits: int = 2) -> str:
+    try:
+        return f"{float(value):.{digits}%}"
+    except (TypeError, ValueError):
+        return "n/a"
+
+
+def build_analysis_summary_docx(
+    event: dict,
+    sim_results: pd.DataFrame,
+    network: dict,
+    portfolio_result: dict | None,
+    portfolio: dict,
+    hedges: list[dict],
+) -> bytes:
+    from docx import Document
+
+    doc = Document()
+    doc.add_heading(f"EventScope 分析摘要：{event['name_zh']}", level=0)
+
+    doc.add_heading("事件概覽", level=1)
+    for text in [
+        f"事件日期：{event['date']}",
+        f"事件類別：{event['category']}",
+        f"主要衝擊：{event['primary_shock']}",
+        f"嚴重程度：{event['magnitude']}/5",
+        f"事件說明：{event['description_zh']}",
+    ]:
+        doc.add_paragraph(text, style="List Bullet")
+
+    def add_table(headers: list[str], rows: list[list[str]]) -> None:
+        table = doc.add_table(rows=1, cols=len(headers))
+        table.style = "Table Grid"
+        for cell, header in zip(table.rows[0].cells, headers):
+            cell.text = header
+        for row_values in rows:
+            cells = table.add_row().cells
+            for cell, value in zip(cells, row_values):
+                cell.text = str(value)
+
+    if sim_results is not None and not sim_results.empty:
+        ranked = sim_results.copy()
+        ranked["name_zh"] = ranked["ticker"].apply(
+            lambda ticker: ASSET_UNIVERSE.get(ticker, {}).get("name_zh", ticker)
+        )
+        losses = ranked.sort_values("mean_return").head(5)
+        gains = ranked.sort_values("mean_return", ascending=False).head(5)
+
+        doc.add_heading("主要衝擊預測", level=1)
+        doc.add_heading("預期承壓資產", level=2)
+        add_table(
+            ["資產", "名稱", "期望報酬", "下跌機率"],
+            [
+                [row["ticker"], row["name_zh"], format_pct(row["mean_return"]), format_pct(row["prob_negative"], 1)]
+                for _, row in losses.iterrows()
+            ],
+        )
+        doc.add_heading("預期受益資產", level=2)
+        add_table(
+            ["資產", "名稱", "期望報酬", "下跌機率"],
+            [
+                [row["ticker"], row["name_zh"], format_pct(row["mean_return"]), format_pct(row["prob_negative"], 1)]
+                for _, row in gains.iterrows()
+            ],
+        )
+
+    if network and network.get("edges"):
+        doc.add_heading("主要傳導路徑", level=1)
+        top_edges = sorted(network["edges"], key=lambda item: item.get("weight", 0), reverse=True)[:8]
+        add_table(
+            ["來源", "目標", "傳導強度"],
+            [
+                [
+                    f"{ASSET_UNIVERSE.get(edge['source'], {}).get('name_zh', edge['source'])} ({edge['source']})",
+                    f"{ASSET_UNIVERSE.get(edge['target'], {}).get('name_zh', edge['target'])} ({edge['target']})",
+                    f"{edge.get('weight', 0):.2f}",
+                ]
+                for edge in top_edges
+            ],
+        )
+
+    if portfolio:
+        doc.add_heading("投資組合配置", level=1)
+        add_table(
+            ["資產", "名稱", "權重"],
+            [
+                [ticker, ASSET_UNIVERSE.get(ticker, {}).get("name_zh", ticker), format_pct(weight, 1)]
+                for ticker, weight in sorted(portfolio.items(), key=lambda item: item[1], reverse=True)
+            ],
+        )
+
+    if portfolio_result:
+        doc.add_heading("投組壓力測試", level=1)
+        for text in [
+            f"期望報酬：{format_pct(portfolio_result.get('expected_return'))}",
+            f"VaR 95%：{format_pct(portfolio_result.get('var_95'))}",
+            f"VaR 99%：{format_pct(portfolio_result.get('var_99'))}",
+            f"CVaR / Expected Shortfall：{format_pct(portfolio_result.get('expected_shortfall'))}",
+            f"最佳情境：{format_pct(portfolio_result.get('best_case'))}",
+        ]:
+            doc.add_paragraph(text, style="List Bullet")
+
+    if hedges:
+        doc.add_heading("對沖建議", level=1)
+        add_table(
+            ["工具", "理由", "預期報酬", "有效性"],
+            [
+                [
+                    f"{ASSET_UNIVERSE.get(hedge['asset'], {}).get('name_zh', hedge['asset'])} ({hedge['asset']})",
+                    hedge["reason_zh"],
+                    format_pct(hedge["expected_return"]),
+                    format_pct(hedge["hedge_effectiveness"], 0),
+                ]
+                for hedge in hedges[:5]
+            ],
+        )
+
+    doc.add_paragraph(
+        "備註：本摘要由 EventScope 依歷史事件、模擬報酬、傳導網路與投組壓力測試自動整理，僅供教學與情境分析使用。"
+    )
+    output = BytesIO()
+    doc.save(output)
+    return output.getvalue()
 
 # ─── Session state init ───────────────────────────────────────────────────────
 for key in [
@@ -560,11 +722,11 @@ with st.sidebar:
     st.markdown(
         """
         <div style="padding: 18px 4px 14px 4px;">
-          <div style="font-size:0.78rem; color:#0f766e; font-weight:800; letter-spacing:0.08em; text-transform:uppercase;">EventScope</div>
-          <div style="font-size:1.35rem; font-weight:850; color:#17212b; margin-top:2px;">金融事件工作台</div>
-          <div style="font-size:0.82rem; color:#61717d; margin-top:6px; line-height:1.5;">情境模擬、傳導網路與投組壓力測試</div>
+          <div style="font-size:0.78rem; color:#8A5A3B; font-weight:800; letter-spacing:0.08em; text-transform:uppercase;">EventScope</div>
+          <div style="font-size:1.35rem; font-weight:850; color:#2E2922; margin-top:2px;">金融事件工作台</div>
+          <div style="font-size:0.82rem; color:#71665A; margin-top:6px; line-height:1.5;">情境模擬、傳導網路與投組壓力測試</div>
         </div>
-        <hr style="border-color:#d8e0e5; margin:8px 0 14px;">
+        <hr style="border-color:#D9C8B3; margin:8px 0 14px;">
         """,
         unsafe_allow_html=True,
     )
@@ -575,11 +737,11 @@ with st.sidebar:
         label_visibility="collapsed",
     )
 
-    st.markdown("<hr style='border-color:#d8e0e5; margin:20px 0 10px 0;'>", unsafe_allow_html=True)
+    st.markdown("<hr style='border-color:#D9C8B3; margin:20px 0 10px 0;'>", unsafe_allow_html=True)
     st.markdown(
         """
-        <div style="font-size:0.78rem; color:#61717d; line-height:1.6;">
-          <b style="color:#17212b;">EventScope v1.0</b><br>
+        <div style="font-size:0.78rem; color:#71665A; line-height:1.6;">
+          <b style="color:#2E2922;">EventScope v1.0</b><br>
           金融科技課程專案<br>
           Powered by Streamlit + Plotly
         </div>
@@ -600,13 +762,13 @@ if page == "🏠 首頁":
           <div class="hero-kicker">Scenario Intelligence Studio</div>
           <div class="hero-title">EventScope</div>
           <div class="hero-subtitle">金融事件情境模擬與衝擊傳導分析平台</div>
-          <div style="position:relative; z-index:1; margin-top:14px; color:#61717d; font-size:0.9rem;">
+          <div style="position:relative; z-index:1; margin-top:14px; color:#71665A; font-size:0.9rem;">
             Financial Event Simulation · Contagion Network · Monte Carlo Risk Assessment
           </div>
           <div style="position:relative; z-index:1; margin-top:22px; display:flex; gap:10px; flex-wrap:wrap;">
-            <span class="badge" style="background:#dff3ef; color:#115e59; border:1px solid #bfe3de;">事件研究</span>
-            <span class="badge" style="background:#e8eef6; color:#3f5f8a; border:1px solid #cdd9ea;">傳導網路</span>
-            <span class="badge" style="background:#f5ead8; color:#8a5b16; border:1px solid #e5cfa8;">投組壓測</span>
+            <span class="badge" style="background:#EAD9C6; color:#6F4329; border:1px solid #D7BEA2;">事件研究</span>
+            <span class="badge" style="background:#EFE3D3; color:#7A6D5F; border:1px solid #D9C8B3;">傳導網路</span>
+            <span class="badge" style="background:#FFF4E6; color:#7A552F; border:1px solid #D7BEA2;">投組壓測</span>
           </div>
         </div>
         """,
@@ -626,6 +788,151 @@ if page == "🏠 首頁":
         st.metric("時間跨度", f"{min(years)}–{max(years)}")
 
     st.markdown("<br>", unsafe_allow_html=True)
+
+    # Visual overview
+    st.markdown('<div class="section-header">📈 歷史事件視覺總覽</div>', unsafe_allow_html=True)
+
+    overview_df = pd.DataFrame(HISTORICAL_EVENTS)
+    overview_df["year"] = pd.to_datetime(overview_df["date"]).dt.year
+    decade_events = overview_df.sort_values("date").tail(12)
+    decade_events = decade_events.assign(
+        label=decade_events["date"].str.slice(0, 4) + "｜" + decade_events["name_zh"]
+    )
+    recent_fig = go.Figure(
+        data=[
+            go.Bar(
+                x=decade_events["label"],
+                y=decade_events["magnitude"],
+                marker=dict(
+                    color=[CAT_COLORS.get(c, "#9B8061") for c in decade_events["category"]],
+                    line=dict(color="#FFF9F0", width=1),
+                ),
+                customdata=np.column_stack(
+                    [
+                        decade_events["date"],
+                        decade_events["category"],
+                        decade_events["primary_shock"],
+                    ]
+                ),
+                hovertemplate=(
+                    "<b>%{x}</b><br>"
+                    "日期：%{customdata[0]}<br>"
+                    "類別：%{customdata[1]}<br>"
+                    "主要衝擊：%{customdata[2]}<br>"
+                    "強度：%{y:.1f}/5"
+                    "<extra></extra>"
+                ),
+            )
+        ]
+    )
+    recent_fig.update_layout(
+        title=dict(text="近年重大事件強度視覺圖", x=0.01, font=dict(size=18, color="#2E2922")),
+        height=300,
+        paper_bgcolor="#FFF9F0",
+        plot_bgcolor="#FFF9F0",
+        margin=dict(l=42, r=22, t=56, b=92),
+        xaxis=dict(title="", tickangle=-32, tickfont=dict(size=11, color="#71665A")),
+        yaxis=dict(title="強度", range=[0, 5.4], gridcolor="#D9C8B3", tickfont=dict(color="#71665A")),
+        showlegend=False,
+    )
+    st.plotly_chart(recent_fig, use_container_width=True)
+
+    timeline_fig = go.Figure()
+    for category, grp in overview_df.groupby("category"):
+        timeline_fig.add_trace(
+            go.Scatter(
+                x=pd.to_datetime(grp["date"]),
+                y=grp["magnitude"],
+                mode="markers",
+                name=category,
+                marker=dict(
+                    size=(grp["magnitude"] * 7 + 8).tolist(),
+                    color=CAT_COLORS.get(category, "#9B8061"),
+                    line=dict(color="#FFF9F0", width=1),
+                    opacity=0.86,
+                ),
+                text=grp["name_zh"],
+                hovertemplate="<b>%{text}</b><br>日期: %{x|%Y-%m-%d}<br>強度: %{y:.1f}/5<extra></extra>",
+            )
+        )
+    timeline_fig.update_layout(
+        title=dict(text="歷史事件時間軸", font=dict(color="#8A5A3B", size=15)),
+        plot_bgcolor="#F5EFE6",
+        paper_bgcolor="#FFF9F0",
+        font=dict(color="#2E2922"),
+        xaxis=dict(title="", gridcolor="#D9C8B3"),
+        yaxis=dict(title="嚴重程度", range=[0.5, 5.5], gridcolor="#D9C8B3"),
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+        height=390,
+        margin=dict(l=45, r=25, t=55, b=45),
+    )
+    st.plotly_chart(timeline_fig, use_container_width=True)
+
+    chart_col1, chart_col2 = st.columns([1.05, 1])
+
+    with chart_col1:
+        cat_counts = (
+            overview_df.groupby("category", as_index=False)
+            .agg(event_count=("id", "count"), avg_magnitude=("magnitude", "mean"))
+            .sort_values("event_count", ascending=True)
+        )
+        fig_cat = go.Figure(
+            go.Bar(
+                x=cat_counts["event_count"],
+                y=cat_counts["category"],
+                orientation="h",
+                marker=dict(
+                    color=[CAT_COLORS.get(c, "#9B8061") for c in cat_counts["category"]],
+                    line=dict(color="#FFF9F0", width=1),
+                ),
+                text=cat_counts["event_count"],
+                textposition="outside",
+                customdata=np.column_stack([cat_counts["avg_magnitude"]]),
+                hovertemplate="<b>%{y}</b><br>事件數: %{x}<br>平均強度: %{customdata[0]:.1f}/5<extra></extra>",
+            )
+        )
+        fig_cat.update_layout(
+            title=dict(text="事件類別分布", font=dict(color="#8A5A3B", size=15)),
+            plot_bgcolor="#F5EFE6",
+            paper_bgcolor="#FFF9F0",
+            font=dict(color="#2E2922"),
+            xaxis=dict(title="事件數", gridcolor="#D9C8B3"),
+            yaxis=dict(title=""),
+            height=360,
+            margin=dict(l=70, r=35, t=55, b=45),
+            showlegend=False,
+        )
+        st.plotly_chart(fig_cat, use_container_width=True)
+
+    with chart_col2:
+        top_events = overview_df.sort_values(["magnitude", "date"], ascending=[False, False]).head(8)
+        fig_top = go.Figure(
+            go.Bar(
+                x=top_events["magnitude"],
+                y=top_events["name_zh"],
+                orientation="h",
+                marker=dict(
+                    color=[CAT_COLORS.get(c, "#9B8061") for c in top_events["category"]],
+                    line=dict(color="#FFF9F0", width=1),
+                ),
+                text=[f"{m:.1f}" for m in top_events["magnitude"]],
+                textposition="outside",
+                customdata=np.column_stack([top_events["date"], top_events["category"]]),
+                hovertemplate="<b>%{y}</b><br>日期: %{customdata[0]}<br>類別: %{customdata[1]}<br>強度: %{x:.1f}/5<extra></extra>",
+            )
+        )
+        fig_top.update_layout(
+            title=dict(text="重大事件強度排行", font=dict(color="#8A5A3B", size=15)),
+            plot_bgcolor="#F5EFE6",
+            paper_bgcolor="#FFF9F0",
+            font=dict(color="#2E2922"),
+            xaxis=dict(title="嚴重程度", range=[0, 5.4], gridcolor="#D9C8B3"),
+            yaxis=dict(title="", autorange="reversed"),
+            height=360,
+            margin=dict(l=140, r=35, t=55, b=45),
+            showlegend=False,
+        )
+        st.plotly_chart(fig_top, use_container_width=True)
 
     # Platform capabilities
     st.markdown('<div class="section-header">🚀 平台功能</div>', unsafe_allow_html=True)
@@ -666,7 +973,7 @@ if page == "🏠 首頁":
                 f"""
                 <div class="event-card">
                   <span class="badge" style="background:{cat_color}22; color:{cat_color};">{ev["category"]}</span>
-                  <span style="color:#6688aa; font-size:0.8rem;">{ev["date"]}</span>
+                  <span style="color:#71665A; font-size:0.8rem;">{ev["date"]}</span>
                   <h4 style="margin-top:6px;">{ev["name_zh"]}</h4>
                   <p>{ev["description_zh"]}</p>
                   <div style="margin-top:8px; color:{cat_color}; font-size:0.85rem;">{mag_stars}</div>
@@ -681,10 +988,10 @@ if page == "🏠 首頁":
     st.markdown(
         """
         <div class="info-box" style="text-align:center; padding:28px;">
-          <div style="font-size:1.1rem; color:#17212b; font-weight:700; margin-bottom:10px;">
+          <div style="font-size:1.1rem; color:#2E2922; font-weight:700; margin-bottom:10px;">
             選擇左側「🔬 事件分析」開始模擬任一歷史事件的市場衝擊
           </div>
-          <div style="color:#61717d; font-size:0.9rem;">
+          <div style="color:#71665A; font-size:0.9rem;">
             支援 30+ 歷史事件 · 12 種資產 · 離線合成資料備援
           </div>
         </div>
@@ -785,32 +1092,35 @@ elif page == "🔬 事件分析":
     if selected_event:
         cat_color = CAT_COLORS.get(selected_event["category"], "#888")
         mag = selected_event["magnitude"]
-        mag_bar = "█" * round(mag) + "░" * (5 - round(mag))
-        calibration_note = ""
+        event_meta = f"事件日期：{selected_event['date']} ｜ 嚴重程度：{mag:.1f}/5"
         if selected_event.get("is_custom"):
-            calibration_note = (
-                f"&nbsp;&nbsp;<span style='color:#8ca0b8; font-size:0.82rem;'>校準基準：</span>"
-                f"<span style='color:#e0e8f0; font-weight:600;'>{selected_event['reference_event_name']}</span>"
+            event_meta += f" ｜ 校準基準：{selected_event['reference_event_name']}"
+        photo_id = selected_event.get("reference_event_id", selected_event["id"])
+        photo = get_event_photo(photo_id)
+        if photo:
+            detail_img_col, detail_text_col = st.columns([1, 2.1], vertical_alignment="top")
+            with detail_img_col:
+                st.image(
+                    photo["abs_file"],
+                    caption=f"{selected_event['name_zh']}｜真實事件圖片",
+                    use_container_width=True,
+                )
+            card_target = detail_text_col
+        else:
+            card_target = st
+        with card_target:
+            st.markdown(
+                f"""
+                <div class="event-card" style="border-left-color:{cat_color};">
+                  <span class="badge" style="background:{cat_color}22; color:{cat_color};">{selected_event["category"]}</span>
+                  <span class="badge" style="background:#EFE3D3; color:#71665A;">主要衝擊：{selected_event["primary_shock"]}</span>
+                  <h4>{selected_event["name_zh"]} <span style="color:#71665A; font-weight:400;">({selected_event["name_en"]})</span></h4>
+                  <p>{selected_event["description_zh"]}</p>
+                  <p style="margin-top:10px; color:#71665A; font-size:0.86rem;">{event_meta}</p>
+                </div>
+                """,
+                unsafe_allow_html=True,
             )
-        st.markdown(
-            f"""
-            <div class="event-card" style="border-left-color:{cat_color};">
-              <span class="badge" style="background:{cat_color}22; color:{cat_color};">{selected_event["category"]}</span>
-              <span class="badge" style="background:#1e3050; color:#8ca0b8;">主要衝擊：{selected_event["primary_shock"]}</span>
-              <h4>{selected_event["name_zh"]} <span style="color:#6688aa; font-weight:400;">({selected_event["name_en"]})</span></h4>
-              <p>{selected_event["description_zh"]}</p>
-              <div style="margin-top:8px;">
-                <span style="color:#8ca0b8; font-size:0.82rem;">事件日期：</span>
-                <span style="color:{cat_color}; font-weight:600;">{selected_event["date"]}</span>
-                {calibration_note}
-                &nbsp;&nbsp;
-                <span style="color:#8ca0b8; font-size:0.82rem;">嚴重程度：</span>
-                <span style="color:{cat_color}; font-family:monospace;">{mag_bar} ({mag}/5)</span>
-              </div>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
         summary_cols = st.columns(3)
         summary_items = [
             ("事件類型", selected_event["category"], f"主衝擊資產：{selected_event['primary_shock']}"),
@@ -912,6 +1222,27 @@ elif page == "🔬 事件分析":
             f'<div class="section-header">📊 分析結果 — {current_event["name_zh"]}</div>',
             unsafe_allow_html=True,
         )
+        summary_portfolio = st.session_state.get("portfolio_dict", DEFAULT_PORTFOLIO.copy())
+        summary_hedges = get_hedge_suggestions(summary_portfolio, sim_results, current_event["category"])
+        summary_docx = build_analysis_summary_docx(
+            current_event,
+            sim_results,
+            net,
+            port_result,
+            summary_portfolio,
+            summary_hedges,
+        )
+        summary_col1, summary_col2 = st.columns([2.4, 1])
+        with summary_col1:
+            st.caption("可下載一份包含事件、資產衝擊、傳導路徑、投組風險與對沖建議的中文摘要。")
+        with summary_col2:
+            st.download_button(
+                "下載 Word 摘要",
+                data=summary_docx,
+                file_name=f"{safe_filename(current_event['date'] + '_' + current_event['name_zh'])}_EventScope摘要.docx",
+                mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                use_container_width=True,
+            )
 
         tab1, tab2, tab3, tab4 = st.tabs(
             ["📊 衝擊預測", "🕸️ 傳導路徑", "📈 歷史比對", "💼 持倉壓力測試"]
@@ -958,8 +1289,8 @@ elif page == "🔬 事件分析":
                         top5 = sorted(scenario_returns.items(), key=lambda x: x[1], reverse=(scen_key == "best"))[:5]
                         for ticker, ret in top5:
                             name = ASSET_UNIVERSE.get(ticker, {}).get("name_zh", ticker)
-                            color = "#2f8f68" if ret >= 0 else "#b4534a"
-                            st.markdown(f"<span style='color:#8ca0b8;font-size:0.85rem;'>{name}:</span> <span style='color:{color};font-weight:600;'>{ret:.2%}</span>", unsafe_allow_html=True)
+                            color = "#6F7F4F" if ret >= 0 else "#A45F45"
+                            st.markdown(f"<span style='color:#71665A;font-size:0.85rem;'>{name}:</span> <span style='color:{color};font-weight:600;'>{ret:.2%}</span>", unsafe_allow_html=True)
 
         # ── Tab 2: Contagion Network ──────────────────────────────────────
         with tab2:
@@ -980,13 +1311,13 @@ elif page == "🔬 事件分析":
                     for e in top_edges:
                         src_name = ASSET_UNIVERSE.get(e["source"], {}).get("name_zh", e["source"])
                         tgt_name = ASSET_UNIVERSE.get(e["target"], {}).get("name_zh", e["target"])
-                        color = "#2f8f68" if e.get("direction") == "positive" else "#b4534a"
+                        color = "#6F7F4F" if e.get("direction") == "positive" else "#A45F45"
                         arrow = "➡️" if e.get("direction") == "positive" else "⬇️"
                         st.markdown(
-                            f"<div style='font-size:0.85rem; margin:6px 0; padding:6px 10px; background:#0d1f3c; border-radius:6px;'>"
-                            f"<span style='color:#f0b90b;'>{src_name}</span> {arrow} "
+                            f"<div style='font-size:0.85rem; margin:6px 0; padding:6px 10px; background:#FFF4E6; border-radius:6px;'>"
+                            f"<span style='color:#B88A45;'>{src_name}</span> {arrow} "
                             f"<span style='color:{color};'>{tgt_name}</span>"
-                            f"<span style='color:#6688aa; float:right;'>強度: {e['weight']:.2f}</span>"
+                            f"<span style='color:#71665A; float:right;'>強度: {e['weight']:.2f}</span>"
                             f"</div>",
                             unsafe_allow_html=True,
                         )
@@ -998,9 +1329,9 @@ elif page == "🔬 事件分析":
                             name = ASSET_UNIVERSE.get(ticker, {}).get("name_zh", ticker)
                             bar_width = int(c_val * 100)
                             st.markdown(
-                                f"<div style='margin:4px 0;'><span style='color:#e0e8f0;font-size:0.82rem;'>{name}</span>"
-                                f"<div style='background:#1e3050; border-radius:4px; margin-top:2px;'>"
-                                f"<div style='background:#f0b90b; width:{bar_width}%; height:6px; border-radius:4px;'></div></div></div>",
+                                f"<div style='margin:4px 0;'><span style='color:#2E2922;font-size:0.82rem;'>{name}</span>"
+                                f"<div style='background:#EFE3D3; border-radius:4px; margin-top:2px;'>"
+                                f"<div style='background:#B88A45; width:{bar_width}%; height:6px; border-radius:4px;'></div></div></div>",
                                 unsafe_allow_html=True,
                             )
                 else:
@@ -1028,7 +1359,7 @@ elif page == "🔬 事件分析":
                     sankey_source = selected_tickers[0]
 
                 st.plotly_chart(
-                    plot_propagation_cascade(net, sankey_source, sim_results),
+                    plot_propagation_cascade(net, sankey_source, sim_results, ASSET_UNIVERSE),
                     use_container_width=True,
                 )
 
@@ -1055,12 +1386,12 @@ elif page == "🔬 事件分析":
                     with st.expander(expander_label, expanded=is_anchor):
                         st.markdown(
                             f"""
-                            <div style="color:#b0c4d8; font-size:0.9rem; line-height:1.7;">
-                            <b style="color:#f0b90b;">事件描述：</b>{ev['description_zh']}<br>
-                            <b style="color:#f0b90b;">英文名稱：</b>{ev['name_en']}<br>
-                            <b style="color:#f0b90b;">主要衝擊：</b><span style="color:{cat_color};">{ev['primary_shock']}</span>
+                            <div style="color:#71665A; font-size:0.9rem; line-height:1.7;">
+                            <b style="color:#B88A45;">事件描述：</b>{ev['description_zh']}<br>
+                            <b style="color:#B88A45;">英文名稱：</b>{ev['name_en']}<br>
+                            <b style="color:#B88A45;">主要衝擊：</b><span style="color:{cat_color};">{ev['primary_shock']}</span>
                             &nbsp;&nbsp;
-                            <b style="color:#f0b90b;">嚴重程度：</b>{'★' * round(ev['magnitude'])} ({ev['magnitude']}/5)
+                            <b style="color:#B88A45;">嚴重程度：</b>{'★' * round(ev['magnitude'])} ({ev['magnitude']}/5)
                             </div>
                             """,
                             unsafe_allow_html=True,
@@ -1204,7 +1535,7 @@ elif page == "🔬 事件分析":
                             "name_zh": ASSET_UNIVERSE.get(ticker, {}).get("name_zh", ticker),
                             "category": ASSET_UNIVERSE.get(ticker, {}).get("category", "其他"),
                             "weight": weight,
-                            "color": ASSET_UNIVERSE.get(ticker, {}).get("color", "#3f7cac"),
+                            "color": ASSET_UNIVERSE.get(ticker, {}).get("color", "#8A5A3B"),
                         }
                         for ticker, weight in port_dict.items()
                     ]
@@ -1223,16 +1554,16 @@ elif page == "🔬 事件分析":
                             labels=alloc_df["name_zh"],
                             values=alloc_df["weight"],
                             hole=0.58,
-                            marker=dict(colors=alloc_df["color"].tolist(), line=dict(color="#ffffff", width=2)),
+                            marker=dict(colors=alloc_df["color"].tolist(), line=dict(color="#FFF9F0", width=2)),
                             textinfo="label+percent",
                         )
                     )
                     pie_fig.update_layout(
-                        plot_bgcolor="#f6f7f9",
-                        paper_bgcolor="#ffffff",
-                        font=dict(color="#17212b", family="Avenir Next, PingFang TC, sans-serif"),
+                        plot_bgcolor="#F5EFE6",
+                        paper_bgcolor="#FFF9F0",
+                        font=dict(color="#2E2922", family="Avenir Next, PingFang TC, sans-serif"),
                         margin=dict(l=10, r=10, t=30, b=10),
-                        title=dict(text="投資組合配置占比", font=dict(color="#0f766e", size=15)),
+                        title=dict(text="投資組合配置占比", font=dict(color="#8A5A3B", size=15)),
                         height=320,
                     )
                     st.plotly_chart(pie_fig, use_container_width=True)
@@ -1272,19 +1603,19 @@ elif page == "🔬 事件分析":
                     x=port_paths * 100,
                     nbinsx=60,
                     name="組合報酬模擬",
-                    marker_color="#3f7cac",
+                    marker_color="#8A5A3B",
                     opacity=0.7,
                 ))
                 fig_hist.add_vline(x=port_result["var_95"] * 100, line_dash="dash",
-                                   line_color="#b4534a", annotation_text="  VaR 95%",
-                                   annotation_font_color="#b4534a")
+                                   line_color="#A45F45", annotation_text="  VaR 95%",
+                                   annotation_font_color="#A45F45")
                 fig_hist.add_vline(x=port_result["expected_return"] * 100, line_dash="dash",
-                                   line_color="#0f766e", annotation_text="  期望值",
-                                   annotation_font_color="#0f766e")
+                                   line_color="#8A5A3B", annotation_text="  期望值",
+                                   annotation_font_color="#8A5A3B")
                 fig_hist.update_layout(
-                    plot_bgcolor="#f6f7f9", paper_bgcolor="#ffffff",
-                    font=dict(color="#17212b"), height=280,
-                    title=dict(text="投資組合報酬模擬分佈", font=dict(color="#0f766e", size=14)),
+                    plot_bgcolor="#F5EFE6", paper_bgcolor="#FFF9F0",
+                    font=dict(color="#2E2922"), height=280,
+                    title=dict(text="投資組合報酬模擬分佈", font=dict(color="#8A5A3B", size=14)),
                     xaxis_title="報酬 (%)", showlegend=False,
                     margin=dict(l=40, r=20, t=50, b=40),
                 )
@@ -1296,19 +1627,19 @@ elif page == "🔬 事件分析":
             for h in hedges:
                 asset_name = ASSET_UNIVERSE.get(h["asset"], {}).get("name_zh", h["asset"])
                 eff_pct = int(h["hedge_effectiveness"] * 100)
-                ret_color = "#2f8f68" if h["expected_return"] >= 0 else "#b4534a"
+                ret_color = "#6F7F4F" if h["expected_return"] >= 0 else "#A45F45"
                 already = "（已持有）" if h.get("already_in_portfolio") else ""
                 st.markdown(
                     f"""
-                    <div class="event-card" style="border-left-color:#2f8f68;">
+                    <div class="event-card" style="border-left-color:#6F7F4F;">
                       <h4>🛡️ {asset_name} ({h['asset']}) {already}</h4>
                       <p>{h['reason_zh']}</p>
                       <div style="margin-top:8px; font-size:0.85rem;">
-                        <span style="color:#8ca0b8;">預期報酬：</span>
+                        <span style="color:#71665A;">預期報酬：</span>
                         <span style="color:{ret_color}; font-weight:600;">{h['expected_return']:.2%}</span>
                         &nbsp;&nbsp;
-                        <span style="color:#8ca0b8;">對沖有效性：</span>
-                        <span style="color:#2f8f68; font-weight:600;">{eff_pct}%</span>
+                        <span style="color:#71665A;">對沖有效性：</span>
+                        <span style="color:#6F7F4F; font-weight:600;">{eff_pct}%</span>
                       </div>
                     </div>
                     """,
@@ -1384,14 +1715,22 @@ elif page == "📚 事件資料庫":
         cat_color = CAT_COLORS.get(ev["category"], "#888")
         mag_stars = "★" * round(ev["magnitude"]) + "☆" * (5 - round(ev["magnitude"]))
         with st.expander(f"📌 {ev['date']} — {ev['name_zh']}"):
-            dc1, dc2 = st.columns([3, 1])
+            dc0, dc1, dc2 = st.columns([1.15, 2.4, 1])
+            with dc0:
+                photo = get_event_photo(ev["id"])
+                if photo:
+                    st.image(
+                        photo["abs_file"],
+                        caption="真實事件圖片",
+                        use_container_width=True,
+                    )
             with dc1:
                 st.markdown(
                     f"""
-                    <div style="color:#b0c4d8; line-height:1.8; font-size:0.9rem;">
-                    <b style="color:#f0b90b;">中文描述：</b>{ev['description_zh']}<br>
-                    <b style="color:#f0b90b;">English：</b>{ev['description_en']}<br>
-                    <b style="color:#f0b90b;">主要衝擊資產：</b><span style="color:{cat_color};">{ev['primary_shock']}</span>
+                    <div style="color:#71665A; line-height:1.8; font-size:0.9rem;">
+                    <b style="color:#B88A45;">中文描述：</b>{ev['description_zh']}<br>
+                    <b style="color:#B88A45;">English：</b>{ev['description_en']}<br>
+                    <b style="color:#B88A45;">主要衝擊資產：</b><span style="color:{cat_color};">{ev['primary_shock']}</span>
                     </div>
                     """,
                     unsafe_allow_html=True,
@@ -1399,9 +1738,9 @@ elif page == "📚 事件資料庫":
             with dc2:
                 st.markdown(
                     f"""
-                    <div style="text-align:center; padding:10px; background:#0d1f3c; border-radius:10px; border:1px solid #1e3050;">
+                    <div style="text-align:center; padding:10px; background:#FFF4E6; border-radius:10px; border:1px solid #EFE3D3;">
                     <div style="font-size:2rem; color:{cat_color};">{mag_stars}</div>
-                    <div style="color:#8ca0b8; font-size:0.8rem; margin-top:4px;">嚴重程度 {ev['magnitude']}/5</div>
+                    <div style="color:#71665A; font-size:0.8rem; margin-top:4px;">嚴重程度 {ev['magnitude']}/5</div>
                     <div style="margin-top:8px;">
                       <span class="badge" style="background:{cat_color}22; color:{cat_color}; padding:4px 10px; border-radius:20px; font-size:0.8rem;">
                         {ev['category']}
@@ -1425,37 +1764,37 @@ elif page == "📖 方法論說明":
     with st.expander("📊 一、事件研究法（Event Study）", expanded=True):
         st.markdown(
             """
-            <div style="color:#b0c4d8; line-height:1.9; font-size:0.92rem;">
+            <div style="color:#71665A; line-height:1.9; font-size:0.92rem;">
 
-            <b style="color:#f0b90b; font-size:1.05rem;">理論基礎</b><br>
+            <b style="color:#B88A45; font-size:1.05rem;">理論基礎</b><br>
             事件研究法由 Fama et al.（1969）提出，用於衡量特定事件對資產價格的異常影響。
             其核心假設是效率市場假說：若市場有效，資產價格應即時反映所有公開訊息，
             因此「異常報酬」（Abnormal Return）代表事件帶來的超額影響。
 
-            <br><br><b style="color:#f0b90b;">估計窗口（Estimation Window）</b><br>
+            <br><br><b style="color:#B88A45;">估計窗口（Estimation Window）</b><br>
             以事件日前的資料（本平台使用 120 個交易日）建立基準模型，
             排除事件期間的「汙染」。
 
-            <br><br><b style="color:#f0b90b;">市場模型（Market Model）</b><br>
+            <br><br><b style="color:#B88A45;">市場模型（Market Model）</b><br>
             透過 OLS 回歸，估計資產報酬與市場報酬的關係：<br>
-            <code style="background:#0d1f3c; padding:4px 8px; border-radius:4px; color:#17becf;">
+            <code style="background:#FFF4E6; padding:4px 8px; border-radius:4px; color:#8A5A3B;">
               R_i,t = α + β × R_m,t + ε_t
             </code>
             <br>其中 α 為截距（超額報酬），β 為系統性風險係數。
 
-            <br><br><b style="color:#f0b90b;">異常報酬（Abnormal Return, AR）</b><br>
-            <code style="background:#0d1f3c; padding:4px 8px; border-radius:4px; color:#17becf;">
+            <br><br><b style="color:#B88A45;">異常報酬（Abnormal Return, AR）</b><br>
+            <code style="background:#FFF4E6; padding:4px 8px; border-radius:4px; color:#8A5A3B;">
               AR_t = R_i,t − (α̂ + β̂ × R_m,t)
             </code>
             <br>事件窗口（Event Window）內的實際報酬與模型預測報酬之差。
 
-            <br><br><b style="color:#f0b90b;">累積異常報酬（Cumulative Abnormal Return, CAR）</b><br>
-            <code style="background:#0d1f3c; padding:4px 8px; border-radius:4px; color:#17becf;">
+            <br><br><b style="color:#B88A45;">累積異常報酬（Cumulative Abnormal Return, CAR）</b><br>
+            <code style="background:#FFF4E6; padding:4px 8px; border-radius:4px; color:#8A5A3B;">
               CAR(t₁, t₂) = Σ AR_t，t₁ ≤ t ≤ t₂
             </code>
             <br>本平台預設使用 [-1, +10] 交易日的 CAR，捕捉事件前後兩週的衝擊。
 
-            <br><br><b style="color:#f0b90b;">顯著性檢定</b><br>
+            <br><br><b style="color:#B88A45;">顯著性檢定</b><br>
             使用 t 統計量：t = CAR / (σ × √n)，
             其中 σ 為估計窗口的殘差標準差，n 為事件窗口長度。
             p < 0.10 視為統計顯著。
@@ -1469,30 +1808,30 @@ elif page == "📖 方法論說明":
     with st.expander("🕸️ 二、Granger 因果性與轉移熵（Causality Network）"):
         st.markdown(
             """
-            <div style="color:#b0c4d8; line-height:1.9; font-size:0.92rem;">
+            <div style="color:#71665A; line-height:1.9; font-size:0.92rem;">
 
-            <b style="color:#f0b90b; font-size:1.05rem;">Granger 因果性檢定</b><br>
+            <b style="color:#B88A45; font-size:1.05rem;">Granger 因果性檢定</b><br>
             Granger（1969）提出：若 X 的過去值能顯著預測 Y 的未來值（在控制 Y 自身歷史後），
             則稱「X Granger-causes Y」。這是一種預測因果性，非哲學上的因果關係。
 
             <br><br>實作方式：對所有資產對進行逐對 VAR 模型 F 檢定，
             測試滯後期 1–5 期，取最小 p 值（最顯著的滯後）。
 
-            <br><br><b style="color:#f0b90b; font-size:1.05rem;">轉移熵（Transfer Entropy, TE）</b><br>
+            <br><br><b style="color:#B88A45; font-size:1.05rem;">轉移熵（Transfer Entropy, TE）</b><br>
             Shannon（1948）資訊理論框架，Schreiber（2000）將其應用於時間序列：<br>
-            <code style="background:#0d1f3c; padding:4px 8px; border-radius:4px; color:#17becf;">
+            <code style="background:#FFF4E6; padding:4px 8px; border-radius:4px; color:#8A5A3B;">
               TE(X→Y) = H(Y_t | Y_{t-1}) − H(Y_t | Y_{t-1}, X_{t-1})
             </code>
             <br>量化「在已知 Y 的歷史後，X 的歷史提供多少關於 Y 未來的額外資訊」。
             透過分箱離散化方法估計，單位為 bits。
 
-            <br><br><b style="color:#f0b90b;">傳導網路建構</b><br>
+            <br><br><b style="color:#B88A45;">傳導網路建構</b><br>
             將 Granger p 值（門檻 0.05）與 TE（門檻 0.01）的結果疊加，
             建立有向加權圖（Directed Weighted Graph）。
             節點大小代表出度中心性（Out-degree Centrality），
             代表該資產對其他資產的整體影響力。
 
-            <br><br><b style="color:#f0b90b;">桑基圖（Sankey Diagram）</b><br>
+            <br><br><b style="color:#B88A45;">桑基圖（Sankey Diagram）</b><br>
             視覺化衝擊從源頭資產（主要受衝擊者）向其他資產的流量分佈，
             流量寬度反映蒙地卡羅模擬中的期望報酬絕對值。
 
@@ -1505,14 +1844,14 @@ elif page == "📖 方法論說明":
     with st.expander("🎲 三、蒙地卡羅模擬（Monte Carlo Simulation）"):
         st.markdown(
             """
-            <div style="color:#b0c4d8; line-height:1.9; font-size:0.92rem;">
+            <div style="color:#71665A; line-height:1.9; font-size:0.92rem;">
 
-            <b style="color:#f0b90b; font-size:1.05rem;">Bootstrap 重抽樣</b><br>
+            <b style="color:#B88A45; font-size:1.05rem;">Bootstrap 重抽樣</b><br>
             本平台使用非參數 Bootstrap 方法：從歷史相似事件的 CAR 樣本中，
             有放回地抽取 5,000 次，加上少量 Gaussian 雜訊（± 15% 標準差）以增加多樣性。
             「事件強度」倍數直接縮放每次抽樣結果。
 
-            <br><br><b style="color:#f0b90b;">輸出統計量</b><br>
+            <br><br><b style="color:#B88A45;">輸出統計量</b><br>
             <ul style="margin:8px 0; padding-left:20px;">
               <li><b>期望報酬（Mean）</b>：5,000 次模擬的平均值</li>
               <li><b>標準差（Std）</b>：波動程度量化</li>
@@ -1520,21 +1859,21 @@ elif page == "📖 方法論說明":
               <li><b>下跌機率</b>：模擬結果為負值的比例</li>
             </ul>
 
-            <br><b style="color:#f0b90b; font-size:1.05rem;">風險指標（Risk Metrics）</b><br>
+            <br><b style="color:#B88A45; font-size:1.05rem;">風險指標（Risk Metrics）</b><br>
             <b>在險值（Value at Risk, VaR）：</b><br>
-            <code style="background:#0d1f3c; padding:4px 8px; border-radius:4px; color:#17becf;">
+            <code style="background:#FFF4E6; padding:4px 8px; border-radius:4px; color:#8A5A3B;">
               VaR_α = 第 (1-α) 百分位數
             </code>
             <br>代表在給定信心水準下的最大可能損失。
             本平台提供 95% 及 99% VaR。
 
             <br><br><b>條件在險值（Expected Shortfall / CVaR）：</b><br>
-            <code style="background:#0d1f3c; padding:4px 8px; border-radius:4px; color:#17becf;">
+            <code style="background:#FFF4E6; padding:4px 8px; border-radius:4px; color:#8A5A3B;">
               ES_α = E[損失 | 損失 > VaR_α]
             </code>
             <br>尾部損失的期望值，比 VaR 更能捕捉極端風險。
 
-            <br><br><b style="color:#f0b90b;">情境分析</b><br>
+            <br><br><b style="color:#B88A45;">情境分析</b><br>
             <ul style="margin:8px 0; padding-left:20px;">
               <li><b>樂觀情境（Best Case）</b>：歷史 CAR 的 P90</li>
               <li><b>基準情境（Base Case）</b>：歷史 CAR 的中位數</li>
@@ -1550,26 +1889,26 @@ elif page == "📖 方法論說明":
     with st.expander("💼 四、投資組合壓力測試（Portfolio Stress Test）"):
         st.markdown(
             """
-            <div style="color:#b0c4d8; line-height:1.9; font-size:0.92rem;">
+            <div style="color:#71665A; line-height:1.9; font-size:0.92rem;">
 
-            <b style="color:#f0b90b; font-size:1.05rem;">加權組合損益計算</b><br>
-            <code style="background:#0d1f3c; padding:4px 8px; border-radius:4px; color:#17becf;">
+            <b style="color:#B88A45; font-size:1.05rem;">加權組合損益計算</b><br>
+            <code style="background:#FFF4E6; padding:4px 8px; border-radius:4px; color:#8A5A3B;">
               R_portfolio,s = Σ w_i × R_i,s
             </code>
             <br>對每一次蒙地卡羅模擬 s，計算加權後的組合報酬，
             得到 5,000 個組合情境報酬。
 
-            <br><br><b style="color:#f0b90b;">資產貢獻分析</b><br>
+            <br><br><b style="color:#B88A45;">資產貢獻分析</b><br>
             每個資產對組合期望損失的貢獻：<br>
-            <code style="background:#0d1f3c; padding:4px 8px; border-radius:4px; color:#17becf;">
+            <code style="background:#FFF4E6; padding:4px 8px; border-radius:4px; color:#8A5A3B;">
               Contribution_i = w_i × E[R_i]
             </code>
 
-            <br><br><b style="color:#f0b90b;">瀑布圖（Waterfall Chart）</b><br>
+            <br><br><b style="color:#B88A45;">瀑布圖（Waterfall Chart）</b><br>
             視覺化每個資產對組合總報酬的貢獻，
             正貢獻顯示為綠色，負貢獻顯示為紅色，組合總計以金色標示。
 
-            <br><br><b style="color:#f0b90b;">對沖建議</b><br>
+            <br><br><b style="color:#B88A45;">對沖建議</b><br>
             根據事件類別與現有持倉，建議適合的對沖工具。
             對沖有效性（Hedge Effectiveness）基於歷史事件中的統計相關性，
             範圍 0–100%，越高代表該資產越能有效抵消組合風險。
@@ -1583,9 +1922,9 @@ elif page == "📖 方法論說明":
     with st.expander("📡 五、資料來源與技術架構"):
         st.markdown(
             """
-            <div style="color:#b0c4d8; line-height:1.9; font-size:0.92rem;">
+            <div style="color:#71665A; line-height:1.9; font-size:0.92rem;">
 
-            <b style="color:#f0b90b; font-size:1.05rem;">主要資料來源</b>
+            <b style="color:#B88A45; font-size:1.05rem;">主要資料來源</b>
             <ul style="margin:8px 0; padding-left:20px;">
               <li><b>Yahoo Finance (yfinance)</b>：股票、ETF、期貨、加密貨幣日收盤價</li>
               <li><b>FRED（聖路易聯準會資料庫）</b>：總體經濟指標（利率、殖利率曲線等）</li>
@@ -1593,7 +1932,7 @@ elif page == "📖 方法論說明":
               <li><b>合成資料備援</b>：當 API 不可用時，基於歷史風格化事實（Stylized Facts）產生模擬資料</li>
             </ul>
 
-            <br><b style="color:#f0b90b; font-size:1.05rem;">技術架構</b>
+            <br><b style="color:#B88A45; font-size:1.05rem;">技術架構</b>
             <ul style="margin:8px 0; padding-left:20px;">
               <li><b>前端框架</b>：Streamlit 1.32+</li>
               <li><b>視覺化</b>：Plotly 5.18+（互動式圖表、網路圖、桑基圖）</li>
@@ -1603,7 +1942,7 @@ elif page == "📖 方法論說明":
               <li><b>資料處理</b>：pandas</li>
             </ul>
 
-            <br><b style="color:#f0b90b;">快取策略</b><br>
+            <br><b style="color:#B88A45;">快取策略</b><br>
             所有資料獲取與分析函式均使用 <code>@st.cache_data(ttl=3600)</code> 快取，
             避免重複計算，提升互動響應速度。
 
@@ -1623,8 +1962,8 @@ elif page == "📖 方法論說明":
     ]
     for author, title, journal in refs:
         st.markdown(
-            f"<div style='margin:6px 0; color:#8ca0b8; font-size:0.87rem;'>"
-            f"<b style='color:#f0b90b;'>{author}</b> — "
+            f"<div style='margin:6px 0; color:#71665A; font-size:0.87rem;'>"
+            f"<b style='color:#B88A45;'>{author}</b> — "
             f"<i>{title}</i>, {journal}</div>",
             unsafe_allow_html=True,
         )

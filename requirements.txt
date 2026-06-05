@@ -9,3 +9,4 @@ networkx>=3.2.0
 requests>=2.31.0
 fredapi>=0.5.1
 pymannkendall
+python-docx>=1.1.2
