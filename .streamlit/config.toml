@@ -1,7 +1,6 @@
 [server]
 headless = true
 runOnSave = true
-port = 8505
 
 [theme]
 base = "light"
