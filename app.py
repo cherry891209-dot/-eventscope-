@@ -1661,6 +1661,18 @@ elif page == "🔬 事件分析":
                         st.metric(label, f"{val:.2%}", help=help_text)
 
                 # Waterfall chart
+                st.markdown(
+                    """
+                    <div class="info-box" style="margin-top:12px;">
+                      <b style="color:#8A5A3B;">各資產瀑布圖怎麼看</b><br>
+                      紅色往下的柱子代表該資產在壓力情境下拉低整體投組，是主要風險來源；
+                      綠色往上的柱子代表該資產有緩衝或避險效果。柱子越長，表示它對整個投組的影響越大。
+                      瀑布圖是逐項累加，所以最後的總結果是在回答：
+                      <b>這次事件讓投組主要虧在哪些資產、又靠哪些資產撐住。</b>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
                 st.plotly_chart(
                     plot_portfolio_waterfall(port_result, port_dict),
                     use_container_width=True,
