@@ -711,9 +711,9 @@ def plot_propagation_cascade(
 
     def short_label(ticker: str) -> str:
         name = asset_name(ticker)
-        if len(name) > 7:
-            name = name[:7] + "..."
-        return f"{name}<br>{ticker}"
+        if len(name) > 6:
+            name = name[:6] + "..."
+        return f"{name} ({ticker})"
 
     def hover_label(ticker: str) -> str:
         impact = sim_indexed.get(ticker)
@@ -728,10 +728,10 @@ def plot_propagation_cascade(
     def link_color(target: str) -> str:
         impact = sim_indexed.get(target, 0.0)
         if impact > 0.0005:
-            return POSITIVE_COLOR
+            return "rgba(111,127,79,0.66)"
         if impact < -0.0005:
-            return "rgba(164,95,69,0.50)"
-        return "rgba(155,128,97,0.42)"
+            return "rgba(164,95,69,0.62)"
+        return "rgba(138,90,59,0.46)"
 
     link_sources, link_targets, link_values, link_colors, link_labels = [], [], [], [], []
     for edge in relevant_edges:
@@ -778,13 +778,14 @@ def plot_propagation_cascade(
     fig = go.Figure(
         go.Sankey(
             arrangement="fixed",
+            textfont=dict(size=15, color=TEXT_COLOR, family="Microsoft JhengHei, PingFang TC, Arial, sans-serif"),
             node=dict(
-                pad=22,
-                thickness=22,
+                pad=26,
+                thickness=26,
                 label=node_labels,
                 color=node_colors,
                 customdata=node_hover,
-                line=dict(color=PAPER_BG, width=1.2),
+                line=dict(color=TEXT_COLOR, width=0.7),
                 x=node_x,
                 y=node_y,
                 hovertemplate="%{customdata}<extra></extra>",
@@ -811,7 +812,7 @@ def plot_propagation_cascade(
         ),
         showarrow=False,
         align="left",
-        font=dict(size=12, color="#71665A"),
+        font=dict(size=13, color="#4B4036"),
     )
     for x, title in [(0.02, "衝擊來源"), (0.46, "直接受影響"), (0.82, "二次傳導")]:
         fig.add_annotation(
@@ -821,17 +822,17 @@ def plot_propagation_cascade(
             yref="paper",
             text=f"<b>{title}</b>",
             showarrow=False,
-            font=dict(size=13, color=ACCENT),
+            font=dict(size=14, color=ACCENT),
         )
 
     sankey_layout = dict(**_LAYOUT_BASE)
-    sankey_layout["margin"] = dict(l=28, r=96, t=112, b=36)
+    sankey_layout["margin"] = dict(l=34, r=120, t=118, b=42)
     fig.update_layout(
         **sankey_layout,
         title=dict(
             text=f"衝擊傳導桑基圖 — 從 {asset_name(source_asset)} 擴散",
-            font=dict(color=ACCENT, size=15),
+            font=dict(color=ACCENT, size=16),
         ),
-        height=560,
+        height=620,
     )
     return fig
