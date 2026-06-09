@@ -668,7 +668,7 @@ def plot_propagation_cascade(
     simulation_results: pd.DataFrame,
     asset_info: dict | None = None,
 ) -> go.Figure:
-    """Readable three-column impact propagation map."""
+    """Sankey diagram showing how impact flows from source to other assets."""
     asset_info = asset_info or {}
     edges = network.get("edges", [])
     if not edges:
@@ -690,7 +690,15 @@ def plot_propagation_cascade(
         second_hop_edges = []
         relevant_edges = direct_edges
 
-    sim_indexed = {}
+    node_set = []
+    node_map = {}
+    for edge in relevant_edges:
+        for ticker in [edge["source"], edge["target"]]:
+            if ticker not in node_map:
+                node_map[ticker] = len(node_set)
+                node_set.append(ticker)
+
+    sim_indexed: dict[str, float] = {}
     if not simulation_results.empty:
         for _, row in simulation_results.iterrows():
             sim_indexed[row["ticker"]] = float(row.get("mean_return", 0.0))
@@ -701,13 +709,16 @@ def plot_propagation_cascade(
     def asset_category(ticker: str) -> str:
         return asset_info.get(ticker, {}).get("category", "其他")
 
-    def asset_label(ticker: str, show_impact: bool = True) -> str:
-        info = asset_info.get(ticker, {})
-        name = info.get("name_zh", ticker)
-        category = info.get("category", "其他")
+    def short_label(ticker: str) -> str:
+        name = asset_name(ticker)
+        if len(name) > 7:
+            name = name[:7] + "..."
+        return f"{name}<br>{ticker}"
+
+    def hover_label(ticker: str) -> str:
         impact = sim_indexed.get(ticker)
-        impact_text = "" if not show_impact else ("來源" if ticker == source_asset else ("n/a" if impact is None else f"｜{impact:+.2%}"))
-        return f"<b>{name}</b><br><span style='font-size:10px;color:#71665A'>{category}｜{ticker}{impact_text}</span>"
+        impact_text = "來源資產" if ticker == source_asset else ("n/a" if impact is None else f"{impact:+.2%}")
+        return f"{asset_name(ticker)}<br>{asset_category(ticker)}｜{ticker}<br>預期報酬：{impact_text}"
 
     def node_color(ticker: str) -> str:
         if ticker == source_asset:
@@ -719,107 +730,75 @@ def plot_propagation_cascade(
         if impact > 0.0005:
             return POSITIVE_COLOR
         if impact < -0.0005:
-            return NEGATIVE_COLOR
-        return "#9B8061"
+            return "rgba(164,95,69,0.50)"
+        return "rgba(155,128,97,0.42)"
 
-    direct_nodes = []
-    for edge in direct_edges:
-        if edge["target"] not in direct_nodes:
-            direct_nodes.append(edge["target"])
-    second_nodes = []
-    for edge in second_hop_edges:
-        if edge["target"] not in second_nodes and edge["target"] != source_asset:
-            second_nodes.append(edge["target"])
-
-    max_rows = max(1, len(direct_nodes), len(second_nodes))
-
-    def y_positions(items: list[str]) -> dict[str, float]:
-        if not items:
-            return {}
-        if len(items) == 1:
-            return {items[0]: 0.50}
-        return {
-            ticker: 0.14 + idx * (0.72 / (len(items) - 1))
-            for idx, ticker in enumerate(items)
-        }
-
-    source_y = 0.50
-    direct_y = y_positions(direct_nodes)
-    second_y = y_positions(second_nodes)
-    x_source, x_direct, x_second = 0.11, 0.50, 0.88
-
-    fig = go.Figure()
-
-    def add_node(ticker: str, x: float, y: float, anchor: str = "center") -> None:
-        fig.add_trace(
-            go.Scatter(
-                x=[x],
-                y=[y],
-                mode="markers",
-                marker=dict(size=24, color=node_color(ticker), line=dict(color=PAPER_BG, width=2)),
-                hovertemplate=f"<b>{asset_name(ticker)}</b><br>{asset_category(ticker)}<br>{ticker}<extra></extra>",
-                showlegend=False,
-            )
-        )
-        yshift = -32 if anchor == "center" else 0
-        fig.add_annotation(
-            x=x,
-            y=y,
-            text=asset_label(ticker),
-            showarrow=False,
-            xanchor=anchor,
-            yanchor="middle" if anchor != "center" else "top",
-            yshift=yshift,
-            align="center" if anchor == "center" else ("left" if anchor == "left" else "right"),
-            font=dict(size=11, color=TEXT_COLOR),
-        )
-
-    def add_edge(edge: dict, x0: float, y0: float, x1: float, y1: float) -> None:
+    link_sources, link_targets, link_values, link_colors, link_labels = [], [], [], [], []
+    for edge in relevant_edges:
+        source_idx = node_map.get(edge["source"])
+        target_idx = node_map.get(edge["target"])
+        if source_idx is None or target_idx is None:
+            continue
         weight = abs(float(edge.get("weight", 0.5)))
-        color = link_color(edge["target"])
-        width = 2 + 7 * min(weight, 1.0)
-        fig.add_trace(
-            go.Scatter(
-                x=[x0, x1],
-                y=[y0, y1],
-                mode="lines",
-                line=dict(color=color, width=width),
-                opacity=0.72,
-                hovertemplate=(
-                    f"<b>{asset_name(edge['source'])} → {asset_name(edge['target'])}</b><br>"
-                    f"傳導強度：{weight:.2f}<br>"
-                    f"目標預期報酬：{sim_indexed.get(edge['target'], 0.0):+.2%}"
-                    "<extra></extra>"
-                ),
-                showlegend=False,
-            )
-        )
-        fig.add_annotation(
-            x=(x0 + x1) / 2,
-            y=(y0 + y1) / 2 + 0.035,
-            text=f"{weight:.2f}",
-            showarrow=False,
-            font=dict(size=10, color=TEXT_COLOR),
-            bgcolor="#FFF4E6",
-            bordercolor=GRID_COLOR,
-            borderpad=2,
+        target_impact = abs(sim_indexed.get(edge["target"], 0.0)) * 100
+        link_sources.append(source_idx)
+        link_targets.append(target_idx)
+        link_values.append(max(0.2, weight * 3.2 + target_impact * 0.65))
+        link_colors.append(link_color(edge["target"]))
+        link_labels.append(
+            f"{asset_name(edge['source'])} → {asset_name(edge['target'])}<br>"
+            f"傳導強度：{weight:.2f}<br>"
+            f"目標預期報酬：{sim_indexed.get(edge['target'], 0.0):+.2%}"
         )
 
-    for edge in direct_edges:
-        target = edge["target"]
-        if target in direct_y:
-            add_edge(edge, x_source + 0.04, source_y, x_direct - 0.06, direct_y[target])
-    for edge in second_hop_edges:
-        source = edge["source"]
-        target = edge["target"]
-        if source in direct_y and target in second_y:
-            add_edge(edge, x_direct + 0.06, direct_y[source], x_second - 0.04, second_y[target])
+    node_labels = [short_label(ticker) for ticker in node_set]
+    node_colors = [node_color(ticker) for ticker in node_set]
+    node_hover = [hover_label(ticker) for ticker in node_set]
 
-    add_node(source_asset, x_source, source_y, "center")
-    for ticker, y in direct_y.items():
-        add_node(ticker, x_direct, y, "center")
-    for ticker, y in second_y.items():
-        add_node(ticker, x_second, y, "center")
+    def node_layer(ticker: str) -> float:
+        if ticker == source_asset:
+            return 0.02
+        if ticker in direct_targets:
+            return 0.46
+        return 0.82
+
+    buckets: dict[float, list[str]] = {}
+    for ticker in node_set:
+        buckets.setdefault(node_layer(ticker), []).append(ticker)
+
+    node_x, node_y = [], []
+    for ticker in node_set:
+        layer = node_layer(ticker)
+        bucket = buckets[layer]
+        index = bucket.index(ticker)
+        y = 0.50 if len(bucket) == 1 else 0.08 + index * (0.84 / (len(bucket) - 1))
+        node_x.append(layer)
+        node_y.append(y)
+
+    fig = go.Figure(
+        go.Sankey(
+            arrangement="fixed",
+            node=dict(
+                pad=22,
+                thickness=22,
+                label=node_labels,
+                color=node_colors,
+                customdata=node_hover,
+                line=dict(color=PAPER_BG, width=1.2),
+                x=node_x,
+                y=node_y,
+                hovertemplate="%{customdata}<extra></extra>",
+            ),
+            link=dict(
+                source=link_sources,
+                target=link_targets,
+                value=link_values,
+                color=link_colors,
+                customdata=link_labels,
+                hovertemplate="%{customdata}<extra></extra>",
+            ),
+        )
+    )
 
     fig.add_annotation(
         x=0.0,
@@ -834,27 +813,25 @@ def plot_propagation_cascade(
         align="left",
         font=dict(size=12, color="#71665A"),
     )
-    for x, title in [(x_source, "衝擊來源"), (x_direct, "直接受影響"), (x_second, "二次傳導")]:
+    for x, title in [(0.02, "衝擊來源"), (0.46, "直接受影響"), (0.82, "二次傳導")]:
         fig.add_annotation(
             x=x,
             y=1.0,
-            xref="x",
-            yref="y",
+            xref="paper",
+            yref="paper",
             text=f"<b>{title}</b>",
             showarrow=False,
             font=dict(size=13, color=ACCENT),
         )
 
-    cascade_layout = dict(**_LAYOUT_BASE)
-    cascade_layout["xaxis"] = dict(range=[0, 1], showgrid=False, zeroline=False, showticklabels=False, fixedrange=True)
-    cascade_layout["yaxis"] = dict(range=[0, 1.08], showgrid=False, zeroline=False, showticklabels=False, fixedrange=True)
-    cascade_layout["margin"] = dict(l=36, r=36, t=112, b=36)
+    sankey_layout = dict(**_LAYOUT_BASE)
+    sankey_layout["margin"] = dict(l=28, r=96, t=112, b=36)
     fig.update_layout(
-        **cascade_layout,
+        **sankey_layout,
         title=dict(
-            text=f"衝擊傳導路徑圖 — 從 {asset_name(source_asset)} 擴散",
+            text=f"衝擊傳導桑基圖 — 從 {asset_name(source_asset)} 擴散",
             font=dict(color=ACCENT, size=15),
         ),
-        height=max(520, 92 * max_rows),
+        height=560,
     )
     return fig

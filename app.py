@@ -1411,8 +1411,8 @@ elif page == "🔬 事件分析":
                         unsafe_allow_html=True,
                     )
 
-            # Propagation route map
-            st.markdown("**🔀 衝擊傳導路徑圖**")
+            # Sankey
+            st.markdown("**🔀 衝擊傳導桑基圖**")
             if net:
                 primary_shock_ticker = current_event.get("primary_shock", "")
                 # Map primary shock to a ticker
