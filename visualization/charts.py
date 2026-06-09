@@ -517,6 +517,8 @@ def plot_historical_comparison(
         return go.Figure()
 
     z = historical_cars.values * 100  # Convert to %
+    z_abs = np.nanpercentile(np.abs(z), 92) if np.isfinite(z).any() else 8
+    z_range = max(3.0, min(12.0, float(z_abs)))
 
     # Truncate long row labels
     row_labels = [str(r)[:35] for r in historical_cars.index]
@@ -528,18 +530,23 @@ def plot_historical_comparison(
             x=col_labels,
             y=row_labels,
             colorscale=[
-                [0.0, NEGATIVE_COLOR],
-                [0.5, BG_COLOR],
-                [1.0, POSITIVE_COLOR],
+                [0.0, "#8F3E2F"],
+                [0.30, "#D39A85"],
+                [0.50, "#FFF8EE"],
+                [0.70, "#A8B682"],
+                [1.0, "#53663B"],
             ],
+            zmin=-z_range,
+            zmax=z_range,
             zmid=0,
             text=[[f"{v:.1f}%" for v in row] for row in z],
             texttemplate="%{text}",
-            textfont=dict(size=9),
+            textfont=dict(size=10, color=TEXT_COLOR),
             hovertemplate="事件: %{y}<br>資產: %{x}<br>CAR: %{z:.2f}%<extra></extra>",
             colorbar=dict(
                 title=dict(text="CAR (%)", font=dict(color=TEXT_COLOR)),
                 tickfont=dict(color=TEXT_COLOR),
+                ticksuffix="%",
             ),
         )
     )
@@ -550,6 +557,19 @@ def plot_historical_comparison(
         **heat_layout,
         title=dict(text=f"歷史相似事件 CAR 熱力圖 — {event_name}", font=dict(color=ACCENT, size=15)),
         height=max(350, len(row_labels) * 30 + 100),
+    )
+    fig.add_annotation(
+        x=0,
+        y=1.08,
+        xref="paper",
+        yref="paper",
+        text=(
+            "<b>讀法：</b>紅色代表該事件下資產累積異常報酬（CAR）偏負，"
+            "綠色代表偏正，米白接近 0。顏色越深，偏離越大。"
+        ),
+        showarrow=False,
+        align="left",
+        font=dict(size=12, color="#4B4036"),
     )
     return fig
 
