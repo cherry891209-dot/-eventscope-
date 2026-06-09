@@ -6,7 +6,6 @@ import warnings
 warnings.filterwarnings("ignore")
 
 import json
-from xml.sax.saxutils import escape
 from io import BytesIO
 from pathlib import Path
 
@@ -460,7 +459,7 @@ def format_pct(value, digits: int = 2) -> str:
         return "n/a"
 
 
-def build_analysis_summary_pdf(
+def build_analysis_summary_docx(
     event: dict,
     sim_results: pd.DataFrame,
     network: dict,
@@ -468,106 +467,61 @@ def build_analysis_summary_pdf(
     portfolio: dict,
     hedges: list[dict],
 ) -> bytes:
-    from reportlab.lib import colors
-    from reportlab.lib.enums import TA_LEFT
-    from reportlab.lib.pagesizes import A4
-    from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
-    from reportlab.lib.units import mm
-    from reportlab.pdfbase.cidfonts import UnicodeCIDFont
-    from reportlab.pdfbase import pdfmetrics
-    from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
+    from docx import Document
+    from docx.oxml.ns import qn
+    from docx.shared import Pt, RGBColor
 
+    font_name = "Microsoft JhengHei"
+    heading_color = RGBColor(111, 67, 41)
+    accent_color = RGBColor(138, 90, 59)
     output = BytesIO()
-    pdf_font = "MSung-Light"
-    pdfmetrics.registerFont(UnicodeCIDFont(pdf_font))
-    doc = SimpleDocTemplate(
-        output,
-        pagesize=A4,
-        rightMargin=16 * mm,
-        leftMargin=16 * mm,
-        topMargin=16 * mm,
-        bottomMargin=16 * mm,
-        title=f"EventScope 分析摘要：{event['name_zh']}",
-    )
+    doc = Document()
 
-    styles = getSampleStyleSheet()
-    title_style = ParagraphStyle(
-        "EventScopeTitle",
-        parent=styles["Title"],
-        fontName=pdf_font,
-        fontSize=18,
-        leading=24,
-        textColor=colors.HexColor("#6F4329"),
-        alignment=TA_LEFT,
-        spaceAfter=12,
-    )
-    heading_style = ParagraphStyle(
-        "EventScopeHeading",
-        parent=styles["Heading2"],
-        fontName=pdf_font,
-        fontSize=13,
-        leading=18,
-        textColor=colors.HexColor("#8A5A3B"),
-        spaceBefore=10,
-        spaceAfter=6,
-    )
-    body_style = ParagraphStyle(
-        "EventScopeBody",
-        parent=styles["BodyText"],
-        fontName=pdf_font,
-        fontSize=10,
-        leading=15,
-        textColor=colors.HexColor("#2E2922"),
-    )
-    small_style = ParagraphStyle(
-        "EventScopeSmall",
-        parent=body_style,
-        fontSize=8.5,
-        leading=12,
-        textColor=colors.HexColor("#71665A"),
-    )
+    def set_run_font(run, size: int | None = None, color: RGBColor | None = None, bold: bool | None = None) -> None:
+        run.font.name = font_name
+        run._element.rPr.rFonts.set(qn("w:eastAsia"), "微軟正黑體")
+        if size is not None:
+            run.font.size = Pt(size)
+        if color is not None:
+            run.font.color.rgb = color
+        if bold is not None:
+            run.bold = bold
 
-    story = [Paragraph(f"EventScope 分析摘要：{escape(event['name_zh'])}", title_style)]
+    def style_paragraph(paragraph, size: int = 10) -> None:
+        for run in paragraph.runs:
+            set_run_font(run, size=size)
 
-    def add_heading(text: str) -> None:
-        story.append(Paragraph(escape(text), heading_style))
+    title = doc.add_heading("", level=0)
+    title_run = title.add_run(f"EventScope 分析摘要：{event['name_zh']}")
+    set_run_font(title_run, size=18, color=heading_color, bold=True)
+
+    def add_heading(text: str, level: int = 1) -> None:
+        paragraph = doc.add_heading("", level=level)
+        run = paragraph.add_run(text)
+        set_run_font(run, size=14 if level == 1 else 12, color=accent_color, bold=True)
 
     def add_bullets(items: list[str]) -> None:
         for item in items:
-            story.append(Paragraph(f"• {escape(str(item))}", body_style))
-        story.append(Spacer(1, 5))
-
-    def cell(value: object, style=body_style) -> Paragraph:
-        return Paragraph(escape(str(value)), style)
+            paragraph = doc.add_paragraph(style="List Bullet")
+            run = paragraph.add_run(str(item))
+            set_run_font(run, size=10)
 
     def add_table(headers: list[str], rows: list[list[str]]) -> None:
-        data = [[cell(header, small_style) for header in headers]]
-        data.extend([[cell(value) for value in row_values] for row_values in rows])
-        usable_width = A4[0] - 32 * mm
-        if len(headers) == 4:
-            col_widths = [35 * mm, 62 * mm, 34 * mm, usable_width - 131 * mm]
-        elif len(headers) == 3:
-            col_widths = [72 * mm, 72 * mm, usable_width - 144 * mm]
-        else:
-            col_widths = [usable_width / len(headers)] * len(headers)
-        table = Table(data, colWidths=col_widths, repeatRows=1, hAlign="LEFT")
-        table.setStyle(
-            TableStyle(
-                [
-                    ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#EAD9C6")),
-                    ("TEXTCOLOR", (0, 0), (-1, 0), colors.HexColor("#2E2922")),
-                    ("FONTNAME", (0, 0), (-1, -1), pdf_font),
-                    ("GRID", (0, 0), (-1, -1), 0.35, colors.HexColor("#D9C8B3")),
-                    ("VALIGN", (0, 0), (-1, -1), "TOP"),
-                    ("LEFTPADDING", (0, 0), (-1, -1), 6),
-                    ("RIGHTPADDING", (0, 0), (-1, -1), 6),
-                    ("TOPPADDING", (0, 0), (-1, -1), 5),
-                    ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
-                ]
-            )
-        )
-        story.append(table)
-        story.append(Spacer(1, 7))
+        table = doc.add_table(rows=1, cols=len(headers))
+        table.style = "Table Grid"
+        for cell, header in zip(table.rows[0].cells, headers):
+            paragraph = cell.paragraphs[0]
+            paragraph.text = ""
+            run = paragraph.add_run(header)
+            set_run_font(run, size=10, bold=True)
+        for row_values in rows:
+            cells = table.add_row().cells
+            for table_cell, value in zip(cells, row_values):
+                paragraph = table_cell.paragraphs[0]
+                paragraph.text = ""
+                run = paragraph.add_run(str(value))
+                set_run_font(run, size=10)
+        doc.add_paragraph("")
 
     add_heading("事件概覽")
     add_bullets(
@@ -589,7 +543,7 @@ def build_analysis_summary_pdf(
         gains = ranked.sort_values("mean_return", ascending=False).head(5)
 
         add_heading("主要衝擊預測")
-        story.append(Paragraph("預期承壓資產", body_style))
+        add_heading("預期承壓資產", level=2)
         add_table(
             ["資產", "名稱", "期望報酬", "下跌機率"],
             [
@@ -597,7 +551,7 @@ def build_analysis_summary_pdf(
                 for _, row in losses.iterrows()
             ],
         )
-        story.append(Paragraph("預期受益資產", body_style))
+        add_heading("預期受益資產", level=2)
         add_table(
             ["資產", "名稱", "期望報酬", "下跌機率"],
             [
@@ -658,13 +612,12 @@ def build_analysis_summary_pdf(
             ],
         )
 
-    story.append(
-        Paragraph(
-            "備註：本摘要由 EventScope 依歷史事件、模擬報酬、傳導網路與投組壓力測試自動整理，僅供教學與情境分析使用。",
-            small_style,
-        )
+    note = doc.add_paragraph()
+    note_run = note.add_run(
+        "備註：本摘要由 EventScope 依歷史事件、模擬報酬、傳導網路與投組壓力測試自動整理，僅供教學與情境分析使用。"
     )
-    doc.build(story)
+    set_run_font(note_run, size=9, color=RGBColor(113, 102, 90))
+    doc.save(output)
     return output.getvalue()
 
 # ─── Session state init ───────────────────────────────────────────────────────
@@ -1315,7 +1268,7 @@ elif page == "🔬 事件分析":
         )
         summary_portfolio = st.session_state.get("portfolio_dict", DEFAULT_PORTFOLIO.copy())
         summary_hedges = get_hedge_suggestions(summary_portfolio, sim_results, current_event["category"])
-        summary_pdf = build_analysis_summary_pdf(
+        summary_docx = build_analysis_summary_docx(
             current_event,
             sim_results,
             net,
@@ -1323,14 +1276,14 @@ elif page == "🔬 事件分析":
             summary_portfolio,
             summary_hedges,
         )
-        summary_filename = f"{safe_filename(current_event['date'] + '_' + current_event['name_zh'])}_EventScope摘要.pdf"
+        summary_filename = f"{safe_filename(current_event['date'] + '_' + current_event['name_zh'])}_EventScope摘要.docx"
 
         st.markdown('<div class="section-header">Step 4 · 下載摘要</div>', unsafe_allow_html=True)
         st.markdown(
             """
             <div class="metric-card" style="margin-bottom:14px;">
               <div style="font-size:0.92rem; color:#71665A; line-height:1.7;">
-                產出 PDF 摘要，包含事件背景、資產衝擊排序、傳導路徑、投組風險與對沖建議。
+                產出 Word 摘要，包含事件背景、資產衝擊排序、傳導路徑、投組風險與對沖建議。
               </div>
             </div>
             """,
@@ -1339,24 +1292,24 @@ elif page == "🔬 事件分析":
         download_col, hint_col = st.columns([1.15, 2])
         with download_col:
             st.download_button(
-                "下載 PDF 摘要",
-                data=summary_pdf,
+                "下載 Word 摘要",
+                data=summary_docx,
                 file_name=summary_filename,
-                mime="application/pdf",
+                mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                 type="primary",
                 use_container_width=True,
             )
         with hint_col:
-            st.caption("格式為 .pdf，不是 Markdown。下載後可直接開啟或上傳作業。")
+            st.caption("格式為 .docx，不是 Markdown。下載後可用 Word、Pages 或 Google Docs 開啟。")
 
         with st.sidebar:
             st.markdown("---")
             st.caption("分析摘要")
             st.download_button(
-                "下載 PDF 摘要",
-                data=summary_pdf,
+                "下載 Word 摘要",
+                data=summary_docx,
                 file_name=summary_filename,
-                mime="application/pdf",
+                mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                 use_container_width=True,
                 key="sidebar_summary_download",
             )
